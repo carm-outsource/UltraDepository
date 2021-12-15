@@ -1,0 +1,19 @@
+# UltraBackpack
+# -> ${project.url}
+
+version: ${project.version}
+
+stroage:
+  # 存储方式，可选 [ yaml | mysql ]
+  method: database
+  # 选择 file 存储方式时的存储路径
+  # 支持绝对路径，如 “/var/data/ub/"(linux) 或 "D:\data\ub\"(windows)
+  # 使用绝对路径时请注意权限问题
+  file-path: data
+  # 选择 database 存储方式时的数据库配置
+  mysql:
+    # 数据库驱动路径
+    driver: "com.mysql.cj.jdbc.Driver"
+    url: ""
+    username: ""
+    passwd: ""

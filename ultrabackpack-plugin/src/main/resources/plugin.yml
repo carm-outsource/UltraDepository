@@ -1,0 +1,16 @@
+main: ${project.groupId}.${project.artifactId}.Main
+version: ${project.version}
+
+name: ${project.name}
+description: ${project.description}
+website: ${project.url}
+
+author: CarmJos
+
+permissions:
+  "${project.name}.use":
+    description: "超级背包的基本使用权限"
+    default: true
+  "${project.name}.admin":
+    description: "超级背包的管理权限"
+    default: op
