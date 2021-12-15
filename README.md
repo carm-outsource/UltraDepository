@@ -32,7 +32,7 @@
 - **[自带]** 数据部分基于 [EasySQL](https://github.com/CarmJos/EasySQL) 实现。
 - **[可选]** 变量部分基于 [PlaceholderAPI](https://www.spigotmc.org/resources/6245/) 实现。
 
-详细依赖列表可见 [Dependencies](https://github.com/CarmJos/UserPrefix/network/dependencies) 。
+详细依赖列表可见 [Dependencies](https://github.com/CarmJos/UltraBackpack/network/dependencies) 。
 
 ## 特殊优势
 

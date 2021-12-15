@@ -72,7 +72,7 @@
         <repository>
             <id>github</id>
             <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/CarmJos/EasySQL</url>
+            <url>https://maven.pkg.github.com/CarmJos/UltraBackpack</url>
         </repository>
 
         <repository>
@@ -90,7 +90,7 @@
             <id>nexus</id>
             <url>https://mvn.lumine.io/repository/maven-public/</url>
         </repository>
-        
+
     </repositories>
 
     <dependencies>
