@@ -123,6 +123,13 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>cc.carm.lib</groupId>
+            <artifactId>easysql-parent</artifactId>
+            <version>0.2.1</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
