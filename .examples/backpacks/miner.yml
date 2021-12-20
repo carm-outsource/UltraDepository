@@ -1,0 +1,27 @@
+name: "&c&l矿业仓库"
+
+capacity:
+  default: 1000
+  permissions:
+    5000: "ub.miner.vip"
+
+gui:
+  title: "&c&l矿业仓库"
+  lines: 6
+  items:
+    "CLOSE":
+      slot: 0
+      type: BARRIER
+      data: 0
+      name: "关闭界面"
+      lore:
+        - "点击关闭界面"
+      actions:
+        - "[CLOSE]"
+
+items:
+  "DIAMOND":
+    slot: 5
+    limit: 500
+    price: 10
+    name: "&b&l钻石"

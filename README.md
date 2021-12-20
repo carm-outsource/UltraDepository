@@ -36,7 +36,49 @@
 
 ## 特殊优势
 
+## 插件指令
+
+## 插件变量 ([PlaceholderAPI](https://www.spigotmc.org/resources/6245/))
+
+变量部分基于 [PlaceholderAPI](https://www.spigotmc.org/resources/6245/) 实现，如需使用变量请安装其插件。
+
+<details>
+<summary>展开查看所有变量</summary>
+
+```yaml
+
+```
+
+</details>
+
+## 插件权限
+
+
 ## 配置文件
+
+### [插件配置文件](ultrabackpack-plugin/src/main/resources/config.yml) (config.yml)
+
+详见源文件。
+
+### [消息配置文件](ultrabackpack-plugin/src/main/resources/messages.yml) (messages.yml)
+
+详见源文件。
+
+### 背包类型配置文件 (backpacks/<ID>.yml)
+
+所有 背包类均为单独的配置文件，存放于 `插件配置目录/backpacks` 下，便于管理。
+
+文件名即背包的ID，理论上可以随便取，但强烈推荐使用纯英文，部分符号可能会影响正常读取，请避免使用。
+
+<details>
+<summary>展开查看示例背包配置</summary>
+
+```yaml
+
+```
+
+</details>
+
 
 ## 支持与捐赠
 
@@ -47,7 +89,10 @@
 ## 开源协议
 
 本项目源码采用 [GNU General Public License v3.0](https://opensource.org/licenses/GPL-3.0) 开源协议。
-> ### 关于 GPL 协议
+
+<details>
+<summary>关于 GPL 协议</summary>
+
 > GNU General Public Licence (GPL) 有可能是开源界最常用的许可模式。GPL 保证了所有开发者的权利，同时为使用者提供了足够的复制，分发，修改的权利：
 >
 > #### 可自由复制
@@ -62,4 +107,4 @@
 > 需要注意的是，分发的时候，需要明确提供源代码和二进制文件，另外，用于某些程序的某些协议有一些问题和限制，你可以看一下 @PierreJoye 写的 Practical Guide to GPL Compliance 一文。使用 GPL 协议，你必须在源代码代码中包含相应信息，以及协议本身。
 >
 > *以上文字来自 [五种开源协议GPL,LGPL,BSD,MIT,Apache](https://www.oschina.net/question/54100_9455) 。*
-
+</details>

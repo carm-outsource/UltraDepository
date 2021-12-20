@@ -1,19 +1,70 @@
-# UltraBackpack
-# -> ${project.url}
+# ${project.parent.name} - ${project.parent.description}
+# 项目地址: ${project.parent.url}
+# 下载地址: ${project.parent.distributionManagement.downloadUrl}
 
-version: ${project.version}
+version: ${project.parent.version}
 
 stroage:
+
   # 存储方式，可选 [ yaml | mysql ]
   method: database
+
   # 选择 file 存储方式时的存储路径
+  # 默认为相对路径，相对于插件生成的配置文件夹下的路径
   # 支持绝对路径，如 “/var/data/ub/"(linux) 或 "D:\data\ub\"(windows)
   # 使用绝对路径时请注意权限问题
   file-path: data
+
   # 选择 database 存储方式时的数据库配置
   mysql:
     # 数据库驱动路径
-    driver: "com.mysql.cj.jdbc.Driver"
-    url: ""
-    username: ""
-    passwd: ""
+    driver: "com.mysql.jdbc.Driver"
+    url: "jdbc:mysql://127.0.0.1:3306/db-name"
+    username: "username"
+    password: "password"
+
+# 通用配置
+general:
+
+  # 针对每一件物品的额外介绍
+  # 将添加到背包界面内的物品上，避免重复配置
+  addtional-lore:
+    - " "
+    - "&f仓库内数量 &a%(amount)"
+    - "&f该物品单价 &a%(price)"
+    - "&f今日可出售 &a%(sold)&8/%(limit)"
+
+  # 提示玩家点击行为的介绍
+  # 将添加到背包界面内的物品上，避免重复配置
+  click-lore:
+    - " "
+    - "&a&l左键点击 &8| &f按量售出该物品"
+    - "&a&l右键点击 &8| &f取出一组该物品"
+
+  # 售出界面的配置
+  sell-gui:
+    title: "&8出售 %(item_name)"
+    items:
+      add:
+        type: GREEN_STAINED_GLASS_PANE
+        name: "&a增加 %(amount) 个"
+      remove:
+        type: RED_STAINED_GLASS_PANE
+        name: "&c减少 %(amount) 个"
+      confirm:
+        type: EMERALD
+        data: 0
+        name: "&a确认售出"
+        lore:
+          - " "
+          - "&7您将售出 &r%(item_name) &8x &f%(amount)"
+          - "&7共计获得 &e%(money) &7元作为回报。"
+          - " "
+          - "&a&l点击确认售出"
+      cancel: "&c取消售出"
+        type: REDSTONE
+        data: 0
+        name: "&a确认售出"
+        lore:
+          - " "
+          - "&c&l点击取消售出"

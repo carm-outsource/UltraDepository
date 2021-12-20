@@ -1,9 +1,9 @@
-main: ${project.groupId}.${project.artifactId}.Main
-version: ${project.version}
+main: cc.carm.plugin.ultrabackpack.Main
+name: UltraBackpack
 
-name: ${project.name}
-description: ${project.description}
-website: ${project.url}
+version: ${project.version}
+description: ${project.parent.description}
+website: ${project.parent.url}
 
 author: CarmJos
 

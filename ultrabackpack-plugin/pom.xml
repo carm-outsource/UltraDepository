@@ -2,12 +2,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
+
     <parent>
         <artifactId>ultrabackpack-parent</artifactId>
         <groupId>cc.carm.plugin</groupId>
         <version>1.0.0</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
     <artifactId>ultrabackpack-plugin</artifactId>
     <packaging>jar</packaging>
@@ -22,9 +32,6 @@
             <name>Carm Jos</name>
             <email>carm@carm.cc</email>
             <url>https://www.carm.cc</url>
-            <roles>
-                <role>Main Developer</role>
-            </roles>
         </developer>
     </developers>
 
@@ -44,15 +51,6 @@
         <system>GitHub Actions</system>
         <url>https://github.com/CarmJos/UltraBackpack/actions/workflows/maven.yml</url>
     </ciManagement>
-
-    <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
-        <maven.javadoc.skip>true</maven.javadoc.skip>
-        <maven.deploy.skip>true</maven.deploy.skip>
-    </properties>
 
     <distributionManagement>
         <downloadUrl>https://github.com/CarmJos/UltraBackpack/releases</downloadUrl>
@@ -75,15 +73,7 @@
         <dependency>
             <groupId>cc.carm.lib</groupId>
             <artifactId>easysql-beecp</artifactId>
-            <version>0.2.1</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.16</version>
+            <version>0.2.2</version>
             <scope>compile</scope>
         </dependency>
 

@@ -4,6 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+    </properties>
+
     <groupId>cc.carm.plugin</groupId>
     <artifactId>ultrabackpack-parent</artifactId>
     <packaging>pom</packaging>
@@ -45,13 +52,6 @@
         <system>GitHub Actions</system>
         <url>https://github.com/CarmJos/UltraBackpack/actions/workflows/maven.yml</url>
     </ciManagement>
-
-    <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
-    </properties>
 
     <distributionManagement>
         <downloadUrl>https://github.com/CarmJos/UltraBackpack/releases</downloadUrl>
@@ -130,6 +130,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.1</version>
+                <configuration>
+                    <useSystemClassLoader>false</useSystemClassLoader>
+                </configuration>
             </plugin>
         </plugins>
         <pluginManagement>
@@ -212,14 +216,6 @@
                                 </excludes>
                             </filter>
                         </filters>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.22.1</version>
-                    <configuration>
-                        <useSystemClassLoader>false</useSystemClassLoader>
                     </configuration>
                 </plugin>
             </plugins>
