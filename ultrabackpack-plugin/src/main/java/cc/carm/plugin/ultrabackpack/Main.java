@@ -1,5 +1,7 @@
 package cc.carm.plugin.ultrabackpack;
 
+import cc.carm.plugin.ultrabackpack.configuration.PluginConfig;
+import cc.carm.plugin.ultrabackpack.manager.ConfigManager;
 import cc.carm.plugin.ultrabackpack.util.ColorParser;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
@@ -13,7 +15,6 @@ import org.jetbrains.annotations.Nullable;
 public class Main extends JavaPlugin {
 
 	private static Main instance;
-	public static boolean debugMode = true;
 
 	@Override
 	public void onEnable() {
@@ -22,8 +23,7 @@ public class Main extends JavaPlugin {
 		long startTime = System.currentTimeMillis();
 
 		log("加载配置文件...");
-		saveDefaultConfig();
-		reloadConfig();
+		ConfigManager.initConfig();
 
 
 		log("注册监听器...");
@@ -56,10 +56,12 @@ public class Main extends JavaPlugin {
 		Bukkit.getConsoleSender().sendMessage(ColorParser.parse("[" + getInstance().getName() + "] " + message));
 	}
 
+	public static void error(String message) {
+		log("&c[ERROR] &r" + message);
+	}
+
 	public static void debug(@Nullable String message) {
-		if (debugMode) {
-			log("[DEBUG] " + message);
-		}
+		if (PluginConfig.DEBUG.get()) log("[DEBUG] " + message);
 	}
 
 	public static Main getInstance() {

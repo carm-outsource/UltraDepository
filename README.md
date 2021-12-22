@@ -38,6 +38,19 @@
 
 ## 插件指令
 
+指令主指令为 /UltraBackpack (/ub | /backpack)
+
+<details>
+<summary>展开查看所有子指令</summary>
+
+```text
+
+
+
+```
+
+</details>
+
 ## 插件变量 ([PlaceholderAPI](https://www.spigotmc.org/resources/6245/))
 
 变量部分基于 [PlaceholderAPI](https://www.spigotmc.org/resources/6245/) 实现，如需使用变量请安装其插件。

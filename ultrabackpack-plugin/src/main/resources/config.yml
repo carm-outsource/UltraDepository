@@ -4,10 +4,14 @@
 
 version: ${project.parent.version}
 
-stroage:
+debug: false
 
-  # 存储方式，可选 [ yaml | mysql ]
-  method: database
+# 存储相关配置
+# 注意：存储配置不会通过重载指令生效，如有修改请重新启动服务器。
+storage:
+
+  # 存储方式，可选 [ file | mysql ]
+  method: mysql
 
   # 选择 file 存储方式时的存储路径
   # 默认为相对路径，相对于插件生成的配置文件夹下的路径
@@ -19,7 +23,7 @@ stroage:
   mysql:
     # 数据库驱动路径
     driver: "com.mysql.jdbc.Driver"
-    url: "jdbc:mysql://127.0.0.1:3306/db-name"
+    url: "jdbc:mysql://127.0.0.1:3306/<db-name>"
     username: "username"
     password: "password"
 

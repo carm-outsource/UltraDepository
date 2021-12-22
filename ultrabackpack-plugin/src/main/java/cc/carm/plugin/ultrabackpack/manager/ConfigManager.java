@@ -3,7 +3,6 @@ package cc.carm.plugin.ultrabackpack.manager;
 
 import cc.carm.plugin.ultrabackpack.Main;
 import cc.carm.plugin.ultrabackpack.configuration.file.FileConfig;
-import org.bukkit.Material;
 
 public class ConfigManager {
 

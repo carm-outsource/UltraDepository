@@ -3,24 +3,23 @@ name: "&c&l矿业仓库"
 capacity:
   default: 1000
   permissions:
-    5000: "ub.miner.vip"
+    - "ub.miner.vip:5000"
 
 gui:
   title: "&c&l矿业仓库"
   lines: 6
   items:
     "CLOSE":
+      icon:
+        ==: org.bukkit.ItemStack
       slot: 0
-      type: BARRIER
-      data: 0
-      name: "关闭界面"
-      lore:
-        - "点击关闭界面"
       actions:
-        - "[CLOSE]"
+        - "[LEFT:CLOSE]"
+        - "[SHIFT_LEFT:CLOSE]"
 
 items:
   "DIAMOND":
+    original: true #只允许无任何特殊属性的物品被收入
     slot: 5
     limit: 500
     price: 10
