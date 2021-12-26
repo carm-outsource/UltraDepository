@@ -1,8 +1,19 @@
 package cc.carm.plugin.ultrabackpack;
 
+import cc.carm.plugin.ultrabackpack.api.UltraBackpackAPI;
+import cc.carm.plugin.ultrabackpack.api.util.ColorParser;
+import cc.carm.plugin.ultrabackpack.api.util.MessageUtil;
 import cc.carm.plugin.ultrabackpack.configuration.PluginConfig;
+import cc.carm.plugin.ultrabackpack.listener.CollectListener;
+import cc.carm.plugin.ultrabackpack.listener.UserListener;
+import cc.carm.plugin.ultrabackpack.manager.BackpackManager;
 import cc.carm.plugin.ultrabackpack.manager.ConfigManager;
-import cc.carm.plugin.ultrabackpack.util.ColorParser;
+import cc.carm.plugin.ultrabackpack.manager.EconomyManager;
+import cc.carm.plugin.ultrabackpack.manager.UserManager;
+import cc.carm.plugin.ultrabackpack.storage.FileStorage;
+import cc.carm.plugin.ultrabackpack.storage.MySQLStorage;
+import cc.carm.plugin.ultrabackpack.storage.UBStorage;
+import cc.carm.plugin.ultrabackpack.util.SchedulerUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
@@ -15,6 +26,13 @@ import org.jetbrains.annotations.Nullable;
 public class Main extends JavaPlugin {
 
 	private static Main instance;
+	private static SchedulerUtils scheduler;
+
+	private static UBStorage storage;
+
+	private static UserManager userManager;
+	private static EconomyManager economyManager;
+	private static BackpackManager backpackManager;
 
 	@Override
 	public void onEnable() {
@@ -25,9 +43,53 @@ public class Main extends JavaPlugin {
 		log("加载配置文件...");
 		ConfigManager.initConfig();
 
+		log("初始化存储方式...");
+		if (PluginConfig.STORAGE_METHOD.get().equalsIgnoreCase("mysql")) {
+			log("	正在使用 MySQL 进行数据存储");
+			storage = new MySQLStorage();
+		} else {
+			log("	正在使用 文件 进行数据存储");
+			storage = new FileStorage();
+		}
+
+		if (!storage.initialize()) {
+			error("存储初始化失败，请检查配置文件。");
+			setEnabled(false);
+			return;
+		}
+
+		log("加载用户系统...");
+		userManager = new UserManager();
+
+		log("加载经济系统...");
+		if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
+			economyManager = new EconomyManager();
+			if (!economyManager.initialize()) {
+				error("经济系统初始化失败，关闭出售功能。");
+			}
+		} else {
+			log("	&7[-] 检测到未安装Vault，关闭出售功能。");
+		}
+
+		log("加载背包管理器...");
+		backpackManager = new BackpackManager();
+
 
 		log("注册监听器...");
+		regListener(new UserListener());
+		regListener(new CollectListener());
 
+		log("注册指令...");
+
+
+		if (MessageUtil.hasPlaceholderAPI()) {
+			log("注册变量...");
+
+		} else {
+			log("检测到未安装PlaceholderAPI，跳过变量注册。");
+		}
+
+		UltraBackpackAPI.initialize(getUserManager());
 
 		log("加载完成 ，共耗时 " + (System.currentTimeMillis() - startTime) + " ms 。");
 
@@ -38,10 +100,38 @@ public class Main extends JavaPlugin {
 		log(getName() + " " + getDescription().getVersion() + " 开始卸载...");
 		long startTime = System.currentTimeMillis();
 
+		log("保存现有用户数据...");
+
+
+		log("释放存储源...");
+		getStorage().shutdown();
+
 		log("卸载监听器...");
 		Bukkit.getServicesManager().unregisterAll(this);
+
 		log("卸载完成 ，共耗时 " + (System.currentTimeMillis() - startTime) + " ms 。");
 	}
+
+	public static SchedulerUtils getScheduler() {
+		return scheduler;
+	}
+
+	public static UBStorage getStorage() {
+		return storage;
+	}
+
+	public static UserManager getUserManager() {
+		return userManager;
+	}
+
+	public static EconomyManager getEconomyManager() {
+		return economyManager;
+	}
+
+	public static BackpackManager getBackpackManager() {
+		return backpackManager;
+	}
+
 
 	/**
 	 * 注册监听器

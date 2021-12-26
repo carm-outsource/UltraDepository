@@ -18,6 +18,14 @@ public class UBItemData {
 		return sold;
 	}
 
+	public void setAmount(int amount) {
+		this.amount = Math.max(0, amount);
+	}
+
+	public void setSold(int sold) {
+		this.sold = Math.max(0, sold);
+	}
+
 	public void clearSold() {
 		this.sold = 0;
 	}

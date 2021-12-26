@@ -1,5 +1,6 @@
-package cc.carm.plugin.ultrabackpack.util;
+package cc.carm.plugin.ultrabackpack.api.util;
 
+import cc.carm.plugin.ultrabackpack.api.util.ColorParser;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -31,11 +32,7 @@ public class MessageUtil {
 
 	public static void sendWithPlaceholders(@Nullable CommandSender sender, List<String> messages) {
 		if (messages == null || messages.isEmpty() || sender == null) return;
-		if (hasPlaceholderAPI() && sender instanceof Player) {
-			send(sender, PlaceholderAPI.setPlaceholders((Player) sender, messages));
-		} else {
-			send(sender, messages);
-		}
+		send(sender, setPlaceholders(sender, messages));
 	}
 
 	public static void sendWithPlaceholders(@Nullable CommandSender sender, List<String> messages, String param, Object value) {
@@ -44,6 +41,15 @@ public class MessageUtil {
 
 	public static void sendWithPlaceholders(@Nullable CommandSender sender, List<String> messages, String[] params, Object[] values) {
 		sendWithPlaceholders(sender, setCustomParams(messages, params, values));
+	}
+
+	public static List<String> setPlaceholders(@Nullable CommandSender sender, List<String> messages) {
+		if (messages == null || messages.isEmpty() || sender == null) return messages;
+		if (hasPlaceholderAPI() && sender instanceof Player) {
+			return PlaceholderAPI.setPlaceholders((Player) sender, messages);
+		} else {
+			return messages;
+		}
 	}
 
 	public static List<String> setCustomParams(List<String> messages, String param, Object value) {

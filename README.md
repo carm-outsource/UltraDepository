@@ -44,9 +44,36 @@
 <summary>展开查看所有子指令</summary>
 
 ```text
+# sell <背包ID> <物品ID> <数量>
+@ 玩家指令 (UltraBackpack.Command.Sell)
+- 售出对应数量的对应物品。
+- 该指令受到玩家每日售出数量的限制。
+
+# sellAll [背包ID] [物品ID]
+@ 玩家指令 (UltraBackpack.Command.SellAll)
+- 售出所有相关物品。
+- 该指令受到玩家每日售出数量的限制。
 
 
+# info <玩家> [背包ID] [物品ID] 
+@ 管理指令 (UltraBackpack.admin)
+- 得到玩家的相关物品信息。
 
+# add <玩家> <背包ID> <物品ID> <数量>
+@ 管理指令 (UltraBackpack.admin)
+- 为玩家添加对应背包中对于物品的数量。
+
+# remove <玩家> <背包ID> <物品ID> <数量>
+@ 管理指令 (UltraBackpack.admin)
+- 为玩家减少对应背包中对于物品的数量。
+
+# sell <玩家> [背包ID] [物品ID] [数量]
+@ 管理指令 (UltraBackpack.admin)
+- 为玩家售出相关物品。
+- 若不填写数量，则售出所有对应背包的对应物品。
+- 若不填写物品，则售出对应背包内所有物品。
+- 若不填写背包，则售出所有背包内所有物品。
+- 该指令受到玩家每日售出数量的限制。
 ```
 
 </details>
@@ -58,14 +85,27 @@
 <details>
 <summary>展开查看所有变量</summary>
 
-```yaml
+```text
+# %UltraBackpack_amount_<背包ID>_<物品ID>%
+- 得到对应背包内对应物品的数量
 
+# %UltraBackpack_price_<背包ID>_<物品ID>%
+- 得到对应背包内对应物品的价格
+
+# %UltraBackpack_sold_<背包ID>_<物品ID>%
+- 得到对应背包内对应物品的今日售出数量
+
+# %UltraBackpack_limit_<背包ID>_<物品ID>%
+- 得到对应背包内对应物品的每日售出限制
+
+# %UltraBackpack_remain_<背包ID>_<物品ID>%
+- 得到对应背包内对应物品的剩余可售出数量
+- $剩余可售出数量 = $每日售出限制 - $今日售出数量
 ```
 
 </details>
 
 ## 插件权限
-
 
 ## 配置文件
 
@@ -91,7 +131,6 @@
 ```
 
 </details>
-
 
 ## 支持与捐赠
 

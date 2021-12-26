@@ -8,9 +8,17 @@ website: ${project.parent.url}
 author: CarmJos
 
 permissions:
-  "${project.name}.use":
+
+  "UltraBackpack.use":
     description: "超级背包的基本使用权限"
     default: true
-  "${project.name}.admin":
+
+  "UltraBackpack.auto":
+    description: "超级背包的自动收集权限"
+
+  "UltraBackpack.auto.enable":
+    description: "用于判断是否启用了自动收集功能"
+
+  "UltraBackpack.admin":
     description: "超级背包的管理权限"
     default: op

@@ -1,16 +1,12 @@
 package cc.carm.plugin.ultrabackpack.util.gui;
 
 import cc.carm.plugin.ultrabackpack.Main;
-import cc.carm.plugin.ultrabackpack.util.ColorParser;
+import cc.carm.plugin.ultrabackpack.api.util.ColorParser;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -36,7 +32,7 @@ public class GUI {
 
 	Map<String, Object> flags;
 
-	public Listener listener;
+	public GUIListener listener;
 
 	public GUI(GUIType type, String name) {
 		this.type = type;
@@ -186,80 +182,9 @@ public class GUI {
 		this.inv = inv;
 		player.openInventory(inv);
 
-		if (listener == null)
-			Bukkit.getPluginManager().registerEvents(listener = new Listener() {
-				@EventHandler
-				public void onInventoryClickEvent(InventoryClickEvent event) {
-					if (!(event.getWhoClicked() instanceof Player)) return;
-					Player p = (Player) event.getWhoClicked();
-					rawClickListener(event);
-					if (event.getSlot() != -999) {
-						try {
-							if (getOpenedGUI(p) == GUI.this
-									&& event.getClickedInventory() != null
-									&& event.getClickedInventory().equals(GUI.this.inv)
-									&& GUI.this.items[event.getSlot()] != null) {
-								GUI.this.items[event.getSlot()].realRawClickAction(event);
-							}
-						} catch (ArrayIndexOutOfBoundsException e) {
-							System.err.print("err cause by GUI(" + GUI.this + "), name=" + name);
-							e.printStackTrace();
-							return;
-						}
-					} else if (cancelOnOuter) {
-						event.setCancelled(true);
-					}
-					if (hasOpenedGUI(p)
-							&& getOpenedGUI(p) == GUI.this
-							&& event.getClickedInventory() != null) {
-						if (event.getClickedInventory().equals(GUI.this.inv)) {
-							if (cancelOnTarget) event.setCancelled(true);
-
-							if (event.getSlot() != -999 && GUI.this.items[event.getSlot()] != null) {
-								if (GUI.this.items[event.getSlot()].isActionActive()) {
-									GUI.this.items[event.getSlot()].onClick(event.getClick());
-									GUI.this.items[event.getSlot()].rawClickAction(event);
-									if (!GUI.this.items[event.getSlot()].actions.isEmpty()) {
-										for (GUIItem.GUIClickAction action : GUI.this.items[event.getSlot()].actions) {
-											action.run(event.getClick(), player);
-										}
-									}
-								}
-								if (!GUI.this.items[event.getSlot()].actionsIgnoreActive.isEmpty()) {
-									for (GUIItem.GUIClickAction action : GUI.this.items[event.getSlot()].actionsIgnoreActive) {
-										action.run(event.getClick(), player);
-									}
-								}
-							}
-						} else if (event.getClickedInventory().equals(p.getInventory()) && cancelOnSelf) {
-							event.setCancelled(true);
-						}
-					}
-				}
-
-				@EventHandler
-				public void onDrag(InventoryDragEvent e) {
-					if (e.getWhoClicked() instanceof Player) {
-						Player p = (Player) e.getWhoClicked();
-						if (e.getInventory().equals(inv) || e.getInventory().equals(p.getInventory())) {
-							GUI.this.onDrag(e);
-						}
-					}
-				}
-
-				@EventHandler
-				public void onInventoryCloseEvent(InventoryCloseEvent event) {
-					if (event.getPlayer() instanceof Player && event.getInventory().equals(inv)) {
-						Player p = (Player) event.getPlayer();
-						if (event.getInventory().equals(inv)) {
-							HandlerList.unregisterAll(this);
-							listener = null;
-							onClose();
-							removeOpenedGUI(p);
-						}
-					}
-				}
-			}, Main.getInstance());
+		if (listener == null) {
+			Main.regListener(listener = new GUIListener(this, player));
+		}
 
 	}
 

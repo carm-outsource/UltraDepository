@@ -1,4 +1,4 @@
-package cc.carm.plugin.ultrabackpack.util;
+package cc.carm.plugin.ultrabackpack.api.util;
 
 
 import org.bukkit.Material;

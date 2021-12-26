@@ -1,7 +1,7 @@
 name: "&c&l矿业仓库"
 
 capacity:
-  default: 1000
+  default: 0 # 若为0则默认不可以使用该仓库
   permissions:
     - "ub.miner.vip:5000"
 

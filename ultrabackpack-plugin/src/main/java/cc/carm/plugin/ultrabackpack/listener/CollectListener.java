@@ -1,5 +1,6 @@
 package cc.carm.plugin.ultrabackpack.listener;
 
+import cc.carm.plugin.ultrabackpack.configuration.PluginConfig;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,14 +16,16 @@ public class CollectListener implements Listener {
 
 	@EventHandler
 	public void onBreak(BlockBreakEvent event) {
+		if (!PluginConfig.Collect.BREAK.get()) return;
 		Player player = event.getPlayer();
 
 		Collection<ItemStack> drops = event.getBlock().getDrops();
-		
+
 	}
 
 	@EventHandler
 	public void onBreak(EntityDeathEvent event) {
+		if (!PluginConfig.Collect.KILL.get()) return;
 		Player player = event.getEntity().getKiller();
 		if (player == null) return;
 
@@ -30,6 +33,7 @@ public class CollectListener implements Listener {
 	}
 
 	public void onPickup(EntityPickupItemEvent event) {
+		if (!PluginConfig.Collect.PICKUP.get()) return;
 		if (!(event.getEntity() instanceof Player)) return;
 		Player player = (Player) event.getEntity();
 

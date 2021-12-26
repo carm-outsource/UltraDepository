@@ -1,24 +1,26 @@
 package cc.carm.plugin.ultrabackpack.api.data;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class UBContentsData {
 
-	private final Map<String, UBItemData> contents;
+	private final Map<@NotNull String, @NotNull UBItemData> contents;
 
-	public UBContentsData(Map<String, UBItemData> contents) {
+	public UBContentsData(Map<@NotNull String, @NotNull UBItemData> contents) {
 		this.contents = contents;
 	}
 
-	public Map<String, UBItemData> getContents() {
+	public @NotNull Map<String, UBItemData> getContents() {
 		return this.contents;
 	}
 
-	public UBItemData getItemData(String itemType) {
+	public @Nullable UBItemData getItemData(@NotNull String itemType) {
 		return getContents().get(itemType);
 	}
-
 
 	public static UBContentsData emptyContents() {
 		return new UBContentsData(new HashMap<>());

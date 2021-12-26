@@ -3,7 +3,7 @@ package cc.carm.plugin.ultrabackpack.configuration.message;
 
 import cc.carm.plugin.ultrabackpack.configuration.values.ConfigValueList;
 import cc.carm.plugin.ultrabackpack.manager.ConfigManager;
-import cc.carm.plugin.ultrabackpack.util.MessageUtil;
+import cc.carm.plugin.ultrabackpack.api.util.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.Nullable;
 

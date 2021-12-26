@@ -27,12 +27,20 @@ storage:
     username: "username"
     password: "password"
 
+
+# 玩家收集配置
+# 用于决定玩家在哪些情况下的物品会自动放入背包
+collect:
+  pickup: true # 捡取物品
+  kill: true #杀死动物
+  break: true #破坏方块
+
 # 通用配置
 general:
 
   # 针对每一件物品的额外介绍
   # 将添加到背包界面内的物品上，避免重复配置
-  addtional-lore:
+  additional-lore:
     - " "
     - "&f仓库内数量 &a%(amount)"
     - "&f该物品单价 &a%(price)"
@@ -65,10 +73,10 @@ general:
           - "&7共计获得 &e%(money) &7元作为回报。"
           - " "
           - "&a&l点击确认售出"
-      cancel: "&c取消售出"
+      cancel:
         type: REDSTONE
         data: 0
-        name: "&a确认售出"
+        name: "&c取消售出"
         lore:
           - " "
           - "&c&l点击取消售出"

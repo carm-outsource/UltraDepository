@@ -16,7 +16,7 @@ public interface UBUserManager {
 	UBUserData getData(@NotNull Player player);
 
 	@NotNull
-	UBUserData loaData(@NotNull UUID userUUID);
+	UBUserData loadData(@NotNull UUID userUUID);
 
 
 }

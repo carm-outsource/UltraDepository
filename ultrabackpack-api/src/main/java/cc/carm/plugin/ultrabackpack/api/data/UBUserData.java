@@ -16,15 +16,29 @@ public interface UBUserData {
 
 	@NotNull Set<String> getBackpackIDs();
 
-	int getItemAmount(String backpackID, String typeID);
+	@Nullable UBItemData getItemData(@NotNull String backpackID, @NotNull String typeID);
 
-	int getItemSold(String backpackID, String typeID);
+	@Nullable Integer getItemAmount(@NotNull String backpackID, @NotNull String typeID);
 
-	Date getDataDay();
+	@Nullable Integer getItemSold(@NotNull String backpackID, @NotNull String typeID);
+
+	@Nullable Integer setItemAmount(@NotNull String backpackID, @NotNull String typeID, int amount);
+
+	@Nullable Integer setItemSold(@NotNull String backpackID, @NotNull String typeID, int amount);
+
+	@Nullable Integer addItemAmount(@NotNull String backpackID, @NotNull String typeID, int amount);
+
+	@Nullable Integer addItemSold(@NotNull String backpackID, @NotNull String typeID, int amount);
+
+	@Nullable Integer removeItemAmount(@NotNull String backpackID, @NotNull String typeID, int amount);
+
+	@Nullable Integer removeItemSold(@NotNull String backpackID, @NotNull String typeID, int amount);
+
+	Date getDate();
 
 	boolean isCurrentDay();
 
-	void updateDate();
+	void checkoutDate();
 
 	void save() throws Exception;
 

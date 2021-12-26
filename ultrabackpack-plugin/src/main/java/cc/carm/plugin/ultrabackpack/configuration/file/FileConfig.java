@@ -10,6 +10,8 @@ import java.io.IOException;
 
 public class FileConfig {
 
+	private long updateTime;
+
 	private final JavaPlugin plugin;
 	private final String fileName;
 
@@ -28,6 +30,7 @@ public class FileConfig {
 	}
 
 	private void initFile() {
+		this.updateTime = System.currentTimeMillis();
 		this.file = new File(plugin.getDataFolder(), fileName);
 		if (!this.file.exists()) {
 			if (!this.file.getParentFile().exists()) {
@@ -55,10 +58,19 @@ public class FileConfig {
 	}
 
 	public void reload() {
+		this.updateTime = System.currentTimeMillis();
 		if (getFile().exists()) {
 			this.config = YamlConfiguration.loadConfiguration(getFile());
 		} else {
 			initFile();
 		}
+	}
+
+	public long getUpdateTime() {
+		return updateTime;
+	}
+
+	public boolean isExpired(long time) {
+		return getUpdateTime() > time;
 	}
 }

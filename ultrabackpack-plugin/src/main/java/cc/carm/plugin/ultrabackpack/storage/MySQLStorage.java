@@ -7,8 +7,7 @@ import cc.carm.lib.easysql.api.action.query.SQLQuery;
 import cc.carm.plugin.ultrabackpack.Main;
 import cc.carm.plugin.ultrabackpack.api.data.UBContentsData;
 import cc.carm.plugin.ultrabackpack.api.data.UBItemData;
-import cc.carm.plugin.ultrabackpack.api.data.UBUserData;
-import cc.carm.plugin.ultrabackpack.api.storage.UBStorage;
+import cc.carm.plugin.ultrabackpack.configuration.PluginConfig;
 import cc.carm.plugin.ultrabackpack.configuration.values.ConfigValue;
 import cc.carm.plugin.ultrabackpack.data.UserData;
 import com.google.gson.Gson;
@@ -27,18 +26,18 @@ import java.util.UUID;
 
 public class MySQLStorage implements UBStorage {
 
-	public static final ConfigValue<String> DRIVER_NAME = new ConfigValue<>(
+	private static final ConfigValue<String> DRIVER_NAME = new ConfigValue<>(
 			"storage.mysql.driver", String.class, "com.mysql.jdbc.Driver"
 	);
 
-	public static final ConfigValue<String> URL = new ConfigValue<>(
+	private static final ConfigValue<String> URL = new ConfigValue<>(
 			"storage.mysql.url", String.class, "jdbc:mysql://127.0.0.1:3306/minecraft"
 	);
 
-	public static final ConfigValue<String> USERNAME = new ConfigValue<>(
+	private static final ConfigValue<String> USERNAME = new ConfigValue<>(
 			"storage.mysql.username", String.class, "username"
 	);
-	public static final ConfigValue<String> PASSWORD = new ConfigValue<>(
+	private static final ConfigValue<String> PASSWORD = new ConfigValue<>(
 			"storage.mysql.password", String.class, "password"
 	);
 
@@ -86,8 +85,9 @@ public class MySQLStorage implements UBStorage {
 	public boolean initialize() {
 
 		try {
-			Main.log("尝试连接到数据库...");
+			Main.log("	尝试连接到数据库...");
 			this.sqlManager = EasySQL.createManager(DRIVER_NAME.get(), URL.get(), USERNAME.get(), PASSWORD.get());
+			this.sqlManager.setDebugMode(PluginConfig.DEBUG.get());
 		} catch (Exception exception) {
 			Main.error("无法连接到数据库，请检查配置文件。");
 			Main.error("Could not connect to the database, please check the configuration.");
@@ -96,7 +96,7 @@ public class MySQLStorage implements UBStorage {
 		}
 
 		try {
-			Main.log("创建插件所需表...");
+			Main.log("	创建插件所需表...");
 			SQLTables.createTables(sqlManager);
 		} catch (SQLException exception) {
 			Main.error("无法创建插件所需的表，请检查数据库权限。");
@@ -109,8 +109,15 @@ public class MySQLStorage implements UBStorage {
 	}
 
 	@Override
-	public @NotNull UserData loadData(@NotNull UUID uuid) throws Exception {
+	public void shutdown() {
+		Main.log("	关闭数据库连接...");
+		EasySQL.shutdownManager(getSQLManager());
+	}
 
+	@Override
+	public @NotNull UserData loadData(@NotNull UUID uuid) throws Exception {
+		long start = System.currentTimeMillis();
+		Main.debug("正通过 MySQLStorage 加载 " + uuid + " 的用户数据...");
 		try (SQLQuery query = createAction(uuid).execute()) {
 			ResultSet resultSet = query.getResultSet();
 			Map<String, UBContentsData> dataMap = new HashMap<>();
@@ -125,8 +132,11 @@ public class MySQLStorage implements UBStorage {
 						if (contentsData != null) dataMap.put(backpackID, contentsData);
 					});
 				}
+				Main.debug("通过 MySQLStorage 加载 " + uuid + " 的用户数据完成，"
+						+ "耗时 " + (System.currentTimeMillis() - start) + "ms。");
 				return new UserData(uuid, this, dataMap, date);
 			}
+			Main.debug("当前库内不存在玩家 " + uuid + " 的数据，视作新档。");
 			return new UserData(uuid, this, new HashMap<>(), new Date(System.currentTimeMillis()));
 		} catch (Exception exception) {
 			Main.error("在加载玩家 #" + uuid + " 的数据时出现异常。");
@@ -136,24 +146,27 @@ public class MySQLStorage implements UBStorage {
 	}
 
 	@Override
-	public void saveUserData(@NotNull UBUserData data) throws Exception {
+	public void saveUserData(@NotNull UserData data) throws Exception {
+		long start = System.currentTimeMillis();
+		Main.debug("正通过 MySQLStorage 保存 " + data.getUserUUID() + " 的用户数据...");
+
 		JsonObject dataObject = new JsonObject();
 
-		for (String backpackID : data.getBackpackIDs()) {
-			JsonObject contentObject = serializeContentsData(data.getBackpack(backpackID));
-			if (contentObject != null) dataObject.add(backpackID, contentObject);
-		}
+		data.getBackpacks().forEach((id, contents) -> dataObject.add(id, serializeContentsData(contents)));
 
 		try {
 			getSQLManager().createReplace(SQLTables.USER_DATA.getName())
 					.setColumnNames("uuid", "data", "day")
-					.setParams(data.getUserUUID(), GSON.toJson(dataObject), data.getDataDay())
+					.setParams(data.getUserUUID(), GSON.toJson(dataObject), data.getDate())
 					.execute();
 		} catch (SQLException exception) {
-			Main.error("在加载玩家 #" + data.getUserUUID() + " 的数据时出现异常。");
-			Main.error("Error occurred when loading #" + data.getUserUUID() + " data.");
+			Main.error("在保存玩家 #" + data.getUserUUID() + " 的数据时出现异常。");
+			Main.error("Error occurred when saving #" + data.getUserUUID() + " data.");
 			throw new Exception(exception);
 		}
+
+		Main.debug("通过 MySQLStorage 保存 " + data.getUserUUID() + " 的用户数据完成，" +
+				"耗时 " + (System.currentTimeMillis() - start) + "ms。");
 
 	}
 

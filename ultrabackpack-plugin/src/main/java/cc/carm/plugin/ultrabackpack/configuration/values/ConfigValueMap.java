@@ -23,6 +23,8 @@ public class ConfigValueMap<K, V> {
 
 	@Nullable LinkedHashMap<K, V> valueCache;
 
+	long updateTime;
+
 	public ConfigValueMap(@NotNull String configSection, @NotNull Function<String, K> keyCast,
 						  @NotNull Class<V> valueClazz) {
 		this(ConfigManager.getPluginConfig(), configSection, keyCast, valueClazz);
@@ -47,7 +49,7 @@ public class ConfigValueMap<K, V> {
 
 	@NotNull
 	public Map<K, V> get() {
-		if (valueCache != null) return valueCache;
+		if (valueCache != null && !this.source.isExpired(this.updateTime)) return valueCache;
 		ConfigurationSection section = getConfiguration().getConfigurationSection(this.configSection);
 		if (section == null) return new LinkedHashMap<>();
 		Set<String> keys = section.getKeys(false);
@@ -62,6 +64,7 @@ public class ConfigValueMap<K, V> {
 					result.put(finalKey, finalValue);
 				}
 			}
+			this.updateTime = System.currentTimeMillis();
 			this.valueCache = result;
 			return result;
 		}

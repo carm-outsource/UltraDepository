@@ -1,9 +1,12 @@
 package cc.carm.plugin.ultrabackpack.data;
 
+import cc.carm.plugin.ultrabackpack.Main;
 import cc.carm.plugin.ultrabackpack.api.data.UBContentsData;
+import cc.carm.plugin.ultrabackpack.api.data.UBItemData;
 import cc.carm.plugin.ultrabackpack.api.data.UBUserData;
-import cc.carm.plugin.ultrabackpack.api.storage.UBStorage;
+import cc.carm.plugin.ultrabackpack.storage.UBStorage;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.Date;
 import java.util.Map;
@@ -19,7 +22,8 @@ public class UserData implements UBUserData {
 
 	Date day;
 
-	public UserData(UUID userUUID, UBStorage storage, Map<String, UBContentsData> backpacks, Date day) {
+	public UserData(UUID userUUID, UBStorage storage,
+					Map<String, UBContentsData> backpacks, Date day) {
 		this.userUUID = userUUID;
 		this.storage = storage;
 		this.backpacks = backpacks;
@@ -36,7 +40,8 @@ public class UserData implements UBUserData {
 	}
 
 	@Override
-	public @NotNull UBContentsData getBackpack(String backpackID) {
+	public @Nullable UBContentsData getBackpack(String backpackID) {
+		if (!Main.getBackpackManager().hasBackpack(backpackID)) return null;
 		if (!getBackpacks().containsKey(backpackID)) {
 			getBackpacks().put(backpackID, UBContentsData.emptyContents());
 		}
@@ -49,17 +54,76 @@ public class UserData implements UBUserData {
 	}
 
 	@Override
-	public int getItemAmount(String backpackID, String typeID) {
-		return getBackpack(backpackID).getItemData(typeID).getAmount();
+	public @Nullable UBItemData getItemData(@NotNull String backpackID, @NotNull String typeID) {
+		UBContentsData data = getBackpack(backpackID);
+		if (data == null) return null;
+		if (!Main.getBackpackManager().hasItem(backpackID, typeID)) return null;
+		UBItemData itemData = data.getItemData(typeID);
+		if (itemData == null) {
+			itemData = UBItemData.emptyItemData();
+			data.getContents().put(typeID, itemData);
+		}
+		return itemData;
+	}
+
+
+	@Override
+	public @Nullable Integer getItemAmount(@NotNull String backpackID, @NotNull String typeID) {
+		UBItemData data = getItemData(backpackID, typeID);
+		if (data == null) return null;
+		return data.getAmount();
 	}
 
 	@Override
-	public int getItemSold(String backpackID, String typeID) {
-		return getBackpack(backpackID).getItemData(typeID).getSold();
+	public @Nullable Integer getItemSold(@NotNull String backpackID, @NotNull String typeID) {
+		checkoutDate();
+		UBItemData data = getItemData(backpackID, typeID);
+		if (data == null) return null;
+		return data.getSold();
 	}
 
 	@Override
-	public Date getDataDay() {
+	public @Nullable Integer setItemAmount(@NotNull String backpackID, @NotNull String typeID, int amount) {
+		UBItemData data = getItemData(backpackID, typeID);
+		if (data == null) return null;
+		data.setAmount(amount);
+		return amount;
+	}
+
+	@Override
+	public @Nullable Integer setItemSold(@NotNull String backpackID, @NotNull String typeID, int soldAmount) {
+		UBItemData data = getItemData(backpackID, typeID);
+		if (data == null) return null;
+		data.setSold(soldAmount);
+		return soldAmount;
+	}
+
+	@Override
+	public @Nullable Integer addItemAmount(@NotNull String backpackID, @NotNull String typeID, int amount) {
+		Integer current = getItemAmount(backpackID, typeID);
+		if (current == null) return null;
+		return setItemAmount(backpackID, typeID, current + amount);
+	}
+
+	@Override
+	public @Nullable Integer addItemSold(@NotNull String backpackID, @NotNull String typeID, int amount) {
+		Integer current = getItemSold(backpackID, typeID);
+		if (current == null) return null;
+		return setItemSold(backpackID, typeID, current + amount);
+	}
+
+	@Override
+	public @Nullable Integer removeItemAmount(@NotNull String backpackID, @NotNull String typeID, int amount) {
+		return addItemAmount(backpackID, typeID, -amount);
+	}
+
+	@Override
+	public @Nullable Integer removeItemSold(@NotNull String backpackID, @NotNull String typeID, int amount) {
+		return addItemSold(backpackID, typeID, -amount);
+	}
+
+	@Override
+	public Date getDate() {
 		return this.day;
 	}
 
@@ -69,8 +133,12 @@ public class UserData implements UBUserData {
 	}
 
 	@Override
-	public void updateDate() {
-
+	public void checkoutDate() {
+		if (isCurrentDay()) return;
+		this.day = new Date(System.currentTimeMillis()); //更新日期
+		getBackpacks().values().stream()
+				.flatMap(value -> value.getContents().values().stream())
+				.forEach(UBItemData::clearSold);
 	}
 
 	@Override
