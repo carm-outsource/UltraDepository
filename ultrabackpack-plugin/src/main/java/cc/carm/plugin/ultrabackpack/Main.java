@@ -4,6 +4,7 @@ import cc.carm.plugin.ultrabackpack.api.UltraBackpackAPI;
 import cc.carm.plugin.ultrabackpack.api.util.ColorParser;
 import cc.carm.plugin.ultrabackpack.api.util.MessageUtil;
 import cc.carm.plugin.ultrabackpack.configuration.PluginConfig;
+import cc.carm.plugin.ultrabackpack.hooker.UBExpansion;
 import cc.carm.plugin.ultrabackpack.listener.CollectListener;
 import cc.carm.plugin.ultrabackpack.listener.UserListener;
 import cc.carm.plugin.ultrabackpack.manager.BackpackManager;
@@ -84,7 +85,7 @@ public class Main extends JavaPlugin {
 
 		if (MessageUtil.hasPlaceholderAPI()) {
 			log("注册变量...");
-
+			new UBExpansion(this).register();
 		} else {
 			log("检测到未安装PlaceholderAPI，跳过变量注册。");
 		}

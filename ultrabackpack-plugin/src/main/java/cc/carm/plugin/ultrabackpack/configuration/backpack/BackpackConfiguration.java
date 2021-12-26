@@ -34,8 +34,7 @@ public class BackpackConfiguration {
 	public @NotNull String getName() {
 		return this.name;
 	}
-
-
+	
 	public @NotNull GUIConfiguration getGUIConfiguration() {
 		return this.guiConfiguration;
 	}

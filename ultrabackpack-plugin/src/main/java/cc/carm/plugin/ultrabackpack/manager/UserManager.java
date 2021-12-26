@@ -39,5 +39,11 @@ public class UserManager implements UBUserManager {
 			return new UserData(userUUID, Main.getStorage(), new HashMap<>(), new Date(System.currentTimeMillis()));
 		}
 	}
-	
+
+
+	public boolean isCollectEnabled(Player player) {
+		return player.hasPermission("UltraBackpack.use") &&
+				player.hasPermission("UltraBackpack.auto") &&
+				player.hasPermission("UltraBackpack.auto.enable");
+	}
 }

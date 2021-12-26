@@ -101,6 +101,9 @@
 # %UltraBackpack_remain_<背包ID>_<物品ID>%
 - 得到对应背包内对应物品的剩余可售出数量
 - $剩余可售出数量 = $每日售出限制 - $今日售出数量
+
+# %UltraBackpack_capacity_<背包ID>%
+- 得到对应背包的容量
 ```
 
 </details>
