@@ -13,6 +13,8 @@ import java.util.Objects;
 
 public class DepositoryItem {
 
+	final Depository depository;
+
 	final @NotNull Material material;
 	final int data;
 
@@ -24,9 +26,11 @@ public class DepositoryItem {
 	@Nullable String name;
 	@Nullable List<String> lore;
 
-	public DepositoryItem(@NotNull Material material, int data,
+	public DepositoryItem(@NotNull Depository depository,
+						  @NotNull Material material, int data,
 						  int slot, double price, int limit,
 						  @Nullable String name, @Nullable List<String> lore) {
+		this.depository = depository;
 		this.material = material;
 		this.data = data;
 		this.slot = slot;
@@ -34,6 +38,10 @@ public class DepositoryItem {
 		this.limit = limit;
 		this.name = name;
 		this.lore = lore;
+	}
+
+	public Depository getDepository() {
+		return depository;
 	}
 
 	public @NotNull String getTypeID() {
@@ -92,7 +100,7 @@ public class DepositoryItem {
 		return Objects.hash(material, data);
 	}
 
-	public static DepositoryItem readFrom(String typeID, ConfigurationSection section) {
+	public static DepositoryItem readFrom(Depository depository, String typeID, ConfigurationSection section) {
 		try {
 			Material material;
 			int data = 0;
@@ -106,7 +114,7 @@ public class DepositoryItem {
 
 			if (material == null) throw new NullPointerException(typeID);
 			return new DepositoryItem(
-					material, data,
+					depository, material, data,
 					section.getInt("slot", 0),
 					section.getDouble("price", 0),
 					section.getInt("limit", 0),

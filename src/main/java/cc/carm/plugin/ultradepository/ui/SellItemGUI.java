@@ -5,7 +5,7 @@ import cc.carm.plugin.ultradepository.configuration.PluginConfig;
 import cc.carm.plugin.ultradepository.configuration.PluginMessages;
 import cc.carm.plugin.ultradepository.configuration.depository.Depository;
 import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
-import cc.carm.plugin.ultradepository.data.ItemData;
+import cc.carm.plugin.ultradepository.data.DepositoryItemData;
 import cc.carm.plugin.ultradepository.data.UserData;
 import cc.carm.plugin.ultradepository.util.ItemStackFactory;
 import cc.carm.plugin.ultradepository.util.gui.GUI;
@@ -23,7 +23,7 @@ public class SellItemGUI extends GUI {
 
 	final Player player;
 	final UserData userData;
-	final ItemData itemData;
+	final DepositoryItemData itemData;
 	final Depository configuration;
 	final DepositoryItem item;
 
@@ -31,7 +31,7 @@ public class SellItemGUI extends GUI {
 
 	int currentAmount;
 
-	public SellItemGUI(Player player, UserData userData, ItemData itemData,
+	public SellItemGUI(Player player, UserData userData, DepositoryItemData itemData,
 					   Depository configuration, DepositoryItem item) {
 		super(GUIType.FOUR_BY_NINE, PluginConfig.General.SellGUI.TITLE.get(player, new String[]{
 				configuration.getName(), item.getName()
@@ -181,7 +181,7 @@ public class SellItemGUI extends GUI {
 		return Math.min(getRemainAmount(), getSellLimit() - getSoldAmount()) - getCurrentAmount();
 	}
 
-	public static void open(Player player, UserData userData, ItemData itemData,
+	public static void open(Player player, UserData userData, DepositoryItemData itemData,
 							Depository configuration, DepositoryItem item) {
 		if (!Main.getEconomyManager().isInitialized()) return;
 		SellItemGUI gui = new SellItemGUI(player, userData, itemData, configuration, item);

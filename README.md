@@ -51,35 +51,39 @@
 <summary>展开查看所有子指令</summary>
 
 ```text
-# sell <背包ID> <物品ID> <数量>
+# open [仓库ID]
+@ 玩家指令 (UltraDepository.use)
+- 打开对应仓库的界面。
+
+# sell <仓库ID> <物品ID> <数量>
 @ 玩家指令 (UltraDepository.Command.Sell)
 - 售出对应数量的对应物品。
 - 该指令受到玩家每日售出数量的限制。
 
-# sellAll [背包ID] [物品ID]
+# sellAll [仓库ID] [物品ID]
 @ 玩家指令 (UltraDepository.Command.SellAll)
 - 售出所有相关物品。
 - 该指令受到玩家每日售出数量的限制。
 
 
-# info <玩家> [背包ID] [物品ID] 
+# info <玩家> [仓库ID] [物品ID] 
 @ 管理指令 (UltraDepository.admin)
 - 得到玩家的相关物品信息。
 
-# add <玩家> <背包ID> <物品ID> <数量>
+# add <玩家> <仓库ID> <物品ID> <数量>
 @ 管理指令 (UltraDepository.admin)
-- 为玩家添加对应背包中对于物品的数量。
+- 为玩家添加对应仓库中对于物品的数量。
 
-# remove <玩家> <背包ID> <物品ID> <数量>
+# remove <玩家> <仓库ID> <物品ID> <数量>
 @ 管理指令 (UltraDepository.admin)
-- 为玩家减少对应背包中对于物品的数量。
+- 为玩家减少对应仓库中对于物品的数量。
 
-# sell <玩家> [背包ID] [物品ID] [数量]
+# sell <玩家> [仓库ID] [物品ID] [数量]
 @ 管理指令 (UltraDepository.admin)
 - 为玩家售出相关物品。
-- 若不填写数量，则售出所有对应背包的对应物品。
-- 若不填写物品，则售出对应背包内所有物品。
-- 若不填写背包，则售出所有背包内所有物品。
+- 若不填写数量，则售出所有对应仓库的对应物品。
+- 若不填写物品，则售出对应仓库内所有物品。
+- 若不填写仓库，则售出所有仓库内所有物品。
 - 该指令受到玩家每日售出数量的限制。
 ```
 
@@ -93,24 +97,31 @@
 <summary>展开查看所有变量</summary>
 
 ```text
-# %UltraDepository_amount_<背包ID>_<物品ID>%
-- 得到对应背包内对应物品的数量
+# %UltraDepository_amount_<仓库ID>_<物品ID>%
+- 得到对应仓库内对应物品的数量
 
-# %UltraDepository_price_<背包ID>_<物品ID>%
-- 得到对应背包内对应物品的价格
+# %UltraDepository_price_<仓库ID>_<物品ID>%
+- 得到对应仓库内对应物品的价格
 
-# %UltraDepository_sold_<背包ID>_<物品ID>%
-- 得到对应背包内对应物品的今日售出数量
+# %UltraDepository_sold_<仓库ID>_<物品ID>%
+- 得到对应仓库内对应物品的今日售出数量
 
-# %UltraDepository_limit_<背包ID>_<物品ID>%
-- 得到对应背包内对应物品的每日售出限制
+# %UltraDepository_limit_<仓库ID>_<物品ID>%
+- 得到对应仓库内对应物品的每日售出限制
 
-# %UltraDepository_remain_<背包ID>_<物品ID>%
-- 得到对应背包内对应物品的剩余可售出数量
+# %UltraDepository_remain_<仓库ID>_<物品ID>%
+- 得到对应仓库内对应物品的剩余可售出数量
 - $剩余可售出数量 = $每日售出限制 - $今日售出数量
 
-# %UltraDepository_capacity_<背包ID>%
-- 得到对应背包的容量
+# %UltraDepository_capacity_<仓库ID>%
+- 得到对应仓库的容量
+
+# %UltraDepository_used_<仓库ID>%
+- 得到已使用的仓库容量
+
+# %UltraDepository_usable_<仓库ID>%
+- 得到剩余可使用的仓库容量
+
 ```
 
 </details>

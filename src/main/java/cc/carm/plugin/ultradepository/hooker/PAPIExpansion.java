@@ -1,6 +1,10 @@
 package cc.carm.plugin.ultradepository.hooker;
 
 import cc.carm.plugin.ultradepository.Main;
+import cc.carm.plugin.ultradepository.configuration.depository.Depository;
+import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
+import cc.carm.plugin.ultradepository.data.DepositoryItemData;
+import cc.carm.plugin.ultradepository.data.UserData;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +19,9 @@ public class PAPIExpansion extends PlaceholderExpansion {
 			"%UltraDepository_sold_<BackpackID>_<ItemTypeID>%",
 			"%UltraDepository_price_<BackpackID>_<ItemTypeID>%",
 			"%UltraDepository_remain_<BackpackID>_<ItemTypeID>%",
-			"%UltraDepository_capacity_<BackpackID>%"
+			"%UltraDepository_capacity_<BackpackID>%",
+			"%UltraDepository_used_<BackpackID>%",
+			"%UltraDepository_remain_<BackpackID>%"
 	);
 
 	Main main;
@@ -55,44 +61,64 @@ public class PAPIExpansion extends PlaceholderExpansion {
 		String[] args = identifier.split("_");
 
 		if (args.length < 1) {
-			return "参数不足";
+			return "Error Params";
 		}
+
+		UserData data = Main.getUserManager().getData(player);
 
 		switch (args[0].toLowerCase()) {
 			case "amount": {
-				if (args.length < 3) return "参数不足";
-				Integer amount = Main.getUserManager().getData(player).getItemAmount(args[2], args[3]);
-				if (amount == null) return "仓库或物品不存在";
+				if (args.length < 3) return "Error Params";
+				Integer amount = data.getItemAmount(args[1], args[2]);
+				if (amount == null) return "Depository or Item not exists";
 				else return amount.toString();
 			}
 			case "sold": {
-				if (args.length < 3) return "参数不足";
-				Integer sold = Main.getUserManager().getData(player).getItemSold(args[2], args[3]);
-				if (sold == null) return "仓库或物品不存在";
+				if (args.length < 3) return "Error Params";
+				Integer sold = data.getItemSold(args[1], args[2]);
+				if (sold == null) return "Depository or Item not exists";
 				else return sold.toString();
 			}
 			case "remain": {
-				if (args.length < 3) return "参数不足";
-
-				Integer sold = Main.getUserManager().getData(player).getItemSold(args[2], args[3]);
-				if (sold == null) return "仓库或物品不存在";
-
-				Integer limit = Main.getDepositoryManager().getItemSellLimit(args[2], args[3]);
-				if (limit == null) return "仓库或物品不存在";
-
-				return Integer.toString(limit - sold);
+				if (args.length < 2) return "Error Params";
+				Depository depository = Main.getDepositoryManager().getDepository(args[1]);
+				if (depository == null) return "Depository not exists";
+				DepositoryItem item = depository.getItems().get(args[2]);
+				if (item == null) return "Depository Item not exists";
+				int limit = item.getLimit();
+				DepositoryItemData itemData = data.getItemData(item);
+				return Integer.toString(limit - itemData.getSold());
 			}
 			case "limit": {
-				if (args.length < 3) return "参数不足";
-				Integer limit = Main.getDepositoryManager().getItemSellLimit(args[2], args[3]);
-				if (limit == null) return "仓库或物品不存在";
+				if (args.length < 3) return "Error Params";
+				Integer limit = Main.getDepositoryManager().getItemSellLimit(args[1], args[2]);
+				if (limit == null) return "Depository or Item not exists";
 				else return limit.toString();
 			}
 			case "price": {
-				if (args.length < 3) return "参数不足";
-				Double price = Main.getDepositoryManager().getItemPrice(args[2], args[3]);
-				if (price == null) return "仓库或物品不存在";
+				if (args.length < 3) return "Error Params";
+				Double price = Main.getDepositoryManager().getItemPrice(args[1], args[2]);
+				if (price == null) return "Depository or Item not exists";
 				else return price.toString();
+			}
+			case "capacity": {
+				if (args.length < 2) return "Error Params";
+				Depository depository = Main.getDepositoryManager().getDepository(args[1]);
+				if (depository == null) return "Depository not exists";
+				return Integer.toString(depository.getCapacity().getPlayerCapacity(player));
+			}
+			case "used": {
+				if (args.length < 2) return "Error Params";
+				Depository depository = Main.getDepositoryManager().getDepository(args[1]);
+				if (depository == null) return "Depository not exists";
+				return Integer.toString(data.getDepositoryData(depository).getUsedCapacity());
+			}
+			case "usable": {
+				if (args.length < 2) return "Error Params";
+				Depository depository = Main.getDepositoryManager().getDepository(args[1]);
+				if (depository == null) return "Depository not exists";
+				int used = data.getDepositoryData(depository).getUsedCapacity();
+				return Integer.toString(depository.getCapacity().getPlayerCapacity(player) - used);
 			}
 			case "version": {
 				return getVersion();

@@ -38,6 +38,8 @@ public class DepositoryManager {
 	}
 
 	public void loadDepositories() {
+		long start = System.currentTimeMillis();
+		Main.log("	开始加载仓库配置...");
 		File folder = new File(Main.getInstance().getDataFolder(), "depositories");
 		if (!folder.exists()) {
 			folder.mkdir();
@@ -56,11 +58,14 @@ public class DepositoryManager {
 			String identifier = fileName.substring(0, fileName.lastIndexOf("."));
 			FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
 			Depository depository = Depository.loadFrom(identifier, configuration);
-			if (depository != null) {
+			if (depository.getItems().size() > 0) {
 				data.put(identifier, depository);
+			} else {
+				Main.error("	仓库 " + depository.getName() + " 未配置任何物品，请检查相关配置！");
 			}
 		}
 		this.depositories = data;
+		Main.log("	仓库配置加载完成，共加载 " + data.size() + " 个仓库，耗时 " + (System.currentTimeMillis() - start) + "ms 。");
 	}
 
 	public @NotNull HashMap<@NotNull String, @NotNull Depository> getDepositories() {

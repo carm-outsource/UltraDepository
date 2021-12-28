@@ -43,17 +43,8 @@ public class UserListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
-		String playerName = player.getName();
 		UUID playerUUID = player.getUniqueId();
-		UserData userData = Main.getUserManager().getData(player);
-		Main.getScheduler().runAsync(() -> {
-			try {
-				userData.save();
-				Main.debug(" 玩家 " + playerName + " 数据已保存并卸载。");
-			} catch (Exception ignored) {
-			}
-			Main.getUserManager().getDataCache().remove(playerUUID);
-		});
+		Main.getScheduler().runAsync(() -> Main.getUserManager().unloadData(playerUUID, true));
 	}
 
 }

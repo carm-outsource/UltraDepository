@@ -37,6 +37,28 @@ public class UserManager {
 		}
 	}
 
+	public void unloadData(UUID uuid, boolean save) {
+		UserData data = getData(uuid);
+		if (data == null) return;
+		if (save) saveData(data);
+		dataCache.remove(uuid);
+	}
+
+	public void saveData(UserData data) {
+		try {
+			data.save();
+			Main.debug(" 玩家 " + data.getUserUUID() + " 数据已保存。");
+		} catch (Exception e) {
+			Main.error("无法正常保存玩家数据，请检查数据配置！");
+			Main.error("Could not save user's data, please check the data configuration!");
+			e.printStackTrace();
+		}
+	}
+
+	public void saveAll() {
+		dataCache.values().forEach(this::saveData);
+	}
+
 	public boolean isCollectEnabled(Player player) {
 		return player.hasPermission("UltraDepository.use") &&
 				player.hasPermission("UltraDepository.auto") &&

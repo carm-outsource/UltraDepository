@@ -4,8 +4,8 @@ import cc.carm.plugin.ultradepository.configuration.PluginConfig;
 import cc.carm.plugin.ultradepository.hooker.PAPIExpansion;
 import cc.carm.plugin.ultradepository.listener.CollectListener;
 import cc.carm.plugin.ultradepository.listener.UserListener;
-import cc.carm.plugin.ultradepository.manager.DepositoryManager;
 import cc.carm.plugin.ultradepository.manager.ConfigManager;
+import cc.carm.plugin.ultradepository.manager.DepositoryManager;
 import cc.carm.plugin.ultradepository.manager.EconomyManager;
 import cc.carm.plugin.ultradepository.manager.UserManager;
 import cc.carm.plugin.ultradepository.storage.DataStorage;
@@ -72,9 +72,9 @@ public class Main extends JavaPlugin {
 			log("	&7[-] 检测到未安装Vault，关闭出售功能。");
 		}
 
-		log("加载背包管理器...");
+		log("加载仓库管理器...");
 		depositoryManager = new DepositoryManager();
-
+		getDepositoryManager().loadDepositories();
 
 		log("注册监听器...");
 		regListener(new UserListener());
@@ -100,7 +100,7 @@ public class Main extends JavaPlugin {
 		long startTime = System.currentTimeMillis();
 
 		log("保存现有用户数据...");
-
+		getUserManager().saveAll();
 
 		log("释放存储源...");
 		getStorage().shutdown();

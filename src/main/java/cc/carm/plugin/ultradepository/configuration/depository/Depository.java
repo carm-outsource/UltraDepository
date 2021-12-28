@@ -11,18 +11,23 @@ import java.util.Objects;
 
 public class Depository {
 
-	final String identifier;
+	private final @NotNull String identifier;
 
-	String name;
-	GUIConfiguration guiConfiguration;
-	DepositoryCapacity capacity;
+	private final @NotNull String name;
+	private final @NotNull GUIConfiguration guiConfiguration;
+	private final @NotNull DepositoryCapacity capacity;
 
-	Map<String, DepositoryItem> items;
+	private Map<String, DepositoryItem> items;
 
+	public Depository(@NotNull String identifier, @NotNull String name,
+					  @NotNull GUIConfiguration guiConfiguration,
+					  @NotNull DepositoryCapacity capacity) {
+		this(identifier, name, guiConfiguration, capacity, new HashMap<>());
+	}
 
-	public Depository(String identifier, String name,
-					  GUIConfiguration guiConfiguration,
-					  DepositoryCapacity capacity,
+	public Depository(@NotNull String identifier, @NotNull String name,
+					  @NotNull GUIConfiguration guiConfiguration,
+					  @NotNull DepositoryCapacity capacity,
 					  Map<String, DepositoryItem> items) {
 		this.identifier = identifier;
 		this.name = name;
@@ -66,24 +71,24 @@ public class Depository {
 	}
 
 	public static Depository loadFrom(String identifier, FileConfiguration configuration) {
-		return new Depository(
-				identifier, configuration.getString("name"),
+		Depository depository = new Depository(identifier, configuration.getString("name", identifier),
 				GUIConfiguration.readConfiguration(configuration.getConfigurationSection("gui")),
 				new DepositoryCapacity(
 						configuration.getInt("capacity.default", 0),
 						configuration.getStringList("capacity.permissions")
-				),
-				readItems(configuration.getConfigurationSection("items"))
+				)
 		);
+		depository.items = readItems(depository, configuration.getConfigurationSection("items"));
+		return depository;
 	}
 
-	private static Map<String, DepositoryItem> readItems(ConfigurationSection section) {
+	private static Map<String, DepositoryItem> readItems(Depository depository, ConfigurationSection section) {
 		if (section == null) return new HashMap<>();
 		Map<String, DepositoryItem> items = new HashMap<>();
 		for (String key : section.getKeys(false)) {
 			ConfigurationSection itemSection = section.getConfigurationSection(key);
 			if (itemSection != null) {
-				items.put(key, DepositoryItem.readFrom(key, itemSection));
+				items.put(key, DepositoryItem.readFrom(depository, key, itemSection));
 			}
 		}
 		return items;

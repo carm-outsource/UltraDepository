@@ -5,7 +5,7 @@ import cc.carm.plugin.ultradepository.configuration.PluginConfig;
 import cc.carm.plugin.ultradepository.configuration.PluginMessages;
 import cc.carm.plugin.ultradepository.configuration.depository.Depository;
 import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
-import cc.carm.plugin.ultradepository.data.ItemData;
+import cc.carm.plugin.ultradepository.data.DepositoryItemData;
 import cc.carm.plugin.ultradepository.data.UserData;
 import cc.carm.plugin.ultradepository.util.ItemStackFactory;
 import cc.carm.plugin.ultradepository.util.gui.GUI;
@@ -41,7 +41,7 @@ public class DepositoryGUI extends GUI {
 
 	private GUIItem createGUIItem(DepositoryItem item) {
 		ItemStackFactory factory = new ItemStackFactory(item.getDisplayItem());
-		ItemData itemData = userData.getItemData(depository, item);
+		DepositoryItemData itemData = userData.getItemData(item);
 		List<String> additionalLore = PluginConfig.General.ADDITIONAL_LORE.get(player, new Object[]{
 				item.getName(), itemData.getAmount(), item.getPrice(), itemData.getSold(), item.getLimit()
 		});

@@ -5,10 +5,12 @@ import cc.carm.lib.easysql.api.SQLManager;
 import cc.carm.lib.easysql.api.action.query.PreparedQueryAction;
 import cc.carm.lib.easysql.api.action.query.SQLQuery;
 import cc.carm.plugin.ultradepository.Main;
-import cc.carm.plugin.ultradepository.data.DepositoryData;
-import cc.carm.plugin.ultradepository.data.ItemData;
 import cc.carm.plugin.ultradepository.configuration.PluginConfig;
+import cc.carm.plugin.ultradepository.configuration.depository.Depository;
+import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
 import cc.carm.plugin.ultradepository.configuration.values.ConfigValue;
+import cc.carm.plugin.ultradepository.data.DepositoryData;
+import cc.carm.plugin.ultradepository.data.DepositoryItemData;
 import cc.carm.plugin.ultradepository.data.UserData;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -120,21 +122,23 @@ public class MySQLStorage implements DataStorage {
 		Main.debug("正通过 MySQLStorage 加载 " + uuid + " 的用户数据...");
 		try (SQLQuery query = createAction(uuid).execute()) {
 			ResultSet resultSet = query.getResultSet();
-			Map<String, DepositoryData> dataMap = new HashMap<>();
 			if (resultSet != null && resultSet.next()) {
 				String dataJSON = resultSet.getString("data");
 				Date date = resultSet.getDate("day");
+				UserData data = new UserData(uuid, this, new HashMap<>(), date);
+
 				JsonElement dataElement = PARSER.parse(dataJSON);
 				if (dataElement.isJsonObject()) {
-					dataElement.getAsJsonObject().entrySet().forEach(entry -> {
-						String backpackID = entry.getKey();
-						DepositoryData contentsData = parseContentsData(entry.getValue());
-						if (contentsData != null) dataMap.put(backpackID, contentsData);
-					});
+					for (Map.Entry<String, JsonElement> entry : dataElement.getAsJsonObject().entrySet()) {
+						Depository depository = Main.getDepositoryManager().getDepository(entry.getKey());
+						if (depository == null) continue;
+						DepositoryData contentsData = parseContentsData(depository, data, entry.getValue());
+						if (contentsData != null) data.setDepository(contentsData);
+					}
 				}
 				Main.debug("通过 MySQLStorage 加载 " + uuid + " 的用户数据完成，"
 						+ "耗时 " + (System.currentTimeMillis() - start) + "ms。");
-				return new UserData(uuid, this, dataMap, date);
+				return data;
 			}
 			Main.debug("当前库内不存在玩家 " + uuid + " 的数据，视作新档。");
 			return new UserData(uuid, this, new HashMap<>(), new Date(System.currentTimeMillis()));
@@ -150,7 +154,7 @@ public class MySQLStorage implements DataStorage {
 
 		JsonObject dataObject = new JsonObject();
 
-		data.getBackpacks().forEach((id, contents) -> dataObject.add(id, serializeContentsData(contents)));
+		data.getDepositories().forEach((id, contents) -> dataObject.add(id, serializeContentsData(contents)));
 
 		try {
 			getSQLManager().createReplace(SQLTables.USER_DATA.getName())
@@ -179,45 +183,47 @@ public class MySQLStorage implements DataStorage {
 				.setLimit(1).build();
 	}
 
-	private DepositoryData parseContentsData(JsonElement contentsElement) {
-		return contentsElement.isJsonObject() ? parseContentsData(contentsElement.getAsJsonObject()) : null;
+	private DepositoryData parseContentsData(Depository source, UserData owner, JsonElement contentsElement) {
+		return contentsElement.isJsonObject() ? parseContentsData(source, owner, contentsElement.getAsJsonObject()) : null;
 	}
 
-	private DepositoryData parseContentsData(JsonObject contentsObject) {
-		Map<String, ItemData> contents = new HashMap<>();
+	private DepositoryData parseContentsData(Depository source, UserData owner, JsonObject contentsObject) {
+		DepositoryData data = DepositoryData.emptyContents(source, owner);
 		for (Map.Entry<String, JsonElement> entry : contentsObject.entrySet()) {
-			String itemType = entry.getKey();
-			ItemData data = parseItemData(entry.getValue());
-			contents.put(itemType, data);
+			DepositoryItem item = source.getItems().get(entry.getKey());
+			if (item == null) continue;
+			DepositoryItemData itemData = parseItemData(item, data, entry.getValue());
+			if (itemData != null) data.getContents().put(item.getTypeID(), itemData);
 		}
-		return new DepositoryData(contents);
+		return data;
 	}
 
-	private ItemData parseItemData(JsonElement itemElement) {
-		return itemElement.isJsonObject() ? parseItemData(itemElement.getAsJsonObject()) : null;
+	private DepositoryItemData parseItemData(DepositoryItem source, DepositoryData owner, JsonElement itemElement) {
+		return itemElement.isJsonObject() ? parseItemData(source, owner, itemElement.getAsJsonObject()) : null;
 	}
 
-	private ItemData parseItemData(JsonObject itemObject) {
-		if (!itemObject.has("amount") || !itemObject.has("sold")) {
-			return ItemData.emptyItemData();
-		} else {
-			return new ItemData(itemObject.get("amount").getAsInt(), itemObject.get("sold").getAsInt());
-		}
+	private DepositoryItemData parseItemData(DepositoryItem source, DepositoryData owner, JsonObject itemObject) {
+		int amount = itemObject.has("amount") ? itemObject.get("amount").getAsInt() : 0;
+		int sold = itemObject.has("sold") ? itemObject.get("sold").getAsInt() : 0;
+		if (amount == 0 && sold == 0) return null;
+		else return new DepositoryItemData(source, owner, amount, sold);
 	}
 
 	@Nullable
 	private JsonObject serializeContentsData(@Nullable DepositoryData contentsData) {
 		if (contentsData == null) return null;
 		JsonObject contentsObject = new JsonObject();
-		contentsData.getContents().forEach((typeID, item) -> contentsObject.add(typeID, serializeItemData(item)));
+		contentsData.getContents().entrySet().stream()
+				.filter(entry -> entry.getValue().getSold() > 0 || entry.getValue().getAmount() > 0)
+				.forEach(entry -> contentsObject.add(entry.getKey(), serializeItemData(entry.getValue())));
 		return contentsObject;
 	}
 
 	@NotNull
-	private JsonObject serializeItemData(@NotNull ItemData itemData) {
+	private JsonObject serializeItemData(@NotNull DepositoryItemData itemData) {
 		JsonObject itemObject = new JsonObject();
-		itemObject.addProperty("amount", itemData.getAmount());
-		itemObject.addProperty("sold", itemData.getSold());
+		if (itemData.getAmount() > 0) itemObject.addProperty("amount", itemData.getAmount());
+		if (itemData.getSold() > 0) itemObject.addProperty("sold", itemData.getSold());
 		return itemObject;
 	}
 
