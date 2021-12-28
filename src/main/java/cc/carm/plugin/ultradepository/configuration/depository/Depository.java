@@ -5,6 +5,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -65,19 +66,26 @@ public class Depository {
 	}
 
 	public static Depository loadFrom(String identifier, FileConfiguration configuration) {
-		String name = configuration.getString("name");
-
-		GUIConfiguration guiConfiguration = GUIConfiguration.readConfiguration(configuration.getConfigurationSection("gui"));
-		DepositoryCapacity capacity = new DepositoryCapacity(
-				configuration.getInt("capacity.default", 0),
-				configuration.getStringList("capacity.permissions")
+		return new Depository(
+				identifier, configuration.getString("name"),
+				GUIConfiguration.readConfiguration(configuration.getConfigurationSection("gui")),
+				new DepositoryCapacity(
+						configuration.getInt("capacity.default", 0),
+						configuration.getStringList("capacity.permissions")
+				),
+				readItems(configuration.getConfigurationSection("items"))
 		);
+	}
 
-		ConfigurationSection itemsSection = configuration.getConfigurationSection("items");
-		if (itemsSection != null) {
-
+	private static Map<String, DepositoryItem> readItems(ConfigurationSection section) {
+		if (section == null) return new HashMap<>();
+		Map<String, DepositoryItem> items = new HashMap<>();
+		for (String key : section.getKeys(false)) {
+			ConfigurationSection itemSection = section.getConfigurationSection(key);
+			if (itemSection != null) {
+				items.put(key, DepositoryItem.readFrom(key, itemSection));
+			}
 		}
-
-		return null;
+		return items;
 	}
 }

@@ -1,7 +1,9 @@
 package cc.carm.plugin.ultradepository.configuration.depository;
 
+import cc.carm.plugin.ultradepository.Main;
 import cc.carm.plugin.ultradepository.util.ItemStackFactory;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +25,7 @@ public class DepositoryItem {
 	@Nullable List<String> lore;
 
 	public DepositoryItem(@NotNull Material material, int data,
-						  int slot, int price, int limit,
+						  int slot, double price, int limit,
 						  @Nullable String name, @Nullable List<String> lore) {
 		this.material = material;
 		this.data = data;
@@ -35,7 +37,7 @@ public class DepositoryItem {
 	}
 
 	public @NotNull String getTypeID() {
-		return getMaterial().name() + (getData() != 0 ? ":" + getData() : "");
+		return getMaterial().name() + ":" + getData();
 	}
 
 	public @NotNull Material getMaterial() {
@@ -88,5 +90,34 @@ public class DepositoryItem {
 	@Override
 	public int hashCode() {
 		return Objects.hash(material, data);
+	}
+
+	public static DepositoryItem readFrom(String typeID, ConfigurationSection section) {
+		try {
+			Material material;
+			int data = 0;
+			if (typeID.contains(":")) {
+				String[] args = typeID.split(":");
+				material = Material.matchMaterial(args[0]);
+				data = Integer.parseInt(args[1]);
+			} else {
+				material = Material.matchMaterial(typeID);
+			}
+
+			if (material == null) throw new NullPointerException(typeID);
+			return new DepositoryItem(
+					material, data,
+					section.getInt("slot", 0),
+					section.getDouble("price", 0),
+					section.getInt("limit", 0),
+					section.getString("name", material.name()),
+					section.getStringList("lore")
+			);
+
+		} catch (Exception ex) {
+			Main.error("没有与 " + typeID + " 匹配的物品！");
+			Main.error("No match material of " + typeID + " !");
+			return null;
+		}
 	}
 }
