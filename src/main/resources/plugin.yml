@@ -2,8 +2,8 @@ main: cc.carm.plugin.ultradepository.Main
 name: UltraDepository
 
 version: ${project.version}
-description: ${project.parent.description}
-website: ${project.parent.url}
+description: ${project.description}
+website: ${project.url}
 
 author: CarmJos
 

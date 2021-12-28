@@ -1,8 +1,8 @@
-# ${project.parent.name} - ${project.parent.description}
-# 项目地址: ${project.parent.url}
-# 下载地址: ${project.parent.distributionManagement.downloadUrl}
+# ${project.name} - ${project.description}
+# 项目地址: ${project.url}
+# 下载地址: ${project.distributionManagement.downloadUrl}
 
-version: ${project.parent.version}
+version: ${project.version}
 
 debug: false
 

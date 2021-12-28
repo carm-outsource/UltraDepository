@@ -1,5 +1,5 @@
-import cc.carm.plugin.ultrastorehouse.configuration.gui.GUIActionType;
-import cc.carm.plugin.ultrastorehouse.manager.ConfigManager;
+import cc.carm.plugin.ultradepository.configuration.gui.GUIActionType;
+import cc.carm.plugin.ultradepository.manager.ConfigManager;
 import org.bukkit.event.inventory.ClickType;
 import org.junit.Test;
 
