@@ -9,19 +9,19 @@
                                              |_|                    
 ```
 
-# UltraBackpack
+# UltraDepository
 
-[![version](https://img.shields.io/github/v/release/CarmJos/UltraBackpack)](https://github.com/CarmJos/UltraBackpack/releases)
-[![License](https://img.shields.io/github/license/CarmJos/UltraBackpack)](https://opensource.org/licenses/GPL-3.0)
-[![workflow](https://github.com/CarmJos/UltraBackpack/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/CarmJos/UltraBackpack/actions/workflows/maven.yml)
-![CodeSize](https://img.shields.io/github/languages/code-size/CarmJos/UltraBackpack)
-![](https://visitor-badge.glitch.me/badge?page_id=UltraBackpack.readme)
+[![version](https://img.shields.io/github/v/release/CarmJos/UltraDepository)](https://github.com/CarmJos/UltraDepository/releases)
+[![License](https://img.shields.io/github/license/CarmJos/UltraDepository)](https://opensource.org/licenses/GPL-3.0)
+[![workflow](https://github.com/CarmJos/UltraDepository/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/CarmJos/UltraDepository/actions/workflows/maven.yml)
+![CodeSize](https://img.shields.io/github/languages/code-size/CarmJos/UltraDepository)
+![](https://visitor-badge.glitch.me/badge?page_id=UltraDepository.readme)
 
-超级背包插件，支持设定不同物品的存储背包。
+超级仓库插件，支持设定不同物品的存储仓库。
 
 本插件基于Spigot实现，**理论上支持全版本**。
 
-本插件由 [墨豆Mordo](https://www.zimrs.cn) 请求本人开发，经过授权后开源。
+本插件由 [墨豆Mordo](https://www.zimrs.cn) 赞助本人开发，经过授权后开源。
 
 ## 效果预览
 
@@ -32,43 +32,43 @@
 - **[自带]** 数据部分基于 [EasySQL](https://github.com/CarmJos/EasySQL) 实现。
 - **[可选]** 变量部分基于 [PlaceholderAPI](https://www.spigotmc.org/resources/6245/) 实现。
 
-详细依赖列表可见 [Dependencies](https://github.com/CarmJos/UltraBackpack/network/dependencies) 。
+详细依赖列表可见 [Dependencies](https://github.com/CarmJos/UltraDepository/network/dependencies) 。
 
 ## 特殊优势
 
 ## 插件指令
 
-指令主指令为 /UltraBackpack (/ub | /backpack)
+指令主指令为 /UltraDepository (/ud | /Depository)
 
 <details>
 <summary>展开查看所有子指令</summary>
 
 ```text
 # sell <背包ID> <物品ID> <数量>
-@ 玩家指令 (UltraBackpack.Command.Sell)
+@ 玩家指令 (UltraDepository.Command.Sell)
 - 售出对应数量的对应物品。
 - 该指令受到玩家每日售出数量的限制。
 
 # sellAll [背包ID] [物品ID]
-@ 玩家指令 (UltraBackpack.Command.SellAll)
+@ 玩家指令 (UltraDepository.Command.SellAll)
 - 售出所有相关物品。
 - 该指令受到玩家每日售出数量的限制。
 
 
 # info <玩家> [背包ID] [物品ID] 
-@ 管理指令 (UltraBackpack.admin)
+@ 管理指令 (UltraDepository.admin)
 - 得到玩家的相关物品信息。
 
 # add <玩家> <背包ID> <物品ID> <数量>
-@ 管理指令 (UltraBackpack.admin)
+@ 管理指令 (UltraDepository.admin)
 - 为玩家添加对应背包中对于物品的数量。
 
 # remove <玩家> <背包ID> <物品ID> <数量>
-@ 管理指令 (UltraBackpack.admin)
+@ 管理指令 (UltraDepository.admin)
 - 为玩家减少对应背包中对于物品的数量。
 
 # sell <玩家> [背包ID] [物品ID] [数量]
-@ 管理指令 (UltraBackpack.admin)
+@ 管理指令 (UltraDepository.admin)
 - 为玩家售出相关物品。
 - 若不填写数量，则售出所有对应背包的对应物品。
 - 若不填写物品，则售出对应背包内所有物品。
@@ -86,23 +86,23 @@
 <summary>展开查看所有变量</summary>
 
 ```text
-# %UltraBackpack_amount_<背包ID>_<物品ID>%
+# %UltraDepository_amount_<背包ID>_<物品ID>%
 - 得到对应背包内对应物品的数量
 
-# %UltraBackpack_price_<背包ID>_<物品ID>%
+# %UltraDepository_price_<背包ID>_<物品ID>%
 - 得到对应背包内对应物品的价格
 
-# %UltraBackpack_sold_<背包ID>_<物品ID>%
+# %UltraDepository_sold_<背包ID>_<物品ID>%
 - 得到对应背包内对应物品的今日售出数量
 
-# %UltraBackpack_limit_<背包ID>_<物品ID>%
+# %UltraDepository_limit_<背包ID>_<物品ID>%
 - 得到对应背包内对应物品的每日售出限制
 
-# %UltraBackpack_remain_<背包ID>_<物品ID>%
+# %UltraDepository_remain_<背包ID>_<物品ID>%
 - 得到对应背包内对应物品的剩余可售出数量
 - $剩余可售出数量 = $每日售出限制 - $今日售出数量
 
-# %UltraBackpack_capacity_<背包ID>%
+# %UltraDepository_capacity_<背包ID>%
 - 得到对应背包的容量
 ```
 
@@ -112,17 +112,17 @@
 
 ## 配置文件
 
-### [插件配置文件](ultrabackpack-plugin/src/main/resources/config.yml) (config.yml)
+### [插件配置文件](src/main/resources/config.yml) (config.yml)
 
 详见源文件。
 
-### [消息配置文件](ultrabackpack-plugin/src/main/resources/messages.yml) (messages.yml)
+### [消息配置文件](src/main/resources/messages.yml) (messages.yml)
 
 详见源文件。
 
-### 背包类型配置文件 (backpacks/<ID>.yml)
+### 背包类型配置文件 (depositories/<ID>.yml)
 
-所有 背包类均为单独的配置文件，存放于 `插件配置目录/backpacks` 下，便于管理。
+所有 背包类均为单独的配置文件，存放于 `插件配置目录/depositories` 下，便于管理。
 
 文件名即背包的ID，理论上可以随便取，但强烈推荐使用纯英文，部分符号可能会影响正常读取，请避免使用。
 

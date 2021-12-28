@@ -1,2 +1,0 @@
-COLLECT: "&f您收集了 &e%(item)&7x%(amount) &f，已自动放入到您的 &6%(backpack) &f中。"
-SELL: "&f您出售了 &e%(item)&7x%(amount) &f，共赚取 &6%(money) &f元。"
