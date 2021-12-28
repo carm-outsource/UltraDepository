@@ -66,8 +66,12 @@ public class DepositoryItem {
 		return lore;
 	}
 
+	public ItemStack getRawItem(int amount) {
+		return new ItemStack(getMaterial(), amount, (short) getData());
+	}
+
 	public ItemStack getDisplayItem() {
-		ItemStackFactory factory = new ItemStackFactory(getMaterial(), 1, getData());
+		ItemStackFactory factory = new ItemStackFactory(getRawItem(1));
 		if (getName() != null) factory.setDisplayName(getName());
 		if (getLore() != null) factory.setLore(getLore());
 		return factory.toItemStack();

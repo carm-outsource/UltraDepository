@@ -1,9 +1,9 @@
 package cc.carm.plugin.ultradepository.configuration.message;
 
 
-import cc.carm.plugin.ultradepository.util.MessageUtil;
 import cc.carm.plugin.ultradepository.configuration.values.ConfigValueList;
 import cc.carm.plugin.ultradepository.manager.ConfigManager;
+import cc.carm.plugin.ultradepository.util.MessageUtil;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,22 +43,18 @@ public class ConfigMessageList extends ConfigValueList<String> {
 	}
 
 	public void send(@Nullable CommandSender sender) {
-		MessageUtil.send(sender, get());
-	}
-
-	public void sendWithPlaceholders(@Nullable CommandSender sender) {
 		MessageUtil.sendWithPlaceholders(sender, get());
 	}
 
-	public void sendWithPlaceholders(@Nullable CommandSender sender, Object[] values) {
+	public void send(@Nullable CommandSender sender, Object[] values) {
 		if (messageParams != null) {
-			sendWithPlaceholders(sender, messageParams, values);
+			send(sender, messageParams, values);
 		} else {
-			sendWithPlaceholders(sender);
+			send(sender);
 		}
 	}
 
-	public void sendWithPlaceholders(@Nullable CommandSender sender, String[] params, Object[] values) {
+	public void send(@Nullable CommandSender sender, String[] params, Object[] values) {
 		MessageUtil.sendWithPlaceholders(sender, get(), params, values);
 	}
 }

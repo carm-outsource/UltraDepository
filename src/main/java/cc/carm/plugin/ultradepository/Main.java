@@ -127,10 +127,9 @@ public class Main extends JavaPlugin {
 		return economyManager;
 	}
 
-	public static DepositoryManager getBackpackManager() {
+	public static DepositoryManager getDepositoryManager() {
 		return depositoryManager;
 	}
-
 
 	/**
 	 * 注册监听器

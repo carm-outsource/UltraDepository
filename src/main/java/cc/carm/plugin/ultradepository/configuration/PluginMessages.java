@@ -9,8 +9,16 @@ public class PluginMessages {
 			"item-sold", new String[0], new String[]{
 			"%(item)", "%(amount)", "%(money)"
 	});
+
+	public static final ConfigMessageList PICKUP = new ConfigMessageList(
+			"item-pickup", new String[0], new String[]{
+			"%(item)", "%(amount)"
+	});
+
 	public static final ConfigMessageList COLLECTED = new ConfigMessageList(
 			"item-collected", new String[0], new String[]{
-			"%(item)", "%(amount)", "%(backpack)"
+			"%(item)", "%(amount)", "%(depository)"
 	});
+
+	public static final ConfigMessageList NO_SPACE = new ConfigMessageList("no-space");
 }

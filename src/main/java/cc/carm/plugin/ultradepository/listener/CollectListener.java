@@ -38,7 +38,7 @@ public class CollectListener implements Listener {
 		if (drops.isEmpty()) return;
 		event.setDropItems(false);
 
-		Collection<ItemStack> finalDrops = Main.getBackpackManager().collectItem(player, drops);
+		Collection<ItemStack> finalDrops = Main.getDepositoryManager().collectItem(player, drops);
 		finalDrops.forEach(finalDrop -> world.dropItemNaturally(location, finalDrop));
 
 	}
@@ -51,7 +51,7 @@ public class CollectListener implements Listener {
 		if (player == null) return;
 		if (!Main.getUserManager().isCollectEnabled(player)) return;
 
-		Collection<ItemStack> finalDrops = Main.getBackpackManager().collectItem(player, event.getDrops());
+		Collection<ItemStack> finalDrops = Main.getDepositoryManager().collectItem(player, event.getDrops());
 		event.getDrops().clear();
 		event.getDrops().addAll(finalDrops);
 	}
@@ -69,7 +69,7 @@ public class CollectListener implements Listener {
 		if (thrower != null && thrower.equals(player.getUniqueId())) return;
 
 		ItemStack item = event.getItem().getItemStack();
-		if (Main.getBackpackManager().collectItem(player, item)) {
+		if (Main.getDepositoryManager().collectItem(player, item)) {
 			event.setCancelled(true);
 			event.getItem().remove();
 		}

@@ -77,20 +77,20 @@ public class PAPIExpansion extends PlaceholderExpansion {
 				Integer sold = Main.getUserManager().getData(player).getItemSold(args[2], args[3]);
 				if (sold == null) return "仓库或物品不存在";
 
-				Integer limit = Main.getBackpackManager().getItemSellLimit(args[2], args[3]);
+				Integer limit = Main.getDepositoryManager().getItemSellLimit(args[2], args[3]);
 				if (limit == null) return "仓库或物品不存在";
 
 				return Integer.toString(limit - sold);
 			}
 			case "limit": {
 				if (args.length < 3) return "参数不足";
-				Integer limit = Main.getBackpackManager().getItemSellLimit(args[2], args[3]);
+				Integer limit = Main.getDepositoryManager().getItemSellLimit(args[2], args[3]);
 				if (limit == null) return "仓库或物品不存在";
 				else return limit.toString();
 			}
 			case "price": {
 				if (args.length < 3) return "参数不足";
-				Double price = Main.getBackpackManager().getItemPrice(args[2], args[3]);
+				Double price = Main.getDepositoryManager().getItemPrice(args[2], args[3]);
 				if (price == null) return "仓库或物品不存在";
 				else return price.toString();
 			}

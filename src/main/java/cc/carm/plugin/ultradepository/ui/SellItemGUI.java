@@ -1,13 +1,13 @@
 package cc.carm.plugin.ultradepository.ui;
 
 import cc.carm.plugin.ultradepository.Main;
-import cc.carm.plugin.ultradepository.data.ItemData;
-import cc.carm.plugin.ultradepository.util.ItemStackFactory;
 import cc.carm.plugin.ultradepository.configuration.PluginConfig;
 import cc.carm.plugin.ultradepository.configuration.PluginMessages;
 import cc.carm.plugin.ultradepository.configuration.depository.Depository;
 import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
+import cc.carm.plugin.ultradepository.data.ItemData;
 import cc.carm.plugin.ultradepository.data.UserData;
+import cc.carm.plugin.ultradepository.util.ItemStackFactory;
 import cc.carm.plugin.ultradepository.util.gui.GUI;
 import cc.carm.plugin.ultradepository.util.gui.GUIItem;
 import cc.carm.plugin.ultradepository.util.gui.GUIType;
@@ -127,7 +127,7 @@ public class SellItemGUI extends GUI {
 				int amount = Math.min(getCurrentAmount(), Math.min(getRemainAmount(), getSellLimit() - getSoldAmount()));
 				if (amount > 0) {
 					double money = Main.getEconomyManager().sell(player, getItemPrice(), amount);
-					PluginMessages.SOLD.sendWithPlaceholders(player, new Object[]{
+					PluginMessages.SOLD.send(player, new Object[]{
 							getItemName(), amount, money
 					});
 				}

@@ -1,6 +1,11 @@
 item-collected:
   - "&f您收集了 &e%(item)&7x%(amount) &f，已自动放入到您的 &6%(depository) &f中。"
 
+
+item-pickup:
+  - "&f您取出了 &e%(item)&7x%(amount) &f，已自动放入到您的背包中。"
+
+
 item-sold:
   - "&f您出售了 &e%(item)&7x%(amount) &f，共赚取 &6%(money) &f元。"
 

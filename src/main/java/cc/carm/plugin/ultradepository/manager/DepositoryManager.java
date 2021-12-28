@@ -8,6 +8,7 @@ import com.google.common.collect.HashMultimap;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -88,6 +89,11 @@ public class DepositoryManager {
 
 	public boolean collectItem(Player player, ItemStack item) {
 		if (!Main.getUserManager().isCollectEnabled(player)) return false;
+		ItemMeta meta = item.getItemMeta();
+		if (meta != null && (meta.hasLore() || meta.hasDisplayName() || meta.hasEnchants())) {
+			// 不收集有特殊属性的物品
+			return false;
+		}
 		Set<Depository> usableDepositories = getPlayerUsableDepository(player, item);
 		if (usableDepositories.size() < 1) return false;
 		Depository depository = usableDepositories.stream().findFirst().orElse(null);

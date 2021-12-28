@@ -40,7 +40,7 @@ public class UserData {
 
 
 	public @Nullable DepositoryData getBackpackData(String backpackID) {
-		Depository configuration = Main.getBackpackManager().getDepository(backpackID);
+		Depository configuration = Main.getDepositoryManager().getDepository(backpackID);
 		if (configuration == null) return null;
 		return getBackpackData(configuration);
 	}
@@ -61,7 +61,7 @@ public class UserData {
 	public @Nullable ItemData getItemData(@NotNull String backpackID, @NotNull String typeID) {
 		DepositoryData data = getBackpackData(backpackID);
 		if (data == null) return null;
-		if (!Main.getBackpackManager().hasItem(backpackID, typeID)) return null;
+		if (!Main.getDepositoryManager().hasItem(backpackID, typeID)) return null;
 		ItemData itemData = data.getItemData(typeID);
 		if (itemData == null) {
 			itemData = ItemData.emptyItemData();

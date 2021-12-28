@@ -2,8 +2,9 @@ package cc.carm.plugin.ultradepository.ui;
 
 import cc.carm.plugin.ultradepository.Main;
 import cc.carm.plugin.ultradepository.configuration.PluginConfig;
-import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
+import cc.carm.plugin.ultradepository.configuration.PluginMessages;
 import cc.carm.plugin.ultradepository.configuration.depository.Depository;
+import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
 import cc.carm.plugin.ultradepository.data.ItemData;
 import cc.carm.plugin.ultradepository.data.UserData;
 import cc.carm.plugin.ultradepository.util.ItemStackFactory;
@@ -20,28 +21,27 @@ public class DepositoryGUI extends GUI {
 
 	Player player;
 	UserData userData;
-	Depository configuration;
+	Depository depository;
 
-	public DepositoryGUI(Player player, Depository configuration) {
-		super(configuration.getGUIConfiguration().getGUIType(), configuration.getGUIConfiguration().getTitle());
+	public DepositoryGUI(Player player, Depository depository) {
+		super(depository.getGUIConfiguration().getGUIType(), depository.getGUIConfiguration().getTitle());
 
 		this.player = player;
 		this.userData = Main.getUserManager().getData(player);
-		this.configuration = configuration;
+		this.depository = depository;
 
-
+		setupItems();
 	}
 
 	public void setupItems() {
-		configuration.getGUIConfiguration().setupItems(this);
-		for (DepositoryItem depositoryItem : configuration.getItems().values()) {
-			setItem(depositoryItem.getSlot(), new GUIItem(depositoryItem.getDisplayItem()));
-		}
+		depository.getGUIConfiguration().setupItems(this);
+		depository.getItems().values().forEach(depositoryItem -> setItem(depositoryItem.getSlot(), createGUIItem(depositoryItem)));
 	}
+
 
 	private GUIItem createGUIItem(DepositoryItem item) {
 		ItemStackFactory factory = new ItemStackFactory(item.getDisplayItem());
-		ItemData itemData = userData.getItemData(configuration, item);
+		ItemData itemData = userData.getItemData(depository, item);
 		List<String> additionalLore = PluginConfig.General.ADDITIONAL_LORE.get(player, new Object[]{
 				item.getName(), itemData.getAmount(), item.getPrice(), itemData.getSold(), item.getLimit()
 		});
@@ -56,14 +56,18 @@ public class DepositoryGUI extends GUI {
 			public void onClick(ClickType type) {
 				if (itemData.getAmount() < 1) return;
 				if (type == ClickType.LEFT) {
-					SellItemGUI.open(player, userData, itemData, configuration, item);
+					SellItemGUI.open(player, userData, itemData, depository, item);
 				} else if (type == ClickType.RIGHT) {
 					if (hasEmptySlot(player)) {
 						int pickupAmount = Math.min(itemData.getAmount(), item.getMaterial().getMaxStackSize());
-
+						player.getInventory().addItem(item.getRawItem(pickupAmount));
+						PluginMessages.PICKUP.send(player, new Object[]{
+								item.getName(), pickupAmount
+						});
 					} else {
-
+						PluginMessages.NO_SPACE.send(player);
 					}
+					player.closeInventory();
 				}
 			}
 		};
@@ -75,5 +79,9 @@ public class DepositoryGUI extends GUI {
 				.anyMatch(i -> i == null || i.getType() == Material.AIR);
 	}
 
+	public static void open(Player player, Depository depository) {
+		DepositoryGUI gui = new DepositoryGUI(player, depository);
+		gui.openGUI(player);
+	}
 
 }
