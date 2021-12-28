@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.sql.Date;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 public class UserData {
@@ -49,10 +48,8 @@ public class UserData {
 	}
 
 	public @NotNull DepositoryData getDepositoryData(Depository depository) {
-		return Objects.requireNonNull(getDepositories().putIfAbsent(
-				depository.getIdentifier(),
-				DepositoryData.emptyContents(depository, this))
-		);
+		getDepositories().putIfAbsent(depository.getIdentifier(), DepositoryData.emptyContents(depository, this));
+		return getDepositories().get(depository.getIdentifier());
 	}
 
 	public @Nullable DepositoryItemData getItemData(@NotNull String depositoryID, @NotNull String typeID) {

@@ -2,44 +2,41 @@ package cc.carm.plugin.ultradepository.listener;
 
 import cc.carm.plugin.ultradepository.Main;
 import cc.carm.plugin.ultradepository.configuration.PluginConfig;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 public class CollectListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onBreak(BlockBreakEvent event) {
-		if (event.isCancelled() || !event.isDropItems() || !PluginConfig.Collect.BREAK.get()) return;
+	public void onBreak(BlockDropItemEvent event) {
+		if (event.isCancelled() || !PluginConfig.Collect.BREAK.get()) return;
 
 		Player player = event.getPlayer();
 		if (!Main.getUserManager().isCollectEnabled(player)) return;
-
-		Location location = event.getBlock().getLocation();
-		World world = event.getBlock().getWorld();
-
-		Collection<ItemStack> drops;
-		if (player.getItemInUse() == null) {
-			drops = event.getBlock().getDrops();
-		} else {
-			drops = event.getBlock().getDrops(player.getItemInUse(), player.getPlayer());
+		if (event.getBlock().getType() == Material.CHEST || event.getBlock().getType() == Material.TRAPPED_CHEST) {
+			return;
 		}
 
-		if (drops.isEmpty()) return;
-		event.setDropItems(false);
+		List<Item> droppedItems = event.getItems();
+		if (droppedItems.isEmpty()) return;
 
-		Collection<ItemStack> finalDrops = Main.getDepositoryManager().collectItem(player, drops);
-		finalDrops.forEach(finalDrop -> world.dropItemNaturally(location, finalDrop));
+		for (Item drop : droppedItems) {
+			Main.debug("Dropped " + drop.getType().name() + " " + drop.getItemStack().getAmount());
+		}
+
+		event.getItems().removeIf(item -> Main.getDepositoryManager().collectItem(player, item.getItemStack()));
 
 	}
 
@@ -68,7 +65,9 @@ public class CollectListener implements Listener {
 		UUID thrower = event.getItem().getThrower();
 		if (thrower != null && thrower.equals(player.getUniqueId())) return;
 
+
 		ItemStack item = event.getItem().getItemStack();
+		Main.debug("Picked up " + item.getType().name() + " " + item.getAmount());
 		if (Main.getDepositoryManager().collectItem(player, item)) {
 			event.setCancelled(true);
 			event.getItem().remove();

@@ -7,6 +7,10 @@ website: ${project.url}
 
 author: CarmJos
 
+softdepend:
+  - PlaceholderAPI
+  - Vault
+
 commands:
   "UltraDepository":
     description: "超级仓库的主指令"
@@ -24,9 +28,11 @@ permissions:
 
   "UltraDepository.auto":
     description: "超级仓库的自动收集权限"
+    default: op
 
   "UltraDepository.auto.enable":
     description: "用于判断是否启用了自动收集功能"
+    default: op
 
   "UltraDepository.admin":
     description: "超级仓库的管理权限"

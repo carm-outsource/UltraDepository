@@ -4,6 +4,7 @@ import cc.carm.plugin.ultradepository.configuration.message.ConfigMessage;
 import cc.carm.plugin.ultradepository.configuration.message.ConfigMessageList;
 import cc.carm.plugin.ultradepository.configuration.values.ConfigStringCast;
 import cc.carm.plugin.ultradepository.configuration.values.ConfigValue;
+import cc.carm.plugin.ultradepository.manager.ConfigManager;
 import org.bukkit.Material;
 
 public class PluginConfig {
@@ -44,16 +45,17 @@ public class PluginConfig {
 		 * 将添加到背包界面内的物品上，避免重复配置
 		 */
 		public static final ConfigMessageList ADDITIONAL_LORE = new ConfigMessageList(
-				"general.additional-lore", new String[]{
-				"%(item_name)", "%(amount)", "%(price)", "%(sold)", "%(limit)"
-		});
+				ConfigManager.getPluginConfig(), "general.additional-lore", new String[]{},
+				new String[]{
+						"%(item_name)", "%(amount)", "%(price)", "%(sold)", "%(limit)"
+				});
 
 		/**
 		 * 提示玩家点击行为的介绍
 		 * 将添加到背包界面内的物品上，避免重复配置
 		 */
 		public static final ConfigMessageList CLICK_LORE = new ConfigMessageList(
-				"general.click-lore", new String[]{
+				ConfigManager.getPluginConfig(), "general.click-lore", new String[]{}, new String[]{
 				"%(item_name)", "%(amount)", "%(price)"
 		});
 
@@ -64,10 +66,10 @@ public class PluginConfig {
 
 
 			public static final ConfigMessage TITLE = new ConfigMessage(
-					"general.sell-gui.title", "&a&l出售",
-					new String[]{
-							"%(item_name)", "%(backpack_name)"
-					}
+					ConfigManager.getPluginConfig(), "general.sell-gui.title",
+					"&a&l出售", new String[]{
+					"%(item_name)", "%(backpack_name)"
+			}
 			);
 
 			public static class Items {
@@ -86,18 +88,18 @@ public class PluginConfig {
 
 
 					public static final ConfigMessage NAME = new ConfigMessage(
-							"general.sell-gui.items.add.name", "&a添加物品 %(amount) 个",
-							new String[]{
-									"%(item_name)", "%(amount)"
-							}
+							ConfigManager.getPluginConfig(), "general.sell-gui.items.add.name",
+							"&a添加物品 %(amount) 个", new String[]{
+							"%(item_name)", "%(amount)"
+					}
 					);
 
 
 					public static final ConfigMessageList LORE = new ConfigMessageList(
-							"general.sell-gui.items.add.lore", null,
-							new String[]{
-									"%(item_name)", "%(amount)"
-							}
+							ConfigManager.getPluginConfig(), "general.sell-gui.items.add.lore",
+							new String[]{}, new String[]{
+							"%(item_name)", "%(amount)"
+					}
 					);
 
 				}
@@ -116,18 +118,18 @@ public class PluginConfig {
 
 
 					public static final ConfigMessage NAME = new ConfigMessage(
-							"general.sell-gui.items.remove.name", "&c減少物品 %(amount) 个",
-							new String[]{
-									"%(item_name)", "%(amount)"
-							}
+							ConfigManager.getPluginConfig(), "general.sell-gui.items.remove.name",
+							"&c減少物品 %(amount) 个", new String[]{
+							"%(item_name)", "%(amount)"
+					}
 					);
 
 
 					public static final ConfigMessageList LORE = new ConfigMessageList(
-							"general.sell-gui.items.remove.lore", null,
-							new String[]{
-									"%(item_name)", "%(amount)"
-							}
+							ConfigManager.getPluginConfig(), "general.sell-gui.items.remove.lore",
+							new String[]{}, new String[]{
+							"%(item_name)", "%(amount)"
+					}
 					);
 
 				}
@@ -146,18 +148,18 @@ public class PluginConfig {
 
 
 					public static final ConfigMessage NAME = new ConfigMessage(
-							"general.sell-gui.items.confirm.name", "&2确认售出",
-							new String[]{
-									"%(item_name)", "%(amount)", "%(money)"
-							}
+							ConfigManager.getPluginConfig(), "general.sell-gui.items.confirm.name",
+							"&2确认售出", new String[]{
+							"%(item_name)", "%(amount)", "%(money)"
+					}
 					);
 
 
 					public static final ConfigMessageList LORE = new ConfigMessageList(
-							"general.sell-gui.items.confirm.lore", null,
-							new String[]{
-									"%(item_name)", "%(amount)", "%(money)"
-							}
+							ConfigManager.getPluginConfig(), "general.sell-gui.items.confirm.lore",
+							new String[]{}, new String[]{
+							"%(item_name)", "%(amount)", "%(money)"
+					}
 					);
 
 				}
@@ -176,11 +178,12 @@ public class PluginConfig {
 
 
 					public static final ConfigMessage NAME = new ConfigMessage(
-							"general.sell-gui.items.cancel.name", "&4取消售出"
+							ConfigManager.getPluginConfig(), "general.sell-gui.items.cancel.name",
+							"&4取消售出", null
 					);
 
 					public static final ConfigMessageList LORE = new ConfigMessageList(
-							"general.sell-gui.items.cancel.lore"
+							ConfigManager.getPluginConfig(), "general.sell-gui.items.cancel.lore", new String[0], new String[0]
 					);
 
 				}

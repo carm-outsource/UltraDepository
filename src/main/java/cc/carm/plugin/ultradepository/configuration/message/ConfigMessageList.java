@@ -1,9 +1,12 @@
 package cc.carm.plugin.ultradepository.configuration.message;
 
 
+import cc.carm.plugin.ultradepository.Main;
+import cc.carm.plugin.ultradepository.configuration.file.FileConfig;
 import cc.carm.plugin.ultradepository.configuration.values.ConfigValueList;
 import cc.carm.plugin.ultradepository.manager.ConfigManager;
 import cc.carm.plugin.ultradepository.util.MessageUtil;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,6 +26,11 @@ public class ConfigMessageList extends ConfigValueList<String> {
 
 	public ConfigMessageList(String configSection, String[] defaultValue, String[] messageParams) {
 		super(ConfigManager.getMessageConfig(), configSection, String.class, defaultValue);
+		this.messageParams = messageParams;
+	}
+
+	public ConfigMessageList(FileConfig config, String configSection, String[] defaultValue, String[] messageParams) {
+		super(config, configSection, String.class, defaultValue);
 		this.messageParams = messageParams;
 	}
 

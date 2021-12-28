@@ -7,7 +7,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class DepositoryData {
 
@@ -37,14 +36,15 @@ public class DepositoryData {
 	public @Nullable DepositoryItemData getItemData(@NotNull String itemType) {
 		DepositoryItem item = getSource().getItems().get(itemType);
 		if (item != null) {
-			return getContents().putIfAbsent(item.getTypeID(), DepositoryItemData.emptyItemData(item, this));
+			return getItemData(item);
 		} else {
 			return null;
 		}
 	}
 
 	public @NotNull DepositoryItemData getItemData(@NotNull DepositoryItem item) {
-		return Objects.requireNonNull(getContents().putIfAbsent(item.getTypeID(), DepositoryItemData.emptyItemData(item, this)));
+		getContents().putIfAbsent(item.getTypeID(), DepositoryItemData.emptyItemData(item, this));
+		return getContents().get(item.getTypeID());
 	}
 
 	public int getUsedCapacity() {

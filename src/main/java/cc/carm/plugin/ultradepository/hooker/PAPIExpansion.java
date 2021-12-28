@@ -21,7 +21,7 @@ public class PAPIExpansion extends PlaceholderExpansion {
 			"%UltraDepository_remain_<BackpackID>_<ItemTypeID>%",
 			"%UltraDepository_capacity_<BackpackID>%",
 			"%UltraDepository_used_<BackpackID>%",
-			"%UltraDepository_remain_<BackpackID>%"
+			"%UltraDepository_usable_<BackpackID>%"
 	);
 
 	Main main;

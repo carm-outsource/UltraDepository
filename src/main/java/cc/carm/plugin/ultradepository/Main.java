@@ -35,6 +35,8 @@ public class Main extends JavaPlugin {
 	private static EconomyManager economyManager;
 	private static DepositoryManager depositoryManager;
 
+	boolean initialized = false;
+
 	@Override
 	public void onEnable() {
 		instance = this;
@@ -91,12 +93,14 @@ public class Main extends JavaPlugin {
 			log("检测到未安装PlaceholderAPI，跳过变量注册。");
 		}
 
+		initialized = true;
 		log("加载完成 ，共耗时 " + (System.currentTimeMillis() - startTime) + " ms 。");
 
 	}
 
 	@Override
 	public void onDisable() {
+		if (!initialized) return;
 		log(getName() + " " + getDescription().getVersion() + " 开始卸载...");
 		long startTime = System.currentTimeMillis();
 

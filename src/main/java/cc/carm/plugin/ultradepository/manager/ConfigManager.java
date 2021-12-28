@@ -24,7 +24,7 @@ public class ConfigManager {
 
 	public static void initConfig() {
 		ConfigManager.config = new FileConfig(Main.getInstance(), "config.yml");
-		ConfigManager.messageConfig = new FileConfig(Main.getInstance(), "src/main/resources/messages.yml");
+		ConfigManager.messageConfig = new FileConfig(Main.getInstance(), "messages.yml");
 	}
 
 	public static FileConfig getPluginConfig() {

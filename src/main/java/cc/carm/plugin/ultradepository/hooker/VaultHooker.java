@@ -1,7 +1,6 @@
 package cc.carm.plugin.ultradepository.hooker;
 
 import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -10,20 +9,17 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 public class VaultHooker {
 
 	private Economy econ = null;
-	private EconomyResponse response;
 
 	public static boolean hasVault() {
 		return Bukkit.getServer().getPluginManager().getPlugin("Vault") != null;
 	}
 
 	public boolean setupEconomy() {
-		if (!hasVault()) {
-			return false;
-		}
+
+		if (!hasVault()) return false;
 		RegisteredServiceProvider<Economy> rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
-		if (rsp == null) {
-			return false;
-		}
+		if (rsp == null) return false;
+
 		this.econ = rsp.getProvider();
 		return true;
 	}

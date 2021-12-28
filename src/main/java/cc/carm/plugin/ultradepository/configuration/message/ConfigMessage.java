@@ -1,6 +1,7 @@
 package cc.carm.plugin.ultradepository.configuration.message;
 
 
+import cc.carm.plugin.ultradepository.configuration.file.FileConfig;
 import cc.carm.plugin.ultradepository.configuration.values.ConfigValue;
 import cc.carm.plugin.ultradepository.manager.ConfigManager;
 import cc.carm.plugin.ultradepository.util.MessageUtil;
@@ -23,6 +24,11 @@ public class ConfigMessage extends ConfigValue<String> {
 
 	public ConfigMessage(String configSection, String defaultValue, String[] messageParams) {
 		super(ConfigManager.getMessageConfig(), configSection, String.class, defaultValue);
+		this.messageParams = messageParams;
+	}
+
+	public ConfigMessage(FileConfig config, String configSection, String defaultValue, String[] messageParams) {
+		super(config, configSection, String.class, defaultValue);
 		this.messageParams = messageParams;
 	}
 

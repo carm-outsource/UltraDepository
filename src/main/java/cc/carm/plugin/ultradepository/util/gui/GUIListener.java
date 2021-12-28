@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 
 public class GUIListener implements Listener {
 
@@ -86,6 +87,18 @@ public class GUIListener implements Listener {
 	public void onInventoryCloseEvent(InventoryCloseEvent event) {
 		Player p = (Player) event.getPlayer();
 		if (event.getInventory().equals(getCurrentGUI().inv)) {
+			HandlerList.unregisterAll(this);
+			getCurrentGUI().listener = null;
+			getCurrentGUI().onClose();
+			GUI.removeOpenedGUI(p);
+		}
+	}
+
+	@EventHandler
+	public void onOpen(InventoryOpenEvent event) {
+		Player p = (Player) event.getPlayer();
+		//开启新界面后 结束旧界面
+		if (!event.getInventory().equals(getCurrentGUI().inv)) {
 			HandlerList.unregisterAll(this);
 			getCurrentGUI().listener = null;
 			getCurrentGUI().onClose();

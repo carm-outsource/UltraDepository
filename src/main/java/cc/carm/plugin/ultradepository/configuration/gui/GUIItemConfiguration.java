@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class GUIItemConfiguration {
 
@@ -51,7 +52,7 @@ public class GUIItemConfiguration {
 	@Nullable
 	public static GUIItemConfiguration readFrom(@Nullable ConfigurationSection itemSection) {
 		if (itemSection == null) return null;
-		Material material = Material.matchMaterial(itemSection.getString("material", "STONE"));
+		Material material = Optional.ofNullable(Material.matchMaterial(itemSection.getString("material", "STONE"))).orElse(Material.STONE);
 		int data = itemSection.getInt("data", 0);
 		String name = itemSection.getString("name");
 		List<String> lore = itemSection.getStringList("lore");

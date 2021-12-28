@@ -57,10 +57,13 @@ public class DepositoryGUI extends GUI {
 			public void onClick(ClickType type) {
 				if (itemData.getAmount() < 1) return;
 				if (type == ClickType.LEFT) {
+					player.closeInventory();
 					SellItemGUI.open(player, userData, itemData, depository, item);
 				} else if (type == ClickType.RIGHT) {
+					player.closeInventory();
 					if (hasEmptySlot(player)) {
 						int pickupAmount = Math.min(itemData.getAmount(), item.getMaterial().getMaxStackSize());
+						userData.removeItemAmount(item.getDepository().getIdentifier(), item.getTypeID(), pickupAmount);
 						player.getInventory().addItem(item.getRawItem(pickupAmount));
 						PluginMessages.PICKUP.send(player, new Object[]{
 								item.getName(), pickupAmount
@@ -68,7 +71,7 @@ public class DepositoryGUI extends GUI {
 					} else {
 						PluginMessages.NO_SPACE.send(player);
 					}
-					player.closeInventory();
+
 				}
 			}
 		};

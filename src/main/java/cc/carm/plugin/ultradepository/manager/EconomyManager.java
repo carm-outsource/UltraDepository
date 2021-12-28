@@ -13,10 +13,7 @@ public class EconomyManager {
 	}
 
 	public boolean initialize() {
-		boolean success = this.hooker.setupEconomy();
-		this.initialized = success;
-
-		return success;
+		return initialized = this.hooker.setupEconomy();
 	}
 
 	public boolean isInitialized() {

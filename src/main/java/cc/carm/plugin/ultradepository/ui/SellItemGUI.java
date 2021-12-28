@@ -11,6 +11,7 @@ import cc.carm.plugin.ultradepository.util.ItemStackFactory;
 import cc.carm.plugin.ultradepository.util.gui.GUI;
 import cc.carm.plugin.ultradepository.util.gui.GUIItem;
 import cc.carm.plugin.ultradepository.util.gui.GUIType;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -33,9 +34,11 @@ public class SellItemGUI extends GUI {
 
 	public SellItemGUI(Player player, UserData userData, DepositoryItemData itemData,
 					   Depository configuration, DepositoryItem item) {
+
 		super(GUIType.FOUR_BY_NINE, PluginConfig.General.SellGUI.TITLE.get(player, new String[]{
 				configuration.getName(), item.getName()
 		}));
+
 		this.player = player;
 		this.userData = userData;
 		this.itemData = itemData;
@@ -48,41 +51,35 @@ public class SellItemGUI extends GUI {
 
 	private void load(int amount) {
 		this.currentAmount = Math.max(1, amount); // 不可小于1
-		loadIcon();
-		loadButtons();
-	}
-
-	private void loadIcon() {
 		ItemStackFactory factory = new ItemStackFactory(this.itemDisplay);
 		List<String> additionalLore = PluginConfig.General.ADDITIONAL_LORE.get(player, new Object[]{
 				getItemName(), getRemainAmount(), getItemPrice(), getSoldAmount(), getSellLimit()
 		});
 		additionalLore.forEach(factory::addLore);
-		setItem(4, new GUIItem(factory.toItemStack()));
-	}
 
-	private void loadButtons() {
-		if (getCurrentAmount() > 1000) setItem(0, getRemoveItem(1000));
-		if (getCurrentAmount() > 100) setItem(1, getRemoveItem(100));
-		if (getCurrentAmount() > 10) setItem(2, getRemoveItem(10));
-		if (getCurrentAmount() > 1) setItem(3, getRemoveItem(1));
-		if (getAddableAmount() > 1) setItem(5, getAddItem(1));
-		if (getAddableAmount() > 10) setItem(6, getAddItem(10));
-		if (getAddableAmount() > 100) setItem(7, getAddItem(100));
-		if (getAddableAmount() > 1000) setItem(8, getAddItem(1000));
+		setItem(9, getCurrentAmount() > 1000 ? getRemoveItem(1000) : null);
+		setItem(10, getCurrentAmount() > 100 ? getRemoveItem(100) : null);
+		setItem(11, getCurrentAmount() > 10 ? getRemoveItem(10) : null);
+		setItem(12, getCurrentAmount() > 1 ? getRemoveItem(1) : null);
+		setItem(13, new GUIItem(factory.toItemStack()));
+		setItem(14, getAddableAmount() >= 1 ? getAddItem(1) : null);
+		setItem(15, getAddableAmount() >= 10 ? getAddItem(10) : null);
+		setItem(16, getAddableAmount() >= 100 ? getAddItem(100) : null);
+		setItem(17, getAddableAmount() >= 1000 ? getAddItem(1000) : null);
 
 		if (getCurrentAmount() >= 1) setItem(getConfirmItem(), 27, 28, 29, 30);
 		setItem(getCancelItem(), 32, 33, 34, 35);
+
 	}
 
 	private GUIItem getAddItem(int amount) {
 		ItemStackFactory factory = new ItemStackFactory(Add.TYPE.get());
 		factory.setDurability(Add.DATA.get());
 		factory.setDisplayName(Add.NAME.get(player, new Object[]{
-				getItemName(), getCurrentAmount()
+				getItemName(), amount
 		}));
 		factory.setLore(Add.LORE.get(player, new Object[]{
-				getItemName(), getCurrentAmount()
+				getItemName(), amount
 		}));
 
 		return new GUIItem(factory.toItemStack()) {
@@ -98,10 +95,10 @@ public class SellItemGUI extends GUI {
 		ItemStackFactory factory = new ItemStackFactory(Remove.TYPE.get());
 		factory.setDurability(Remove.DATA.get());
 		factory.setDisplayName(Remove.NAME.get(player, new Object[]{
-				getItemName(), getCurrentAmount()
+				getItemName(), amount
 		}));
 		factory.setLore(Remove.LORE.get(player, new Object[]{
-				getItemName(), getCurrentAmount()
+				getItemName(), amount
 		}));
 		return new GUIItem(factory.toItemStack()) {
 			@Override
@@ -126,6 +123,8 @@ public class SellItemGUI extends GUI {
 			public void onClick(ClickType type) {
 				int amount = Math.min(getCurrentAmount(), Math.min(getRemainAmount(), getSellLimit() - getSoldAmount()));
 				if (amount > 0) {
+					userData.removeItemAmount(item.getDepository().getIdentifier(), item.getTypeID(), amount);
+					userData.addItemSold(item.getDepository().getIdentifier(), item.getTypeID(), amount);
 					double money = Main.getEconomyManager().sell(player, getItemPrice(), amount);
 					PluginMessages.SOLD.send(player, new Object[]{
 							getItemName(), amount, money
@@ -170,11 +169,11 @@ public class SellItemGUI extends GUI {
 	}
 
 	private int getRemainAmount() {
-		return this.itemData.getAmount();
+		return userData.getItemData(this.item).getAmount();
 	}
 
 	private int getSoldAmount() {
-		return this.itemData.getSold();
+		return userData.getItemData(this.item).getSold();
 	}
 
 	private int getAddableAmount() {

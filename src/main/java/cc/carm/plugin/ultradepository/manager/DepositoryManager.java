@@ -50,7 +50,7 @@ public class DepositoryManager {
 
 		File[] files = folder.listFiles();
 		if (files == null) return;
-
+		HashMultimap<@NotNull String, @NotNull String> items = HashMultimap.create();
 		HashMap<@NotNull String, @NotNull Depository> data = new HashMap<>();
 		for (File file : files) {
 			String fileName = file.getName();
@@ -59,12 +59,21 @@ public class DepositoryManager {
 			FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
 			Depository depository = Depository.loadFrom(identifier, configuration);
 			if (depository.getItems().size() > 0) {
+				depository.getItems().values().forEach(value -> items.put(value.getTypeID(), depository.getIdentifier()));
 				data.put(identifier, depository);
 			} else {
 				Main.error("	仓库 " + depository.getName() + " 未配置任何物品，请检查相关配置！");
 			}
 		}
+		for (Map.Entry<String, Collection<String>> entry : items.asMap().entrySet()) {
+			Main.debug("# " + entry.getKey());
+			for (String depositoryID : entry.getValue()) {
+				Main.debug("- " + depositoryID);
+			}
+		}
+
 		this.depositories = data;
+		this.itemMap = items;
 		Main.log("	仓库配置加载完成，共加载 " + data.size() + " 个仓库，耗时 " + (System.currentTimeMillis() - start) + "ms 。");
 	}
 
@@ -119,27 +128,37 @@ public class DepositoryManager {
 	}
 
 	public Collection<ItemStack> collectItem(Player player, Collection<ItemStack> items) {
-		if (!Main.getUserManager().isCollectEnabled(player)) return new ArrayList<>();
-		else return items.stream().filter(item -> collectItem(player, item)).collect(Collectors.toList());
+		if (!Main.getUserManager().isCollectEnabled(player)) {
+			Main.debug("player " + player.getName() + " disabled collect, skipped.");
+			return items;
+		} else return items.stream().filter(item -> !collectItem(player, item)).collect(Collectors.toList());
 	}
 
 	public boolean collectItem(Player player, ItemStack item) {
-		if (!Main.getUserManager().isCollectEnabled(player)) return false;
+		String typeID = getItemTypeID(item);
+		Main.debug("Checking item " + typeID + " ...");
+		if (!Main.getUserManager().isCollectEnabled(player)) {
+			Main.debug("Player " + player.getName() + " disabled collect, skipped.");
+			return false;
+		}
 		ItemMeta meta = item.getItemMeta();
 		if (meta != null && (meta.hasLore() || meta.hasDisplayName() || meta.hasEnchants())) {
 			// 不收集有特殊属性的物品
+			Main.debug("Item has special meta, skipped.");
 			return false;
 		}
 		Set<Depository> usableDepositories = getPlayerUsableDepository(player, item);
-		if (usableDepositories.size() < 1) return false;
+		if (usableDepositories.size() < 1) {
+			Main.debug("Item doesn't has any depository, skipped.");
+			return false;
+		}
 		Depository depository = usableDepositories.stream().findFirst().orElse(null);
-
-		String typeID = getItemTypeID(item);
 		String itemName = depository.getItems().get(typeID).getName();
 		UserData data = Main.getUserManager().getData(player);
 		int itemAmount = item.getAmount();
 		data.addItemAmount(depository.getIdentifier(), typeID, itemAmount);
 		PluginMessages.COLLECTED.send(player, new Object[]{itemName, itemAmount, depository.getName()});
+		Main.debug("Item collected successfully.");
 		return true;
 	}
 
