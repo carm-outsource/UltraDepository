@@ -110,6 +110,34 @@
 
 ## 插件权限
 
+<details>
+<summary>展开查看所有权限</summary>
+
+```text
+
+# UltraDepository.use
+- 超级仓库的基本使用权限 (默认所有人都有)
+
+# UltraDepository.Command.Sell
+- 玩家使用Sell指令的权限
+
+# UltraDepository.Command.SellAll
+- 玩家使用SellAll指令的权限
+
+# UltraDepository.auto
+- 超级仓库的自动收集权限
+
+# UltraDepository.auto.enable
+- 用于判断是否启用了自动收集功能
+- 您可以自己使用GUI创建一个按钮，后通过给玩家添加/删除该权限决定玩家是否开启自动收集。
+
+# UltraDepository.admin
+- "超级仓库的管理权限"
+
+```
+
+</details>
+
 ## 配置文件
 
 ### [插件配置文件](src/main/resources/config.yml) (config.yml)
