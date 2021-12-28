@@ -10,9 +10,12 @@ gui:
   lines: 6
   items:
     "CLOSE":
-      icon:
-        ==: org.bukkit.ItemStack
+      material: RED_STONE
+      data: 0
       slot: 0
+      name: "关闭界面"
+      lore:
+        - "点击后您将关闭本界面。"
       actions:
         - "[LEFT:CLOSE]"
         - "[SHIFT_LEFT:CLOSE]"

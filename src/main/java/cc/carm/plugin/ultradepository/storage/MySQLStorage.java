@@ -214,6 +214,7 @@ public class MySQLStorage implements DataStorage {
 		if (contentsData == null) return null;
 		JsonObject contentsObject = new JsonObject();
 		contentsData.getContents().entrySet().stream()
+				// 只存取有数值的部分，减少数据量
 				.filter(entry -> entry.getValue().getSold() > 0 || entry.getValue().getAmount() > 0)
 				.forEach(entry -> contentsObject.add(entry.getKey(), serializeItemData(entry.getValue())));
 		return contentsObject;

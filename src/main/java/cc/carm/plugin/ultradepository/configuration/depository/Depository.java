@@ -88,7 +88,8 @@ public class Depository {
 		for (String key : section.getKeys(false)) {
 			ConfigurationSection itemSection = section.getConfigurationSection(key);
 			if (itemSection != null) {
-				items.put(key, DepositoryItem.readFrom(depository, key, itemSection));
+				DepositoryItem item = DepositoryItem.readFrom(depository, key, itemSection);
+				if (item != null) items.put(item.getTypeID(), item);
 			}
 		}
 		return items;

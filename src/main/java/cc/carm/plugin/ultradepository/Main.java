@@ -1,5 +1,6 @@
 package cc.carm.plugin.ultradepository;
 
+import cc.carm.plugin.ultradepository.command.DepositoryCommand;
 import cc.carm.plugin.ultradepository.configuration.PluginConfig;
 import cc.carm.plugin.ultradepository.hooker.PAPIExpansion;
 import cc.carm.plugin.ultradepository.listener.CollectListener;
@@ -81,7 +82,7 @@ public class Main extends JavaPlugin {
 		regListener(new CollectListener());
 
 		log("注册指令...");
-
+		registerCommand("UltraDepository", new DepositoryCommand(), new DepositoryCommand());
 
 		if (MessageUtil.hasPlaceholderAPI()) {
 			log("注册变量...");

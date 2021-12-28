@@ -7,6 +7,15 @@ website: ${project.url}
 
 author: CarmJos
 
+commands:
+  "UltraDepository":
+    description: "超级仓库的主指令"
+    permission: "UltraDepository.use"
+    aliases:
+      - ud
+      - depository
+      - depositories
+
 permissions:
 
   "UltraDepository.use":
@@ -22,3 +31,9 @@ permissions:
   "UltraDepository.admin":
     description: "超级仓库的管理权限"
     default: op
+
+  "UltraDepository.Command.Sell":
+    description: "超级仓库的出售指令权限"
+
+  "UltraDepository.Command.SellAll":
+    description: "超级仓库的出售全部指令权限"

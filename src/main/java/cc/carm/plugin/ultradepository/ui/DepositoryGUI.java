@@ -13,6 +13,7 @@ import cc.carm.plugin.ultradepository.util.gui.GUIItem;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -34,7 +35,7 @@ public class DepositoryGUI extends GUI {
 	}
 
 	public void setupItems() {
-		depository.getGUIConfiguration().setupItems(this);
+		depository.getGUIConfiguration().setupItems(player, this);
 		depository.getItems().values().forEach(depositoryItem -> setItem(depositoryItem.getSlot(), createGUIItem(depositoryItem)));
 	}
 
@@ -79,7 +80,7 @@ public class DepositoryGUI extends GUI {
 				.anyMatch(i -> i == null || i.getType() == Material.AIR);
 	}
 
-	public static void open(Player player, Depository depository) {
+	public static void open(@NotNull Player player, @NotNull Depository depository) {
 		DepositoryGUI gui = new DepositoryGUI(player, depository);
 		gui.openGUI(player);
 	}
