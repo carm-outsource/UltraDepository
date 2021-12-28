@@ -30,14 +30,14 @@ jobs:
         run: |
           rm -rf docs
           mkdir -vp docs
-          cp -vrf ultrabackpack-api/target/apidocs/* docs/
+          cp -vrf target/apidocs/* docs/
           cp -vrf .documentation/JAVADOC-README.md docs/README.md
 
       - name: Generate the sitemap
         id: sitemap
         uses: cicirello/generate-sitemap@v1
         with:
-          base-url-path: https://carmjos.github.io/UltraBackpack
+          base-url-path: https://carmjos.github.io/UltraDepository
           path-to-root: docs
 
       - name: Output stats
@@ -62,7 +62,7 @@ jobs:
         run: |
           cd docs
           git init
-          git remote add origin git@github.com:CarmJos/UltraBackpack.git
+          git remote add origin git@github.com:CarmJos/UltraDepository.git
           git checkout -b gh-pages
           git add -A
           git commit -m "API Document generated."

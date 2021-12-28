@@ -1,20 +1,25 @@
 package cc.carm.plugin.ultradepository.manager;
 
 import cc.carm.plugin.ultradepository.Main;
+import cc.carm.plugin.ultradepository.configuration.PluginMessages;
 import cc.carm.plugin.ultradepository.configuration.depository.Depository;
 import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
 import cc.carm.plugin.ultradepository.data.UserData;
 import com.google.common.collect.HashMultimap;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class DepositoryManager {
 
 	/**
@@ -30,6 +35,32 @@ public class DepositoryManager {
 	public DepositoryManager() {
 		this.depositories = new HashMap<>();
 		this.itemMap = HashMultimap.create();
+	}
+
+	public void loadDepositories() {
+		File folder = new File(Main.getInstance().getDataFolder(), "depositories");
+		if (!folder.exists()) {
+			folder.mkdir();
+		} else if (folder.isDirectory()) {
+			folder.delete();
+			folder.mkdir();
+		}
+
+		File[] files = folder.listFiles();
+		if (files == null) return;
+
+		HashMap<@NotNull String, @NotNull Depository> data = new HashMap<>();
+		for (File file : files) {
+			String fileName = file.getName();
+			if (!file.isFile() || !fileName.toLowerCase().endsWith(".yml")) continue;
+			String identifier = fileName.substring(0, fileName.lastIndexOf("."));
+			FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+			Depository depository = Depository.loadFrom(identifier, configuration);
+			if (depository != null) {
+				data.put(identifier, depository);
+			}
+		}
+		this.depositories = data;
 	}
 
 	public @NotNull HashMap<@NotNull String, @NotNull Depository> getDepositories() {
@@ -99,9 +130,11 @@ public class DepositoryManager {
 		Depository depository = usableDepositories.stream().findFirst().orElse(null);
 
 		String typeID = getItemTypeID(item);
+		String itemName = depository.getItems().get(typeID).getName();
 		UserData data = Main.getUserManager().getData(player);
 		int itemAmount = item.getAmount();
 		data.addItemAmount(depository.getIdentifier(), typeID, itemAmount);
+		PluginMessages.COLLECTED.send(player, new Object[]{itemName, itemAmount, depository.getName()});
 		return true;
 	}
 

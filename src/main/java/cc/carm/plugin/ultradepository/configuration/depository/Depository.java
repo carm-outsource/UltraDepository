@@ -1,6 +1,8 @@
 package cc.carm.plugin.ultradepository.configuration.depository;
 
 import cc.carm.plugin.ultradepository.configuration.gui.GUIConfiguration;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -60,5 +62,22 @@ public class Depository {
 	@Override
 	public int hashCode() {
 		return Objects.hash(identifier);
+	}
+
+	public static Depository loadFrom(String identifier, FileConfiguration configuration) {
+		String name = configuration.getString("name");
+
+		GUIConfiguration guiConfiguration = GUIConfiguration.readConfiguration(configuration.getConfigurationSection("gui"));
+		DepositoryCapacity capacity = new DepositoryCapacity(
+				configuration.getInt("capacity.default", 0),
+				configuration.getStringList("capacity.permissions")
+		);
+
+		ConfigurationSection itemsSection = configuration.getConfigurationSection("items");
+		if (itemsSection != null) {
+
+		}
+
+		return null;
 	}
 }

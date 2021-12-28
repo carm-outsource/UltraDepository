@@ -22,4 +22,5 @@ items:
     original: true #只允许无任何特殊属性的物品被收入
     slot: 5
     price: 10
+    limit: 100
     name: "&b&l钻石"

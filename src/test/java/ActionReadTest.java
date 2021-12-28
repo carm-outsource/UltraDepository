@@ -1,5 +1,5 @@
 import cc.carm.plugin.ultradepository.configuration.gui.GUIActionType;
-import cc.carm.plugin.ultradepository.manager.ConfigManager;
+import cc.carm.plugin.ultradepository.configuration.gui.GUIConfiguration;
 import org.bukkit.event.inventory.ClickType;
 import org.junit.Test;
 
@@ -29,7 +29,7 @@ public class ActionReadTest {
 			GUIActionType actionType;
 			if (prefix.contains(":")) {
 				String[] args = prefix.split(":");
-				clickType = ConfigManager.readClickType(args[0]);
+				clickType = GUIConfiguration.readClickType(args[0]);
 				actionType = GUIActionType.readActionType(args[1]);
 			} else {
 				actionType = GUIActionType.readActionType(prefix);
