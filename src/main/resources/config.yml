@@ -11,7 +11,7 @@ debug: false
 storage:
 
   # 存储方式，可选 [ file | mysql ]
-  method: mysql
+  method: file
 
   # 选择 file 存储方式时的存储路径
   # 默认为相对路径，相对于插件生成的配置文件夹下的路径

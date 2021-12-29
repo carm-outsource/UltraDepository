@@ -26,19 +26,27 @@
 
 ## 效果预览
 
-### 收集物品
+<details>
+<summary>收集物品</summary>
 
 ![collect](.documentation/images/collect-message.jpg)
 
-### 仓库界面 (可自定义配置)
+</details>
+
+<details>
+<summary>仓库界面 (可自定义配置)</summary>
 
 ![item-gui](.documentation/images/item-in-gui.png)
 
-### 出售界面
+</details>
+
+<details>
+<summary>出售界面</summary>
 
 ![sell-gui](.documentation/images/sell-gui.png)
 
 ![sell-message](.documentation/images/sell-message.png)
+</details>
 
 ## 插件依赖
 
