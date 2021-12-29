@@ -3,6 +3,7 @@ package cc.carm.plugin.ultradepository.storage;
 import cc.carm.plugin.ultradepository.Main;
 import cc.carm.plugin.ultradepository.configuration.values.ConfigValue;
 import cc.carm.plugin.ultradepository.data.UserData;
+import cc.carm.plugin.ultradepository.util.DateUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -32,7 +33,7 @@ public class FileStorage implements DataStorage {
 	public @NotNull UserData loadData(@NotNull UUID uuid) {
 		long start = System.currentTimeMillis();
 		Main.debug("正通过 FileStorage 加载 " + uuid + " 的用户数据...");
-		return new UserData(uuid, this, new HashMap<>(), new Date(System.currentTimeMillis()));
+		return new UserData(uuid, this, new HashMap<>(), DateUtil.getCurrentDate());
 	}
 
 	@Override

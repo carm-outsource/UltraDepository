@@ -4,6 +4,7 @@ import cc.carm.plugin.ultradepository.Main;
 import cc.carm.plugin.ultradepository.configuration.depository.Depository;
 import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
 import cc.carm.plugin.ultradepository.storage.DataStorage;
+import cc.carm.plugin.ultradepository.util.DateUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,14 +19,14 @@ public class UserData {
 	DataStorage storage;
 	Map<String, DepositoryData> depositories;
 
-	Date day;
+	int date;
 
 	public UserData(UUID userUUID, DataStorage storage,
-					Map<String, DepositoryData> depositories, Date day) {
+					Map<String, DepositoryData> depositories, int date) {
 		this.userUUID = userUUID;
 		this.storage = storage;
 		this.depositories = depositories;
-		this.day = day;
+		this.date = date;
 	}
 
 
@@ -117,18 +118,22 @@ public class UserData {
 
 
 	public Date getDate() {
-		return this.day;
+		return new Date(DateUtil.getDateMillis(this.date));
 	}
 
 
 	public boolean isCurrentDay() {
-		return this.day.equals(new Date(System.currentTimeMillis()));
+		return this.date == DateUtil.getCurrentDate();
 	}
 
 
 	public void checkoutDate() {
-		if (isCurrentDay()) return;
-		this.day = new Date(System.currentTimeMillis()); //更新日期
+		if (isCurrentDay()) {
+			Main.debug("Date is not change, skip clear sold amount.");
+			return;
+		}
+		this.date = DateUtil.getCurrentDate(); //更新日期
+		Main.debug("Date changed, clear sold.");
 		getDepositories().values().stream()
 				.flatMap(value -> value.getContents().values().stream())
 				.forEach(DepositoryItemData::clearSold);

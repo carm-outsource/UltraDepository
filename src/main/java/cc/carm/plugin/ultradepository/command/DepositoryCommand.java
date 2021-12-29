@@ -107,7 +107,7 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 						return true;
 					}
 
-					if (currentAmount > (limit - sold)) {
+					if (amount > (limit - sold)) {
 						PluginConfig.Sounds.SELL_FAIL.play(player);
 						PluginMessages.ITEM_SOLD_LIMIT.send(player, new Object[]{(limit - sold), limit});
 						return true;

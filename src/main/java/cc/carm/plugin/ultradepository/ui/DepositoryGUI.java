@@ -41,11 +41,15 @@ public class DepositoryGUI extends GUI {
 
 
 	private GUIItem createGUIItem(DepositoryItem item) {
-		ItemStackFactory factory = new ItemStackFactory(item.getDisplayItem());
 		DepositoryItemData itemData = userData.getItemData(item);
+		int remain = item.getLimit() - itemData.getSold();
+
+		ItemStackFactory factory = new ItemStackFactory(item.getDisplayItem());
 		List<String> additionalLore = PluginConfig.General.ADDITIONAL_LORE.get(player, new Object[]{
-				item.getName(), itemData.getAmount(), item.getPrice(), itemData.getSold(), item.getLimit()
+				item.getName(), itemData.getAmount(), item.getPrice(),
+				itemData.getSold(), remain, item.getLimit()
 		});
+
 		additionalLore.forEach(factory::addLore);
 		List<String> clickLore = PluginConfig.General.CLICK_LORE.get(player, new Object[]{
 				item.getName(), itemData.getAmount(), item.getPrice()
@@ -58,7 +62,16 @@ public class DepositoryGUI extends GUI {
 				if (itemData.getAmount() < 1) return;
 				if (type == ClickType.LEFT) {
 					player.closeInventory();
-					SellItemGUI.open(player, userData, itemData, depository, item);
+					if (itemData.getAmount() >= 1) {
+						if (remain >= 1) {
+							SellItemGUI.open(player, userData, itemData, depository, item);
+						} else {
+							PluginMessages.ITEM_SOLD_LIMIT.send(player, new Object[]{remain, item.getLimit()});
+						}
+					} else {
+						PluginMessages.NO_ENOUGH_ITEM.send(player);
+					}
+
 				} else if (type == ClickType.RIGHT) {
 					player.closeInventory();
 					if (hasEmptySlot(player)) {

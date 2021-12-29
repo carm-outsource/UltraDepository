@@ -38,7 +38,7 @@ collect:
 
 sounds:
   collect: ENTITY_EXPERIENCE_ORB_PICKUP
-  sell-success: ENTITY_VILLAGER_TRADE
+  sell-success: ENTITY_VILLAGER_CELEBRATE
   sell-fail: ENTITY_VILLAGER_NO
   gui-click: UI_BUTTON_CLICK
 
@@ -51,7 +51,7 @@ general:
     - " "
     - "&f仓库内数量 &a%(amount)"
     - "&f该物品单价 &a%(price)"
-    - "&f今日可出售 &a%(sold)&8/%(limit)"
+    - "&f今日可出售 &a%(remain)&8/%(limit)"
 
   # 提示玩家点击行为的介绍
   # 将添加到背包界面内的物品上，避免重复配置

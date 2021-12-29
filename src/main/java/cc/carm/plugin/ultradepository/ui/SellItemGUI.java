@@ -51,7 +51,8 @@ public class SellItemGUI extends GUI {
 		this.currentAmount = Math.max(1, amount); // 不可小于1
 		ItemStackFactory factory = new ItemStackFactory(this.itemDisplay);
 		List<String> additionalLore = PluginConfig.General.ADDITIONAL_LORE.get(player, new Object[]{
-				getItemName(), getRemainAmount(), getItemPrice(), getSoldAmount(), getSellLimit()
+				getItemName(), getRemainAmount(), getItemPrice(),
+				getSoldAmount(), (getSellLimit() - getSoldAmount()), getSellLimit()
 		});
 		additionalLore.forEach(factory::addLore);
 
@@ -122,7 +123,7 @@ public class SellItemGUI extends GUI {
 			@Override
 			public void onClick(ClickType type) {
 				int amount = Math.min(getCurrentAmount(), Math.min(getRemainAmount(), getSellLimit() - getSoldAmount()));
-				if (amount > 0) Main.getEconomyManager().sell(player, getItemPrice(), amount);
+				if (amount > 0) Main.getEconomyManager().sellItem(player, userData, itemData, amount);
 				player.closeInventory();
 			}
 		};

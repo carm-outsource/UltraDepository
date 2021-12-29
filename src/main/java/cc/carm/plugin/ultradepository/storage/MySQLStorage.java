@@ -12,6 +12,7 @@ import cc.carm.plugin.ultradepository.configuration.values.ConfigValue;
 import cc.carm.plugin.ultradepository.data.DepositoryData;
 import cc.carm.plugin.ultradepository.data.DepositoryItemData;
 import cc.carm.plugin.ultradepository.data.UserData;
+import cc.carm.plugin.ultradepository.util.DateUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -125,7 +126,7 @@ public class MySQLStorage implements DataStorage {
 			if (resultSet != null && resultSet.next()) {
 				String dataJSON = resultSet.getString("data");
 				Date date = resultSet.getDate("day");
-				UserData data = new UserData(uuid, this, new HashMap<>(), date);
+				UserData data = new UserData(uuid, this, new HashMap<>(), DateUtil.getDateInt(date));
 
 				JsonElement dataElement = PARSER.parse(dataJSON);
 				if (dataElement.isJsonObject()) {
@@ -141,7 +142,7 @@ public class MySQLStorage implements DataStorage {
 				return data;
 			}
 			Main.debug("当前库内不存在玩家 " + uuid + " 的数据，视作新档。");
-			return new UserData(uuid, this, new HashMap<>(), new Date(System.currentTimeMillis()));
+			return new UserData(uuid, this, new HashMap<>(), DateUtil.getCurrentDate());
 		} catch (Exception exception) {
 			throw new Exception(exception);
 		}

@@ -40,9 +40,9 @@ public class PluginConfig {
 	public static class Sounds {
 
 		public static final ConfigSound COLLECT = new ConfigSound("sounds.collect");
-		public static final ConfigSound SELL_SUCCESS = new ConfigSound("sell-success");
-		public static final ConfigSound SELL_FAIL = new ConfigSound("sell-fail");
-		public static final ConfigSound GUI_CLICK = new ConfigSound("gui-click");
+		public static final ConfigSound SELL_SUCCESS = new ConfigSound("sounds.sell-success");
+		public static final ConfigSound SELL_FAIL = new ConfigSound("sounds.sell-fail");
+		public static final ConfigSound GUI_CLICK = new ConfigSound("sounds.gui-click");
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class PluginConfig {
 		public static final ConfigMessageList ADDITIONAL_LORE = new ConfigMessageList(
 				ConfigManager.getPluginConfig(), "general.additional-lore", new String[]{},
 				new String[]{
-						"%(item_name)", "%(amount)", "%(price)", "%(sold)", "%(limit)"
+						"%(item_name)", "%(amount)", "%(price)", "%(sold)", "%(remain)", "%(limit)"
 				});
 
 		/**
