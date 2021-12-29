@@ -79,16 +79,16 @@ public class UserData {
 	public @Nullable Integer setItemAmount(@NotNull String depositoryID, @NotNull String typeID, int amount) {
 		DepositoryItemData data = getItemData(depositoryID, typeID);
 		if (data == null) return null;
-		data.setAmount(amount);
-		return amount;
+		data.setAmount(Math.max(0, amount)); // 最小为0
+		return data.getAmount();
 	}
 
 
 	public @Nullable Integer setItemSold(@NotNull String depositoryID, @NotNull String typeID, int soldAmount) {
 		DepositoryItemData data = getItemData(depositoryID, typeID);
 		if (data == null) return null;
-		data.setSold(soldAmount);
-		return soldAmount;
+		data.setSold(Math.max(0, soldAmount));
+		return data.getSold();
 	}
 
 

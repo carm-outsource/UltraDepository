@@ -15,6 +15,7 @@
 [![License](https://img.shields.io/github/license/CarmJos/UltraDepository)](https://opensource.org/licenses/GPL-3.0)
 [![workflow](https://github.com/CarmJos/UltraDepository/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/CarmJos/UltraDepository/actions/workflows/maven.yml)
 ![CodeSize](https://img.shields.io/github/languages/code-size/CarmJos/UltraDepository)
+![Support](https://img.shields.io/badge/Minecraft-Java%201.13--Latest-green)
 ![](https://visitor-badge.glitch.me/badge?page_id=UltraDepository.readme)
 
 超级仓库插件，支持设定不同物品的存储仓库。
