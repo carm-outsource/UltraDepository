@@ -34,7 +34,6 @@ permissions:
 
   "UltraDepository.auto.enable":
     description: "用于判断是否启用了自动收集功能"
-    default: op
 
   "UltraDepository.admin":
     description: "超级仓库的管理权限"
