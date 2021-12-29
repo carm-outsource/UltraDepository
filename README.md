@@ -42,6 +42,7 @@
 
 - **[必须]** 插件本体基于 [Spigot-API](https://hub.spigotmc.org/stash/projects/SPIGOT)、[BukkitAPI](http://bukkit.org/) 实现。
 - **[自带]** 数据部分基于 [EasySQL](https://github.com/CarmJos/EasySQL) 实现。
+  - 本插件连接池使用 [BeeCP](https://github.com/Chris2018998/BeeCP) ，更轻量、快速。
 - **[推荐]** 变量部分基于 [PlaceholderAPI](https://www.spigotmc.org/resources/6245/) 实现。
 - **[推荐]** 经济部分基于 [VaultAPI](https://github.com/MilkBowl/VaultAPI) 实现。
 
@@ -60,8 +61,11 @@
 
 指令主指令为 /UltraDepository (/ud | /Depository)
 
+### 玩家指令
+
 <details>
-<summary>展开查看所有子指令</summary>
+<summary>展开查看所有玩家指令</summary>
+
 
 ```text
 # open [仓库ID]
@@ -77,8 +81,17 @@
 @ 玩家指令 (UltraDepository.Command.SellAll)
 - 售出所有相关物品。
 - 该指令受到玩家每日售出数量的限制。
+```
+
+</details>
+
+### 管理指令
+
+<details>
+<summary>展开查看所有管理指令</summary>
 
 
+```text
 # info <玩家> [仓库ID] [物品ID] 
 @ 管理指令 (UltraDepository.admin)
 - 得到玩家的相关物品信息。
@@ -99,7 +112,6 @@
 - 若不填写仓库，则售出所有仓库内所有物品。
 - 该指令受到玩家每日售出数量的限制。
 ```
-
 </details>
 
 ## 插件变量 ([PlaceholderAPI](https://www.spigotmc.org/resources/6245/))
