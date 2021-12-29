@@ -3,6 +3,7 @@ package cc.carm.plugin.ultradepository.listener;
 import cc.carm.plugin.ultradepository.Main;
 import cc.carm.plugin.ultradepository.configuration.PluginConfig;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -64,7 +65,6 @@ public class CollectListener implements Listener {
 		// 自己扔出去的东西不计入背包
 		UUID thrower = event.getItem().getThrower();
 		if (thrower != null && thrower.equals(player.getUniqueId())) return;
-
 
 		ItemStack item = event.getItem().getItemStack();
 		Main.debug("Picked up " + item.getType().name() + " " + item.getAmount());
