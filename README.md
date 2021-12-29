@@ -222,10 +222,10 @@ gui: # GUI额外配置
         # 支持使用变量
         - "你好 %player_name% !"
       actions: # 物品点击操作
-        - "[CHAT] Hello!" #以玩家身份发送Hello
-        - "[CHAT] /help" #若内容以"/"开头，则会以玩家身份执行指令
-        - "[CONSOLE] say HELLO WORLD" #以后台身份执行指令，不需要加"/"
-        - "[MESSAGE] &(#FFBBBBB)Test %player_name%" # 向玩家发送消息，支持Placeholder变量和RGB颜色
+        - "[CHAT] Hello!" #以玩家身份发送Hello，支持PlaceholderAPI变量
+        - "[CHAT] /help" #若内容以"/"开头，则会以玩家身份执行指令,支持PlaceholderAPI变量
+        - "[CONSOLE] say HELLO WORLD" #以后台身份执行指令，不需要加"/"，支持PlaceholderAPI变量
+        - "[MESSAGE] &(#FFBBBBB)Test %player_name%" # 向玩家发送消息，支持PlaceholderAPI变量和RGB颜色
         - "[SOUND] ENTITY_EXPERIENCE_ORB_PICKUP:0.5" # 向玩家发送声音，可以规定音量大小和音调，格式为 <声音>:[音量]:[音调]
         - "[CLOSE]" # 为玩家关闭界面
 
