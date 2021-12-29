@@ -60,6 +60,7 @@ public class UserData {
 	}
 
 	public @NotNull DepositoryItemData getItemData(@NotNull DepositoryItem itemType) {
+		checkoutDate();
 		return getDepositoryData(itemType.getDepository()).getItemData(itemType);
 	}
 
@@ -70,7 +71,6 @@ public class UserData {
 	}
 
 	public @Nullable Integer getItemSold(@NotNull String depositoryID, @NotNull String typeID) {
-		checkoutDate();
 		DepositoryItemData data = getItemData(depositoryID, typeID);
 		if (data == null) return null;
 		return data.getSold();
