@@ -84,24 +84,21 @@
 </details>
 
 <details>
-<summary>展开查看所有管理指令</summary>
+<summary>展开查看所有后台指令</summary>
 
+以下指令**只有后台**才可以使用，可用于搭配变量自制玩家管理GUI。
 
 ```text
-# info <玩家> [仓库ID] [物品ID] 
-@ 管理指令 (UltraDepository.admin)
+# info <玩家> [仓库ID] [物品ID]
 - 得到玩家的相关物品信息。
 
 # add <玩家> <仓库ID> <物品ID> <数量>
-@ 管理指令 (UltraDepository.admin)
 - 为玩家添加对应仓库中对于物品的数量。
 
 # remove <玩家> <仓库ID> <物品ID> <数量>
-@ 管理指令 (UltraDepository.admin)
 - 为玩家减少对应仓库中对于物品的数量。
 
 # sell <玩家> [仓库ID] [物品ID] [数量]
-@ 管理指令 (UltraDepository.admin)
 - 为玩家售出相关物品。
 - 若不填写数量，则售出所有对应仓库的对应物品。
 - 若不填写物品，则售出对应仓库内所有物品。
