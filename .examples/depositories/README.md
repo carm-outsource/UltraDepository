@@ -1,8 +1,12 @@
-# UltraDepository 示例仓库配置
+# UltraDepository 预设仓库配置
+
+## 详细示例
+
+您可以 [点击这里](full-example.yml) 查看一份详细的示例。
 
 ## 使用须知
 
-示例配置基于 MineCraft 1.16 实现，更低版本可能无法使用。
+预设配置基于 MineCraft 1.16 实现，更低版本可能无法使用。
 
 ## 如何使用？
 
@@ -11,8 +15,7 @@
 3. 下载你想要的示例仓库配置文件，并放入 `插件配置目录/depositories` 下。
 4. 重启服务器，即可令对应的配置文件生效！
 
-
-## 示例图片
+## 预设配置截图
 
 ### 渔夫仓库 ([fishman.yml](files/fishman.yml))
 

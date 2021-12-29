@@ -187,79 +187,23 @@
 
 ## 配置文件
 
-### [插件配置文件](src/main/resources/config.yml) (config.yml)
+### 插件配置文件 ([config.yml](src/main/resources/config.yml))
 
 详见源文件。
 
-### [消息配置文件](src/main/resources/messages.yml) (messages.yml)
+### 消息配置文件 ([messages.yml](src/main/resources/messages.yml))
 
 详见源文件。
 
-### 仓库配置文件 (depositories/<ID>.yml)
+### 仓库配置文件 ([depositories/<仓库ID>.yml](.examples/depositories/full-example.yml))
 
 所有仓库配置均为单独的配置文件，存放于 `插件配置目录/depositories` 下，便于管理。
 
-文件名即仓库的ID，理论上可以随便取，但**强烈推荐**使用纯英文，部分符号可能会影响正常读取，请避免使用。
+文件名即仓库的ID，**强烈推荐使用纯英文**，部分符号可能会影响正常读取，请避免使用。
 
-这里准备了几个常用的仓库类型，可以 [在这里](.examples/depositories) 找到您需要的直接使用或加以修改后使用。
+随本项目预设了几个常用的仓库类型，可以 [在这里](.examples/depositories) 找到您需要的直接使用或加以修改后使用。
 
-您也可以查看下方的示例，看到所有相关的配置，以制作您自己的仓库。
-<details>
-<summary>展开查看示例仓库配置</summary>
-
-```yaml
-
-name: "&b&l示例仓库" # 仓库名，用于消息显示
-
-capacity: # 容量配置
-  default: 500 # 若为0则默认不可以使用该仓库
-  permissions: # 特殊权限对应的仓库容量，格式为 "权限:容量
-    - "UltraDepository.vip:1000"
-    - "UltraDepository.mvp:1500"
-
-gui: # GUI额外配置
-  title: "&b&l示例仓库 &7| 界面" #示例仓库的GUI标题
-  lines: 4 # GUI的行数，支持 1-6行。
-  items:
-    "TEST":
-      material: CHEST # 物品图标的类型
-      data: 0 # 物品图标的数据值
-      slot: 31 # 在GUI中显示的格子
-      name: "&9&l测试图标"
-      lore:
-        # 支持使用变量
-        - "你好 %player_name% !"
-      actions: # 物品点击操作
-        - "[CHAT] Hello!" #以玩家身份发送Hello，支持PlaceholderAPI变量
-        - "[CHAT] /help" #若内容以"/"开头，则会以玩家身份执行指令,支持PlaceholderAPI变量
-        - "[CONSOLE] say HELLO WORLD" #以后台身份执行指令，不需要加"/"，支持PlaceholderAPI变量
-        - "[MESSAGE] &(#FFBBBBB)Test %player_name%" # 向玩家发送消息，支持PlaceholderAPI变量和RGB颜色
-        - "[SOUND] ENTITY_EXPERIENCE_ORB_PICKUP:0.5" # 向玩家发送声音，可以规定音量大小和音调，格式为 <声音>:[音量]:[音调]
-        - "[CLOSE]" # 为玩家关闭界面
-
-        - "[LEFT:CLOSE]" #限制只有 鼠标左键 才触发CLOSE
-        - "[SHIFT_LEFT:CLOSE]" #限制只有 按住Shift+鼠标左键 才触发CLOSE
-        - "[RIGHT:CLOSE]" #限制只有 鼠标右键 才触发CLOSE
-        - "[SHIFT_RIGHT:CLOSE]" #限制只有 按住Shift+鼠标右键 才触发CLOSE
-        - "[MIDDLE:CLOSE]" #限制只有 鼠标中键 才触发CLOSE
-        - "[DROP:CLOSE]" #限制只有 丢弃建 才触发CLOSE
-        - "[CONTROL_DROP:CLOSE]" #限制只有 按住Ctrl+丢弃键 才触发CLOSE
-        - "[DOUBLE_CLICK:CLOSE]" #限制只有 鼠标双击物品 才触发CLOSE
-        - "[NUMBER_KEY:CLOSE]" #限制只有 数字键切换 才触发CLOSE
-
-items:
-  "INK_SAC": #物品ID，若需要限制数据ID则可以加“:”,如 "INK_SANK:4" 
-    slot: 11 # 物品在GUI中显示的槽位
-    price: 0.1 # 物品单价
-    limit: 500 # 物品每日售出限制
-    name: "&8&l墨囊" # 物品显示的名字
-    lore: # 物品的lore
-      - " "
-      - "&f抓住墨鱼！"
-
-```
-
-</details>
+您也可以 [点击这里](.examples/depositories/full-example.yml) 查看一份*详细的仓库配置示例*，以制作您自己的仓库。
 
 ## 支持与捐赠
 
