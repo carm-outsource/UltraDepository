@@ -41,6 +41,7 @@ public class Main extends JavaPlugin {
 	public void onEnable() {
 		instance = this;
 		scheduler = new SchedulerUtils(this);
+		outputPlugin();
 		log(getName() + " " + getDescription().getVersion() + " &7开始加载...");
 		long startTime = System.currentTimeMillis();
 
@@ -101,6 +102,7 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		if (!initialized) return;
+		outputPlugin();
 		log(getName() + " " + getDescription().getVersion() + " 开始卸载...");
 		long startTime = System.currentTimeMillis();
 
@@ -173,5 +175,16 @@ public class Main extends JavaPlugin {
 		if (command == null) return;
 		command.setExecutor(executor);
 		if (tabCompleter != null) command.setTabCompleter(tabCompleter);
+	}
+
+	public static void outputPlugin() {
+		log(" _    _ _ _             _____                       _ _                   ");
+		log("| |  | | | |           |  __ \\                     (_) |                  ");
+		log("| |  | | | |_ _ __ __ _| |  | | ___ _ __   ___  ___ _| |_ ___  _ __ _   _ ");
+		log("| |  | | | __| '__/ _` | |  | |/ _ \\ '_ \\ / _ \\/ __| | __/ _ \\| '__| | | |");
+		log("| |__| | | |_| | | (_| | |__| |  __/ |_) | (_) \\__ \\ | || (_) | |  | |_| |");
+		log(" \\____/|_|\\__|_|  \\__,_|_____/ \\___| .__/ \\___/|___/_|\\__\\___/|_|   \\__, |");
+		log("                                   | |                               __/ |");
+		log("                                   |_|                              |___/ ");
 	}
 }
