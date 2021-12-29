@@ -1,0 +1,129 @@
+name: "&a&l农夫仓库"
+
+capacity:
+  default: 500 # 若为0则默认不可以使用该仓库
+  permissions:
+    - "ud.farmer.vip:1000"
+
+gui:
+  title: "&a&l农夫仓库"
+  lines: 6
+  items:
+    "INFO":
+      material: CHEST
+      data: 0
+      slot: 49
+      name: "&2&l背包信息"
+      lore:
+        - " "
+        - "&f仓库最大容量&a %UltraDepository_capacity_farmer%"
+        - "&f仓库已用容量&a %UltraDepository_used_farmer%"
+        - "&f仓库剩余容量&a %UltraDepository_usable_farmer%"
+        - " "
+
+items:
+  "WHEAT_SEEDS":
+    slot: 10
+    price: 0.1
+    limit: 500
+    name: "&a&l小麦种子"
+  "MELON_SEEDS":
+    slot: 11
+    price: 0.1
+    limit: 500
+    name: "&8&l西瓜种子"
+  "PUMPKIN_SEEDS":
+    slot: 12
+    price: 0.1
+    limit: 500
+    name: "&f&l南瓜种子"
+  "BEETROOT_SEEDS":
+    slot: 13
+    price: 0.1
+    limit: 500
+    name: "&7&l甜菜种子"
+  "NETHER_WART":
+    slot: 14
+    price: 0.1
+    limit: 500
+    name: "&c&l地狱疣"
+  "COCOA_BEANS":
+    slot: 15
+    price: 0.1
+    limit: 500
+    name: "&6&l可可豆"
+  "SWEET_BERRIES":
+    slot: 16
+    price: 0.1
+    limit: 500
+    name: "&c&l树莓"
+  "BEETROOT":
+    slot: 19
+    price: 0.1
+    limit: 500
+    name: "&c&l甜菜根"
+  "CARROT":
+    slot: 20
+    price: 0.1
+    limit: 500
+    name: "&6&l胡萝卜"
+  "POTATO":
+    slot: 21
+    price: 0.1
+    limit: 500
+    name: "&e&l土豆"
+  "WHEAT":
+    slot: 22
+    price: 0.1
+    limit: 500
+    name: "&e&l小麦"
+  "MELON_SLICE":
+    slot: 23
+    price: 0.1
+    limit: 500
+    name: "&c&l西瓜片"
+  "PUMPKIN":
+    slot: 24
+    price: 0.1
+    limit: 500
+    name: "&6&l南瓜"
+  "CACTUS":
+    slot: 25
+    price: 0.1
+    limit: 500
+    name: "&2&l仙人掌"
+  "POISONOUS_POTATO":
+    slot: 28
+    price: 0.1
+    limit: 500
+    name: "&a&l毒土豆"
+  "KELP":
+    slot: 29
+    price: 0.1
+    limit: 500
+    name: "&2&l海带"
+  "SUGAR_CANE":
+    slot: 30
+    price: 0.1
+    limit: 500
+    name: "&a&l甘蔗"
+  "BAMBOO":
+    slot: 31
+    price: 0.1
+    limit: 500
+    name: "&a&l竹子"
+  "VINE":
+    slot: 32
+    price: 0.1
+    limit: 500
+    name: "&2&l藤蔓"
+  "CHORUS_FRUIT":
+    slot: 33
+    price: 0.1
+    limit: 500
+    name: "&d&l紫颂果"
+  "CHORUS_PLANT":
+    slot: 34
+    price: 0.1
+    limit: 500
+    name: "&5&l紫颂植株"

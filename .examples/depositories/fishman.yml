@@ -1,0 +1,64 @@
+name: "&b&l渔夫仓库"
+
+capacity:
+  default: 500 # 若为0则默认不可以使用该仓库
+  permissions:
+    - "ud.fishman.vip:1000"
+
+gui:
+  title: "&b&l渔夫仓库"
+  lines: 4
+  items:
+    "INFO":
+      material: CHEST
+      data: 0
+      slot: 31
+      name: "&9&l背包信息"
+      lore:
+        - " "
+        - "&f仓库最大容量&b %UltraDepository_capacity_fishman%"
+        - "&f仓库已用容量&b %UltraDepository_used_fishman%"
+        - "&f仓库剩余容量&b %UltraDepository_usable_fishman%"
+        - " "
+
+items:
+  "INK_SAC":
+    slot: 11
+    price: 0.1
+    limit: 500
+    name: "&8&l墨囊"
+    lore:
+      - " "
+      - "&f抓住墨鱼！"
+  "TROPICAL_FISH":
+    slot: 12
+    price: 0.1
+    limit: 500
+    name: "&(#EE7942)&l小丑鱼"
+    lore:
+      - " "
+      - "&f不是小丑！"
+  "SALMON":
+    slot: 13
+    price: 0.1
+    limit: 500
+    name: "&c&l鲑鱼"
+    lore:
+      - " "
+      - "&f肉质鲜美！"
+  "COD":
+    slot: 14
+    price: 0.1
+    limit: 500
+    name: "&f&l鳕鱼"
+    lore:
+      - " "
+      - "&f十分美味！"
+  "PUFFERFISH":
+    slot: 15
+    price: 0.1
+    limit: 500
+    name: "&6&L河豚"
+    lore:
+      - " "
+      - "&f小心有毒！"

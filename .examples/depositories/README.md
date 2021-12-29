@@ -1,0 +1,31 @@
+# UltraDepository 示例仓库配置
+
+## 使用须知
+
+示例配置基于 MineCraft 1.16 实现，更低版本可能无法使用。
+
+## 如何使用？
+
+1. 下载并安装 UltraDepository 插件。
+2. 启动服务器，配置 `config.yml` 中的一些基础设置。
+3. 下载你想要的示例仓库配置文件，并放入 `插件配置目录/depositories` 下。
+4. 重启服务器，即可令对应的配置文件生效！
+
+
+## 示例图片
+
+### 渔夫仓库 ([fishman.yml](fishman.yml))
+
+![fishman](images/fishman.png)
+
+### 矿工仓库 ([miner.yml](miner.yml))
+
+![miner](images/miner.png)
+
+### 农夫仓库 ([farmer.yml](farmer.yml))
+
+![farmer](images/farmer.png)
+
+### 猎人仓库 ([hunter.yml](hunter.yml))
+
+![hunter](images/hunter.png)

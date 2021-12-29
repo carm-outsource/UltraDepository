@@ -1,0 +1,130 @@
+name: "&5&l猎人仓库"
+
+capacity:
+  default: 500 # 若为0则默认不可以使用该仓库
+  permissions:
+    - "ud.hunter.vip:1000"
+
+gui:
+  title: "&5&l猎人仓库"
+  lines: 6
+  items:
+    "INFO":
+      material: CHEST
+      data: 0
+      slot: 49
+      name: "&5&l背包信息"
+      lore:
+        - " "
+        - "&f仓库最大容量&d %UltraDepository_capacity_hunter%"
+        - "&f仓库已用容量&d %UltraDepository_used_hunter%"
+        - "&f仓库剩余容量&d %UltraDepository_usable_hunter%"
+        - " "
+
+
+items:
+  "CHICKEN":
+    slot: 10
+    price: 0.1
+    limit: 500
+    name: "&6&l鸡肉"
+  "PORKCHOP":
+    slot: 11
+    price: 0.1
+    limit: 500
+    name: "&c&l猪肉"
+  "BEEF":
+    slot: 12
+    price: 0.1
+    limit: 500
+    name: "&c&l牛肉"
+  "MUTTON":
+    slot: 13
+    price: 0.1
+    limit: 500
+    name: "&6&l羊肉"
+  "RABBIT":
+    slot: 14
+    price: 0.1
+    limit: 500
+    name: "&f&l兔肉"
+  "RABBIT_HIDE":
+    slot: 15
+    price: 0.1
+    limit: 500
+    name: "&f&l兔子皮"
+  "LEATHER":
+    slot: 16
+    price: 0.1
+    limit: 500
+    name: "&c&l皮革"
+  "EGG":
+    slot: 19
+    price: 0.1
+    limit: 500
+    name: "&f&l鸡蛋"
+  "RABBIT_FOOT":
+    slot: 20
+    price: 0.1
+    limit: 500
+    name: "&f&l兔子脚"
+  "FEATHER":
+    slot: 21
+    price: 0.1
+    limit: 500
+    name: "&f&l羽毛"
+  "GOLD_NUGGET":
+    slot: 22
+    price: 0.1
+    limit: 500
+    name: "&e&l金粒"
+  "GHAST_TEAR":
+    slot: 23
+    price: 0.1
+    limit: 500
+    name: "&7&l恶魂之泪"
+  "BLAZE_ROD":
+    slot: 24
+    price: 0.1
+    limit: 500
+    name: "&e&l烈焰棒"
+  "MAGMA_CREAM":
+    slot: 25
+    price: 0.1
+    limit: 500
+    name: "&c&l岩浆球"
+  "SLIME_BALL":
+    slot: 28
+    price: 0.1
+    limit: 500
+    name: "&a&l粘液球"
+  "BONE":
+    slot: 29
+    price: 0.1
+    limit: 500
+    name: "&f&l骨头"
+  "SPIDER_EYE":
+    slot: 30
+    price: 0.1
+    limit: 500
+    name: "&4&l蜘蛛眼"
+  "GUNPOWDER":
+    slot: 31
+    price: 0.1
+    limit: 500
+    name: "&7&l火药"
+  "ROTTEN_FLESH":
+    slot: 32
+    price: 0.1
+    limit: 500
+    name: "&2&l腐肉"
+  "STRING":
+    slot: 33
+    price: 0.1
+    limit: 500
+    name: "&f&l线"
+  "ENDER_PEARL":
+    slot: 34
+    price: 0.1
+    limit: 500
+    name: "&5&l末影珍珠"

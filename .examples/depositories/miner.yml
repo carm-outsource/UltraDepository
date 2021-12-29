@@ -1,28 +1,136 @@
-name: "&c&l矿业仓库"
+name: "&e&l矿工仓库"
 
 capacity:
-  default: 0 # 若为0则默认不可以使用该仓库
+  default: 5000 # 若为0则默认不可以使用该仓库
   permissions:
-    - "ub.miner.vip:5000"
+    - "ud.miner.vip:10000"
 
 gui:
-  title: "&c&l矿业仓库"
+  title: "&e&l矿工仓库"
   lines: 6
   items:
-    "CLOSE":
-      material: RED_STONE
+    "INFO":
+      material: CHEST
       data: 0
-      slot: 0
-      name: "关闭界面"
+      slot: 49
+      name: "&e&l背包信息"
       lore:
-        - "点击后您将关闭本界面。"
-      actions:
-        - "[LEFT:CLOSE]"
-        - "[SHIFT_LEFT:CLOSE]"
+        - " "
+        - "&f仓库最大容量&6 %UltraDepository_capacity_miner%"
+        - "&f仓库已用容量&6 %UltraDepository_used_miner%"
+        - "&f仓库剩余容量&6 %UltraDepository_usable_miner%"
+        - " "
 
 items:
+  "COBBLESTONE":
+    slot: 11
+    price: 0.1
+    limit: 500
+    name: "&f&l圆石"
+    lore:
+      - " "
+      - "&f方块！"
+  "IRON_ORE":
+    slot: 12
+    price: 0.1
+    limit: 500
+    name: "&f&l铁矿"
+    lore:
+      - " "
+      - "&f升级！"
+  "GOLD_ORE":
+    slot: 13
+    price: 0.1
+    limit: 500
+    name: "&e&l金矿"
+    lore:
+      - " "
+      - "&f财富！"
+  "COAL":
+    slot: 14
+    price: 0.1
+    limit: 500
+    name: "&8&l煤炭"
+    lore:
+      - " "
+      - "&f燃料！"
+  "FLINT":
+    slot: 15
+    price: 0.1
+    limit: 500
+    name: "&7&l燧石"
+    lore:
+      - " "
+      - "&f点火！"
+  "IRON_INGOT":
+    slot: 20
+    price: 0.1
+    limit: 500
+    name: "&f&l铁锭"
+    lore:
+      - " "
+      - "&f制造！"
+  "GOLD_INGOT":
+    slot: 21
+    price: 0.1
+    limit: 500
+    name: "&e&l金锭"
+    lore:
+      - " "
+      - "&f高贵！"
+  "LAPIS_LAZULI":
+    slot: 22
+    price: 0.1
+    limit: 500
+    name: "&9&l青金石"
+    lore:
+      - " "
+      - "&f附魔！"
   "DIAMOND":
-    slot: 5
+    slot: 23
     price: 10
-    limit: 100
+    limit: 1500
     name: "&b&l钻石"
+    lore:
+      - " "
+      - "&f钻石！"
+  "EMERALD":
+    slot: 24
+    price: 10
+    limit: 1500
+    name: "&a&l绿宝石"
+    lore:
+      - " "
+      - "&f交易！"
+  "CLAY_BALL":
+    slot: 30
+    price: 0.1
+    limit: 500
+    name: "&7&l黏土"
+    lore:
+      - " "
+      - "&f塑形！"
+  "REDSTONE":
+    slot: 29
+    price: 0.1
+    limit: 500
+    name: "&c&l红石"
+    lore:
+      - " "
+      - "&f电路！"
+  "GLOWSTONE_DUST":
+    slot: 32
+    price: 0.5
+    limit: 1500
+    name: "&6&l萤石"
+    lore:
+      - " "
+      - "&f发光！"
+  "QUARTZ":
+    slot: 33
+    price: 0.5
+    limit: 1500
+    name: "&f&l石英"
+    lore:
+      - " "
+      - "&f美丽！"
