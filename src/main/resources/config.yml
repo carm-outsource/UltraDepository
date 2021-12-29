@@ -37,10 +37,10 @@ collect:
 
 
 sounds:
-  collect: ENTITY_EXPERIENCE_ORB_PICKUP
-  sell-success: ENTITY_VILLAGER_CELEBRATE
-  sell-fail: ENTITY_VILLAGER_NO
-  gui-click: UI_BUTTON_CLICK
+  collect: "ENTITY_EXPERIENCE_ORB_PICKUP:0.5"
+  sell-success: "ENTITY_VILLAGER_CELEBRATE"
+  sell-fail: "ENTITY_VILLAGER_NO"
+  gui-click: "UI_BUTTON_CLICK"
 
 # 通用配置
 general:
