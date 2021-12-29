@@ -61,8 +61,6 @@
 
 指令主指令为 /UltraDepository (/ud | /Depository)
 
-### 玩家指令
-
 <details>
 <summary>展开查看所有玩家指令</summary>
 
@@ -84,8 +82,6 @@
 ```
 
 </details>
-
-### 管理指令
 
 <details>
 <summary>展开查看所有管理指令</summary>
