@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-public class DateUtil {
+public class DateIntUtil {
 
 	private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyyMMdd");
 

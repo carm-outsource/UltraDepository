@@ -2,7 +2,7 @@ package cc.carm.plugin.ultradepository.manager;
 
 import cc.carm.plugin.ultradepository.Main;
 import cc.carm.plugin.ultradepository.data.UserData;
-import cc.carm.plugin.ultradepository.util.DateUtil;
+import cc.carm.plugin.ultradepository.util.DateIntUtil;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,7 +33,7 @@ public class UserManager {
 		} catch (Exception e) {
 			Main.error("无法正常加载玩家数据，玩家操作将不会被保存，请检查数据配置！");
 			Main.error("Could not load user's data, please check the data configuration!");
-			return new UserData(userUUID, Main.getStorage(), new HashMap<>(), DateUtil.getCurrentDate());
+			return new UserData(userUUID, Main.getStorage(), new HashMap<>(), DateIntUtil.getCurrentDate());
 		}
 	}
 

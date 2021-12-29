@@ -4,7 +4,7 @@ import cc.carm.plugin.ultradepository.Main;
 import cc.carm.plugin.ultradepository.configuration.depository.Depository;
 import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
 import cc.carm.plugin.ultradepository.storage.DataStorage;
-import cc.carm.plugin.ultradepository.util.DateUtil;
+import cc.carm.plugin.ultradepository.util.DateIntUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -118,12 +118,16 @@ public class UserData {
 
 
 	public Date getDate() {
-		return new Date(DateUtil.getDateMillis(this.date));
+		return new Date(DateIntUtil.getDateMillis(getDateInt()));
+	}
+
+	public int getDateInt() {
+		return this.date;
 	}
 
 
 	public boolean isCurrentDay() {
-		return this.date == DateUtil.getCurrentDate();
+		return this.date == DateIntUtil.getCurrentDate();
 	}
 
 
@@ -132,7 +136,7 @@ public class UserData {
 			Main.debug("Date is not change, skip clear sold amount.");
 			return;
 		}
-		this.date = DateUtil.getCurrentDate(); //更新日期
+		this.date = DateIntUtil.getCurrentDate(); //更新日期
 		Main.debug("Date changed, clear sold.");
 		getDepositories().values().stream()
 				.flatMap(value -> value.getContents().values().stream())

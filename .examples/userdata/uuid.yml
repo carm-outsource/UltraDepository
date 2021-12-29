@@ -1,0 +1,13 @@
+date: 20211111 # 用于判断售出数据的所在日期
+
+depositories:
+  "miner":
+    "COAL:0":
+      amount: 1241
+      sold: 100
+    "FLINT:0":
+      amount: 1241
+  "fishman":
+    "TROPICAL_FISH:0":
+      amount: 51
+      sold: 4
