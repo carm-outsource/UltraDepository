@@ -28,9 +28,9 @@
 ## 插件依赖
 
 - **[必须]** 插件本体基于 [Spigot-API](https://hub.spigotmc.org/stash/projects/SPIGOT)、[BukkitAPI](http://bukkit.org/) 实现。
-- **[必须]** 经济部分基于 [VaultAPI](https://github.com/MilkBowl/VaultAPI) 实现。
 - **[自带]** 数据部分基于 [EasySQL](https://github.com/CarmJos/EasySQL) 实现。
-- **[可选]** 变量部分基于 [PlaceholderAPI](https://www.spigotmc.org/resources/6245/) 实现。
+- **[推荐]** 变量部分基于 [PlaceholderAPI](https://www.spigotmc.org/resources/6245/) 实现。
+- **[推荐]** 经济部分基于 [VaultAPI](https://github.com/MilkBowl/VaultAPI) 实现。
 
 详细依赖列表可见 [Dependencies](https://github.com/CarmJos/UltraDepository/network/dependencies) 。
 
