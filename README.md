@@ -27,6 +27,7 @@
 ## 效果预览
 
 ### 收集物品
+
 ![collect](.documentation/images/collect-message.jpg)
 
 ### 仓库界面 (可自定义配置)
@@ -43,7 +44,7 @@
 
 - **[必须]** 插件本体基于 [Spigot-API](https://hub.spigotmc.org/stash/projects/SPIGOT)、[BukkitAPI](http://bukkit.org/) 实现。
 - **[自带]** 数据部分基于 [EasySQL](https://github.com/CarmJos/EasySQL) 实现。
-  - 本插件连接池使用 [BeeCP](https://github.com/Chris2018998/BeeCP) ，更轻量、快速。
+    - 本插件连接池使用 [BeeCP](https://github.com/Chris2018998/BeeCP) ，更轻量、快速。
 - **[推荐]** 变量部分基于 [PlaceholderAPI](https://www.spigotmc.org/resources/6245/) 实现。
 - **[推荐]** 经济部分基于 [VaultAPI](https://github.com/MilkBowl/VaultAPI) 实现。
 
@@ -64,7 +65,6 @@
 
 <details>
 <summary>展开查看所有玩家指令</summary>
-
 
 ```text
 # open [仓库ID]
@@ -107,6 +107,7 @@
 - 若不填写仓库，则售出所有仓库内所有物品。
 - 该指令受到玩家每日售出数量的限制。
 ```
+
 </details>
 
 ## 插件变量 ([PlaceholderAPI](https://www.spigotmc.org/resources/6245/))
@@ -199,6 +200,54 @@
 <summary>展开查看示例仓库配置</summary>
 
 ```yaml
+
+name: "&b&l示例仓库" # 仓库名，用于消息显示
+
+capacity: # 容量配置
+  default: 500 # 若为0则默认不可以使用该仓库
+  permissions: # 特殊权限对应的仓库容量，格式为 "权限:容量
+    - "UltraDepository.vip:1000"
+    - "UltraDepository.mvp:1500"
+
+gui: # GUI额外配置
+  title: "&b&l示例仓库 &7| 界面" #示例仓库的GUI标题
+  lines: 4 # GUI的行数，支持 1-6行。
+  items:
+    "TEST":
+      material: CHEST # 物品图标的类型
+      data: 0 # 物品图标的数据值
+      slot: 31 # 在GUI中显示的格子
+      name: "&9&l测试图标"
+      lore:
+        # 支持使用变量
+        - "你好 %player_name% !"
+      actions: # 物品点击操作
+        - "[CHAT] Hello!" #以玩家身份发送Hello
+        - "[CHAT] /help" #若内容以"/"开头，则会以玩家身份执行指令
+        - "[CONSOLE] say HELLO WORLD" #以后台身份执行指令，不需要加"/"
+        - "[MESSAGE] &(#FFBBBBB)Test %player_name%" # 向玩家发送消息，支持Placeholder变量和RGB颜色
+        - "[SOUND] ENTITY_EXPERIENCE_ORB_PICKUP:0.5" # 向玩家发送声音，可以规定音量大小和音调，格式为 <声音>:[音量]:[音调]
+        - "[CLOSE]" # 为玩家关闭界面
+
+        - "[LEFT:CLOSE]" #限制只有 鼠标左键 才触发CLOSE
+        - "[SHIFT_LEFT:CLOSE]" #限制只有 按住Shift+鼠标左键 才触发CLOSE
+        - "[RIGHT:CLOSE]" #限制只有 鼠标右键 才触发CLOSE
+        - "[SHIFT_RIGHT:CLOSE]" #限制只有 按住Shift+鼠标右键 才触发CLOSE
+        - "[MIDDLE:CLOSE]" #限制只有 鼠标中键 才触发CLOSE
+        - "[DROP:CLOSE]" #限制只有 丢弃建 才触发CLOSE
+        - "[CONTROL_DROP:CLOSE]" #限制只有 按住Ctrl+丢弃键 才触发CLOSE
+        - "[DOUBLE_CLICK:CLOSE]" #限制只有 鼠标双击物品 才触发CLOSE
+        - "[NUMBER_KEY:CLOSE]" #限制只有 数字键切换 才触发CLOSE
+
+items:
+  "INK_SAC": #物品ID，若需要限制数据ID则可以加“:”,如 "INK_SANK:4" 
+    slot: 11 # 物品在GUI中显示的槽位
+    price: 0.1 # 物品单价
+    limit: 500 # 物品每日售出限制
+    name: "&8&l墨囊" # 物品显示的名字
+    lore: # 物品的lore
+      - " "
+      - "&f抓住墨鱼！"
 
 ```
 
