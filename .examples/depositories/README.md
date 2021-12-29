@@ -14,18 +14,18 @@
 
 ## 示例图片
 
-### 渔夫仓库 ([fishman.yml](fishman.yml))
+### 渔夫仓库 ([fishman.yml](files/fishman.yml))
 
 ![fishman](images/fishman.png)
 
-### 矿工仓库 ([miner.yml](miner.yml))
+### 矿工仓库 ([miner.yml](files/miner.yml))
 
 ![miner](images/miner.png)
 
-### 农夫仓库 ([farmer.yml](farmer.yml))
+### 农夫仓库 ([farmer.yml](files/farmer.yml))
 
 ![farmer](images/farmer.png)
 
-### 猎人仓库 ([hunter.yml](hunter.yml))
+### 猎人仓库 ([hunter.yml](files/hunter.yml))
 
 ![hunter](images/hunter.png)
