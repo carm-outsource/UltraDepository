@@ -14,7 +14,7 @@
     <groupId>cc.carm.plugin</groupId>
     <artifactId>ultradepository</artifactId>
     <packaging>jar</packaging>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 
     <name>UltraDepository</name>
     <description>超级仓库插件，支持设定不同物品的存储仓库。</description>
