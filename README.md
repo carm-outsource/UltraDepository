@@ -25,6 +25,19 @@
 
 ## 效果预览
 
+### 收集物品
+![collect](.documentation/images/collect-message.jpg)
+
+### 仓库界面 (可自定义配置)
+
+![item-gui](.documentation/images/item-in-gui.png)
+
+### 出售界面
+
+![sell-gui](.documentation/images/sell-gui.png)
+
+![sell-message](.documentation/images/sell-message.png)
+
 ## 插件依赖
 
 - **[必须]** 插件本体基于 [Spigot-API](https://hub.spigotmc.org/stash/projects/SPIGOT)、[BukkitAPI](http://bukkit.org/) 实现。
