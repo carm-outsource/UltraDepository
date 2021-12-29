@@ -1,6 +1,7 @@
 package cc.carm.plugin.ultradepository.manager;
 
 import cc.carm.plugin.ultradepository.Main;
+import cc.carm.plugin.ultradepository.configuration.PluginConfig;
 import cc.carm.plugin.ultradepository.configuration.PluginMessages;
 import cc.carm.plugin.ultradepository.configuration.depository.Depository;
 import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
@@ -158,6 +159,7 @@ public class DepositoryManager {
 		int itemAmount = item.getAmount();
 		data.addItemAmount(depository.getIdentifier(), typeID, itemAmount);
 		PluginMessages.COLLECTED.send(player, new Object[]{itemName, itemAmount, depository.getName()});
+		PluginConfig.Sounds.COLLECT.play(player);
 		Main.debug("Item collected successfully.");
 		return true;
 	}

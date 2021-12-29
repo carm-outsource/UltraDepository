@@ -1,6 +1,7 @@
 package cc.carm.plugin.ultradepository.command;
 
 import cc.carm.plugin.ultradepository.Main;
+import cc.carm.plugin.ultradepository.configuration.PluginConfig;
 import cc.carm.plugin.ultradepository.configuration.PluginMessages;
 import cc.carm.plugin.ultradepository.configuration.depository.Depository;
 import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
@@ -64,18 +65,21 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 						return false;
 					}
 					if (!Main.getEconomyManager().isInitialized()) {
+						PluginConfig.Sounds.SELL_FAIL.play(player);
 						PluginMessages.NO_ECONOMY.send(player);
 						return true;
 					}
 					if (args.length < 4) return helpPlayer(player);
 					Depository depository = Main.getDepositoryManager().getDepository(args[1]);
 					if (depository == null) {
+						PluginConfig.Sounds.SELL_FAIL.play(player);
 						PluginMessages.NO_DEPOSITORY.send(player);
 						return true;
 					}
 
 					DepositoryItem item = depository.getItems().get(args[2]);
 					if (item == null) {
+						PluginConfig.Sounds.SELL_FAIL.play(player);
 						PluginMessages.NO_ITEM.send(player);
 						return true;
 					}
@@ -86,6 +90,7 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 					} catch (Exception ignore) {
 					}
 					if (amount <= 0) {
+						PluginConfig.Sounds.SELL_FAIL.play(player);
 						PluginMessages.WRONG_NUMBER.send(player);
 						return true;
 					}
@@ -97,16 +102,18 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 					int currentAmount = itemData.getAmount();
 
 					if (currentAmount < amount) {
+						PluginConfig.Sounds.SELL_FAIL.play(player);
 						PluginMessages.NO_ENOUGH_ITEM.send(player);
 						return true;
 					}
 
 					if (currentAmount > (limit - sold)) {
+						PluginConfig.Sounds.SELL_FAIL.play(player);
 						PluginMessages.ITEM_SOLD_LIMIT.send(player, new Object[]{(limit - sold), limit});
 						return true;
 					}
 
-					sellItem(player, userData, itemData, amount);
+					Main.getEconomyManager().sellItem(player, userData, itemData, amount);
 					return true;
 				}
 				case "sellall": {
@@ -114,6 +121,7 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 						return false;
 					}
 					if (!Main.getEconomyManager().isInitialized()) {
+						PluginConfig.Sounds.SELL_FAIL.play(player);
 						PluginMessages.NO_ECONOMY.send(player);
 						return true;
 					}
@@ -126,15 +134,14 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 					if (depositoryID != null) {
 						depository = Main.getDepositoryManager().getDepository(depositoryID);
 						if (depository == null) {
+							PluginConfig.Sounds.SELL_FAIL.play(player);
 							PluginMessages.NO_DEPOSITORY.send(player);
 							return true;
 						}
 					}
 
 					if (depository == null) {
-						userData.getDepositories().values().stream()
-								.flatMap(depositoryData -> depositoryData.getContents().values().stream())
-								.forEach(itemData -> sellAllItem(player, userData, itemData));
+						Main.getEconomyManager().sellAllItem(player, userData);
 						sender.sendMessage("Success! " + player.getName() + "'s items had been sold.");
 						return true;
 					}
@@ -143,18 +150,18 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 					if (itemID != null) {
 						item = depository.getItems().get(itemID);
 						if (item == null) {
+							PluginConfig.Sounds.SELL_FAIL.play(player);
 							PluginMessages.NO_ITEM.send(player);
 							return true;
 						}
 					}
 
 					if (item == null) {
-						userData.getDepositoryData(depository).getContents().values()
-								.forEach(itemData -> sellAllItem(player, userData, itemData));
+						Main.getEconomyManager().sellAllItem(player, userData, userData.getDepositoryData(depositoryID));
 						return true;
 					}
 
-					sellAllItem(player, userData, userData.getItemData(item));
+					Main.getEconomyManager().sellAllItem(player, userData, userData.getItemData(item));
 					return true;
 				}
 				default:
@@ -334,9 +341,7 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 					UserData userData = Main.getUserManager().getData(player);
 
 					if (depository == null) {
-						userData.getDepositories().values().stream()
-								.flatMap(depositoryData -> depositoryData.getContents().values().stream())
-								.forEach(itemData -> sellAllItem(player, userData, itemData));
+						Main.getEconomyManager().sellAllItem(player, userData);
 						sender.sendMessage("Success! " + player.getName() + "'s items had been sold.");
 						return true;
 					}
@@ -349,10 +354,8 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 							return true;
 						}
 					}
-
 					if (item == null) {
-						userData.getDepositoryData(depository).getContents().values()
-								.forEach(itemData -> sellAllItem(player, userData, itemData));
+						Main.getEconomyManager().sellAllItem(player, userData, userData.getDepositoryData(depository));
 						sender.sendMessage("Success! " + player.getName() + "'s " + depository.getIdentifier() + " had been sold.");
 						return true;
 					}
@@ -371,10 +374,11 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 					}
 
 					if (amount == null) {
-						sellAllItem(player, userData, userData.getItemData(item));
+						Main.getEconomyManager().sellAllItem(player, userData, userData.getItemData(item));
 						sender.sendMessage("Success! " + player.getName() + "'s " + item.getTypeID() + " had been sold.");
 						return true;
 					}
+
 					DepositoryItemData itemData = userData.getItemData(item);
 
 					int limit = item.getLimit();
@@ -391,7 +395,7 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 						return true;
 					}
 
-					sellItem(player, userData, userData.getItemData(item), amount);
+					Main.getEconomyManager().sellItem(player, userData, userData.getItemData(item), amount);
 					sender.sendMessage("Success! " + player.getName() + "'s " + amount + " " + item.getTypeID() + " had been sold.");
 					return true;
 				}
@@ -401,22 +405,6 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 		}
 	}
 
-	private void sellAllItem(Player player, UserData userData, DepositoryItemData itemData) {
-		int amount = itemData.getAmount();
-		int sold = itemData.getSold();
-		int limit = itemData.getSource().getLimit();
-		int finalAmount = Math.min(amount, (limit - sold));
-		if (finalAmount > 0) {
-			sellItem(player, userData, itemData, finalAmount);
-		}
-	}
-
-	private void sellItem(Player player, UserData userData, DepositoryItemData itemData, int amount) {
-		userData.addItemSold(itemData.getOwner().getSource().getIdentifier(), itemData.getSource().getTypeID(), amount);
-		userData.removeItemAmount(itemData.getOwner().getSource().getIdentifier(), itemData.getSource().getTypeID(), amount);
-		double money = Main.getEconomyManager().sell(player, itemData.getSource().getPrice(), amount);
-		PluginMessages.SOLD.send(player, new Object[]{itemData.getSource().getName(), amount, money});
-	}
 
 	@Nullable
 	@Override

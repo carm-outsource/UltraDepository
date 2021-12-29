@@ -2,7 +2,6 @@ package cc.carm.plugin.ultradepository.ui;
 
 import cc.carm.plugin.ultradepository.Main;
 import cc.carm.plugin.ultradepository.configuration.PluginConfig;
-import cc.carm.plugin.ultradepository.configuration.PluginMessages;
 import cc.carm.plugin.ultradepository.configuration.depository.Depository;
 import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
 import cc.carm.plugin.ultradepository.data.DepositoryItemData;
@@ -11,7 +10,6 @@ import cc.carm.plugin.ultradepository.util.ItemStackFactory;
 import cc.carm.plugin.ultradepository.util.gui.GUI;
 import cc.carm.plugin.ultradepository.util.gui.GUIItem;
 import cc.carm.plugin.ultradepository.util.gui.GUIType;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -85,6 +83,7 @@ public class SellItemGUI extends GUI {
 		return new GUIItem(factory.toItemStack()) {
 			@Override
 			public void onClick(ClickType type) {
+				PluginConfig.Sounds.GUI_CLICK.play(player);
 				load(getCurrentAmount() + amount);
 				updateView();
 			}
@@ -103,6 +102,7 @@ public class SellItemGUI extends GUI {
 		return new GUIItem(factory.toItemStack()) {
 			@Override
 			public void onClick(ClickType type) {
+				PluginConfig.Sounds.GUI_CLICK.play(player);
 				load(getCurrentAmount() - amount);
 				updateView();
 			}
@@ -122,14 +122,7 @@ public class SellItemGUI extends GUI {
 			@Override
 			public void onClick(ClickType type) {
 				int amount = Math.min(getCurrentAmount(), Math.min(getRemainAmount(), getSellLimit() - getSoldAmount()));
-				if (amount > 0) {
-					userData.removeItemAmount(item.getDepository().getIdentifier(), item.getTypeID(), amount);
-					userData.addItemSold(item.getDepository().getIdentifier(), item.getTypeID(), amount);
-					double money = Main.getEconomyManager().sell(player, getItemPrice(), amount);
-					PluginMessages.SOLD.send(player, new Object[]{
-							getItemName(), amount, money
-					});
-				}
+				if (amount > 0) Main.getEconomyManager().sell(player, getItemPrice(), amount);
 				player.closeInventory();
 			}
 		};
@@ -143,6 +136,7 @@ public class SellItemGUI extends GUI {
 		return new GUIItem(factory.toItemStack()) {
 			@Override
 			public void onClick(ClickType type) {
+				PluginConfig.Sounds.SELL_FAIL.play(player);
 				player.closeInventory();
 			}
 		};

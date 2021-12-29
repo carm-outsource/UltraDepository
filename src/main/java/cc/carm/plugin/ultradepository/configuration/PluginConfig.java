@@ -2,6 +2,7 @@ package cc.carm.plugin.ultradepository.configuration;
 
 import cc.carm.plugin.ultradepository.configuration.message.ConfigMessage;
 import cc.carm.plugin.ultradepository.configuration.message.ConfigMessageList;
+import cc.carm.plugin.ultradepository.configuration.values.ConfigSound;
 import cc.carm.plugin.ultradepository.configuration.values.ConfigStringCast;
 import cc.carm.plugin.ultradepository.configuration.values.ConfigValue;
 import cc.carm.plugin.ultradepository.manager.ConfigManager;
@@ -34,6 +35,14 @@ public class PluginConfig {
 				"collect.break", Boolean.class, true
 		);
 
+	}
+
+	public static class Sounds {
+
+		public static final ConfigSound COLLECT = new ConfigSound("sounds.collect");
+		public static final ConfigSound SELL_SUCCESS = new ConfigSound("sell-success");
+		public static final ConfigSound SELL_FAIL = new ConfigSound("sell-fail");
+		public static final ConfigSound GUI_CLICK = new ConfigSound("gui-click");
 	}
 
 	/**

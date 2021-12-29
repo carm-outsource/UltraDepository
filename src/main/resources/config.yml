@@ -35,6 +35,13 @@ collect:
   kill: true #杀死动物
   break: true #破坏方块
 
+
+sounds:
+  collect: ENTITY_EXPERIENCE_ORB_PICKUP
+  sell-success: ENTITY_VILLAGER_TRADE
+  sell-fail: ENTITY_VILLAGER_NO
+  gui-click: UI_BUTTON_CLICK
+
 # 通用配置
 general:
 
