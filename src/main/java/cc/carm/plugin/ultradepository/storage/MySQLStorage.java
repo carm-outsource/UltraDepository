@@ -18,7 +18,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -133,12 +132,16 @@ public class MySQLStorage implements DataStorage {
 					for (Map.Entry<String, JsonElement> entry : dataElement.getAsJsonObject().entrySet()) {
 						Depository depository = Main.getDepositoryManager().getDepository(entry.getKey());
 						if (depository == null) continue;
+
 						DepositoryData contentsData = parseContentsData(depository, data, entry.getValue());
 						if (contentsData != null) data.setDepository(contentsData);
+
 					}
 				}
+
 				Main.debug("通过 MySQLStorage 加载 " + uuid + " 的用户数据完成，"
 						+ "耗时 " + (System.currentTimeMillis() - start) + "ms。");
+
 				return data;
 			}
 			Main.debug("当前库内不存在玩家 " + uuid + " 的数据，视作新档。");
@@ -153,15 +156,13 @@ public class MySQLStorage implements DataStorage {
 		long start = System.currentTimeMillis();
 		Main.debug("正通过 MySQLStorage 保存 " + data.getUserUUID() + " 的用户数据...");
 
-		JsonObject dataObject = new JsonObject();
-
-		data.getDepositories().forEach((id, contents) -> dataObject.add(id, serializeContentsData(contents)));
-
 		try {
+
 			getSQLManager().createReplace(SQLTables.USER_DATA.getName())
 					.setColumnNames("uuid", "data", "day")
-					.setParams(data.getUserUUID(), GSON.toJson(dataObject), data.getDate())
+					.setParams(data.getUserUUID(), GSON.toJson(data.serializeToMap()), data.getDate())
 					.execute();
+
 		} catch (SQLException exception) {
 			Main.error("在保存玩家 #" + data.getUserUUID() + " 的数据时出现异常。");
 			Main.error("Error occurred when saving #" + data.getUserUUID() + " data.");
@@ -191,10 +192,13 @@ public class MySQLStorage implements DataStorage {
 	private DepositoryData parseContentsData(Depository source, UserData owner, JsonObject contentsObject) {
 		DepositoryData data = DepositoryData.emptyContents(source, owner);
 		for (Map.Entry<String, JsonElement> entry : contentsObject.entrySet()) {
+
 			DepositoryItem item = source.getItems().get(entry.getKey());
 			if (item == null) continue;
+
 			DepositoryItemData itemData = parseItemData(item, data, entry.getValue());
 			if (itemData != null) data.getContents().put(item.getTypeID(), itemData);
+
 		}
 		return data;
 	}
@@ -207,26 +211,8 @@ public class MySQLStorage implements DataStorage {
 		int amount = itemObject.has("amount") ? itemObject.get("amount").getAsInt() : 0;
 		int sold = itemObject.has("sold") ? itemObject.get("sold").getAsInt() : 0;
 		if (amount == 0 && sold == 0) return null;
-		else return new DepositoryItemData(source, owner, amount, sold);
-	}
 
-	@Nullable
-	private JsonObject serializeContentsData(@Nullable DepositoryData contentsData) {
-		if (contentsData == null) return null;
-		JsonObject contentsObject = new JsonObject();
-		contentsData.getContents().entrySet().stream()
-				// 只存取有数值的部分，减少数据量
-				.filter(entry -> entry.getValue().getSold() > 0 || entry.getValue().getAmount() > 0)
-				.forEach(entry -> contentsObject.add(entry.getKey(), serializeItemData(entry.getValue())));
-		return contentsObject;
-	}
-
-	@NotNull
-	private JsonObject serializeItemData(@NotNull DepositoryItemData itemData) {
-		JsonObject itemObject = new JsonObject();
-		if (itemData.getAmount() > 0) itemObject.addProperty("amount", itemData.getAmount());
-		if (itemData.getSold() > 0) itemObject.addProperty("sold", itemData.getSold());
-		return itemObject;
+		return new DepositoryItemData(source, owner, amount, sold);
 	}
 
 }

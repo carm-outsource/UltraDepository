@@ -15,8 +15,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.UUID;
 
 public class FileStorage implements DataStorage {
@@ -104,21 +102,8 @@ public class FileStorage implements DataStorage {
 		YamlConfiguration userDataConfig = new YamlConfiguration();
 		userDataConfig.set("date", data.getDateInt());
 
-		Map<String, Map<String, Map<String, Integer>>> values = new LinkedHashMap<>();
-
-		data.getDepositories().forEach((depositoryID, depositoryData) -> {
-			Map<String, Map<String, Integer>> depositoryDataMap = new LinkedHashMap<>();
-			depositoryData.getContents().forEach((itemType, itemData) -> {
-				Map<String, Integer> itemDataMap = new HashMap<>();
-				if (itemData.getAmount() > 0) itemDataMap.put("amount", itemData.getAmount());
-				if (itemData.getSold() > 0) itemDataMap.put("sold", itemData.getSold());
-				if (!itemDataMap.isEmpty()) depositoryDataMap.put(itemType, itemDataMap);
-			});
-			if (!depositoryDataMap.isEmpty()) values.put(depositoryID, depositoryDataMap);
-		});
-		
 		try {
-			userDataConfig.createSection("depositories", values);
+			userDataConfig.createSection("depositories", data.serializeToMap());
 			userDataConfig.save(new File(getDataContainer(), data.getUserUUID() + ".yml"));
 		} catch (IOException ioException) {
 			Main.error("在保存玩家 #" + data.getUserUUID() + " 的数据时出现异常。");

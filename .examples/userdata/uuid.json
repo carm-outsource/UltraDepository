@@ -1,0 +1,41 @@
+{
+  "farmer": {},
+  "hunter": {
+    "CHICKEN:0": {
+      "amount": 3
+    },
+    "FEATHER:0": {
+      "amount": 2
+    }
+  },
+  "miner": {
+    "COAL:0": {
+      "amount": 9,
+      "sold": 10
+    },
+    "LAPIS_LAZULI:0": {
+      "amount": 9
+    },
+    "REDSTONE:0": {
+      "sold": 129
+    },
+    "COBBLESTONE:0": {
+      "amount": 12
+    },
+    "CLAY_BALL:0": {
+      "amount": 112
+    },
+    "DIAMOND:0": {
+      "amount": 975,
+      "sold": 1500
+    }
+  },
+  "fishman": {
+    "COD:0": {
+      "amount": 3
+    },
+    "PUFFERFISH:0": {
+      "amount": 64
+    }
+  }
+}

@@ -9,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -146,6 +148,23 @@ public class UserData {
 
 	public void save() throws Exception {
 		this.storage.saveUserData(this);
+	}
+
+	public Map<String, Map<String, Map<String, Integer>>> serializeToMap() {
+		Map<String, Map<String, Map<String, Integer>>> values = new LinkedHashMap<>();
+
+		getDepositories().forEach((depositoryID, depositoryData) -> {
+			Map<String, Map<String, Integer>> depositoryDataMap = new LinkedHashMap<>();
+			depositoryData.getContents().forEach((itemType, itemData) -> {
+				Map<String, Integer> itemDataMap = new HashMap<>();
+				if (itemData.getAmount() > 0) itemDataMap.put("amount", itemData.getAmount());
+				if (itemData.getSold() > 0) itemDataMap.put("sold", itemData.getSold());
+				if (!itemDataMap.isEmpty()) depositoryDataMap.put(itemType, itemDataMap);
+			});
+			if (!depositoryDataMap.isEmpty()) values.put(depositoryID, depositoryDataMap);
+		});
+
+		return values;
 	}
 
 }
