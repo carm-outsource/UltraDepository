@@ -205,6 +205,10 @@
 
 您也可以 [点击这里](.examples/depositories/full-example.yml) 查看一份*详细的仓库配置示例*，以制作您自己的仓库。
 
+## 使用统计
+
+![bStats](https://bstats.org/signatures/bukkit/UltraDepository.svg)
+
 ## 支持与捐赠
 
 若您觉得本插件做的不错，您可以捐赠支持我！
