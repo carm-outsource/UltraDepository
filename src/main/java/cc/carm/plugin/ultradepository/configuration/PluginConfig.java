@@ -11,8 +11,13 @@ import org.bukkit.Material;
 public class PluginConfig {
 
 	public static final ConfigValue<Boolean> DEBUG = new ConfigValue<>(
-			"debug", Boolean.class
+			"debug", Boolean.class, false
 	);
+
+	public static final ConfigValue<Boolean> METRICS = new ConfigValue<>(
+			"metrics", Boolean.class, true
+	);
+
 
 	public static final ConfigValue<String> STORAGE_METHOD = new ConfigValue<>(
 			"storage.method", String.class

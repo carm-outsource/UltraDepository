@@ -15,6 +15,8 @@ import cc.carm.plugin.ultradepository.storage.MySQLStorage;
 import cc.carm.plugin.ultradepository.util.ColorParser;
 import cc.carm.plugin.ultradepository.util.MessageUtil;
 import cc.carm.plugin.ultradepository.util.SchedulerUtils;
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SingleLineChart;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
@@ -27,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
 public class Main extends JavaPlugin {
 
 	private static Main instance;
+	private static Metrics metrics;
 	private static SchedulerUtils scheduler;
 
 	private static DataStorage storage;
@@ -92,6 +95,15 @@ public class Main extends JavaPlugin {
 			new PAPIExpansion(this).register();
 		} else {
 			log("检测到未安装PlaceholderAPI，跳过变量注册。");
+		}
+
+		if (PluginConfig.METRICS.get()) {
+			log("启用统计数据...");
+			metrics = new Metrics(this, 13776);
+			metrics.addCustomChart(new SingleLineChart(
+					"active_depositories",
+					() -> getDepositoryManager().getDepositories().size())
+			);
 		}
 
 		initialized = true;

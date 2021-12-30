@@ -6,6 +6,11 @@ version: ${project.version}
 
 debug: false
 
+# 统计数据设定
+# 改选项用于帮助开发者统计插件版本与使用情况，且绝不会影响性能与使用体验。
+# 当然，您也可以选择在这里关闭，或在plugins/bStats下的配置文件中关闭。
+metrics: true
+
 # 存储相关配置
 # 注意：存储配置不会通过重载指令生效，如有修改请重新启动服务器。
 storage:

@@ -59,7 +59,11 @@ public class DepositoryGUI extends GUI {
 		return new GUIItem(factory.toItemStack()) {
 			@Override
 			public void onClick(ClickType type) {
-				if (itemData.getAmount() < 1) return;
+				if (itemData.getAmount() < 1) {
+					PluginMessages.NO_ENOUGH_ITEM.send(player);
+					return;
+				}
+
 				if (type == ClickType.LEFT) {
 					player.closeInventory();
 					if (itemData.getAmount() >= 1) {
@@ -71,7 +75,6 @@ public class DepositoryGUI extends GUI {
 					} else {
 						PluginMessages.NO_ENOUGH_ITEM.send(player);
 					}
-
 				} else if (type == ClickType.RIGHT) {
 					player.closeInventory();
 					if (hasEmptySlot(player)) {
@@ -84,7 +87,6 @@ public class DepositoryGUI extends GUI {
 					} else {
 						PluginMessages.NO_SPACE.send(player);
 					}
-
 				}
 			}
 		};
