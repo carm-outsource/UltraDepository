@@ -99,7 +99,7 @@ public class Main extends JavaPlugin {
 
 		if (PluginConfig.METRICS.get()) {
 			log("启用统计数据...");
-			metrics = new Metrics(this, 13776);
+			metrics = new Metrics(this, 13777);
 			metrics.addCustomChart(new SingleLineChart(
 					"active_depositories",
 					() -> getDepositoryManager().getDepositories().size())
