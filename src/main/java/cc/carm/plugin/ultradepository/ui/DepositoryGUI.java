@@ -65,18 +65,13 @@ public class DepositoryGUI extends GUI {
 				}
 
 				if (type == ClickType.LEFT) {
-					player.closeInventory();
-					if (itemData.getAmount() >= 1) {
-						if (remain >= 1) {
-							SellItemGUI.open(player, userData, itemData, depository, item);
-						} else {
-							PluginMessages.ITEM_SOLD_LIMIT.send(player, new Object[]{remain, item.getLimit()});
-						}
+					if (remain >= 1) {
+						SellItemGUI.open(player, userData, itemData, depository, item);
 					} else {
-						PluginMessages.NO_ENOUGH_ITEM.send(player);
+						PluginMessages.ITEM_SOLD_LIMIT.send(player, new Object[]{remain, item.getLimit()});
 					}
 				} else if (type == ClickType.RIGHT) {
-					player.closeInventory();
+
 					if (hasEmptySlot(player)) {
 						int pickupAmount = Math.min(itemData.getAmount(), item.getMaterial().getMaxStackSize());
 						userData.removeItemAmount(item.getDepository().getIdentifier(), item.getTypeID(), pickupAmount);
@@ -84,8 +79,11 @@ public class DepositoryGUI extends GUI {
 						PluginMessages.PICKUP.send(player, new Object[]{
 								item.getName(), pickupAmount
 						});
+						setupItems(); //刷新GUI
+						updateView();
 					} else {
 						PluginMessages.NO_SPACE.send(player);
+						player.closeInventory();
 					}
 				}
 			}
@@ -99,6 +97,7 @@ public class DepositoryGUI extends GUI {
 	}
 
 	public static void open(@NotNull Player player, @NotNull Depository depository) {
+		player.closeInventory();
 		DepositoryGUI gui = new DepositoryGUI(player, depository);
 		gui.openGUI(player);
 	}

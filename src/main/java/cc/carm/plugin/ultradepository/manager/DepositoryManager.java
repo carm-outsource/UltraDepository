@@ -7,7 +7,6 @@ import cc.carm.plugin.ultradepository.configuration.depository.Depository;
 import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
 import cc.carm.plugin.ultradepository.data.UserData;
 import com.google.common.collect.HashMultimap;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -112,12 +111,10 @@ public class DepositoryManager {
 	}
 
 	public Set<Depository> getPlayerUsableDepository(Player player, ItemStack itemStack) {
-		String typeID = getItemTypeID(itemStack);
 		return getItemDepositories(itemStack).stream().filter(configuration -> {
-			int currentAmount = Optional.ofNullable(Main.getUserManager().getData(player)
-					.getItemAmount(configuration.getIdentifier(), typeID)).orElse(0);
-			int depositoryCapacity = configuration.getCapacity().getPlayerCapacity(player);
-			return currentAmount + itemStack.getAmount() <= depositoryCapacity;
+			int used = Main.getUserManager().getData(player).getDepositoryData(configuration).getUsedCapacity();
+			int max = configuration.getCapacity().getPlayerCapacity(player);
+			return used + itemStack.getAmount() <= max;
 		}).collect(Collectors.toSet());
 	}
 

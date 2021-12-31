@@ -6,16 +6,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
 
 public class GUI {
 
@@ -26,13 +28,13 @@ public class GUI {
 	public GUIItem[] items;
 	public Inventory inv;
 
-	boolean cancelOnTarget = true;
-	boolean cancelOnSelf = true;
-	boolean cancelOnOuter = true;
+	boolean setCancelledIfClickOnTarget = true;
+	boolean setCancelledIfClickOnSelf = true;
+	boolean setCancelledIfClickOnOuter = true;
 
 	Map<String, Object> flags;
 
-	public GUIListener listener;
+	public Listener listener;
 
 	public GUI(GUIType type, String name) {
 		this.type = type;
@@ -71,18 +73,10 @@ public class GUI {
 		}
 	}
 
-	/**
-	 * 批量添加GUI Item
-	 *
-	 * @param item  物品
-	 * @param index 对应格
-	 */
 	public void setItem(GUIItem item, int... index) {
-		Arrays.stream(index).forEach(i -> setItem(i, item));
-	}
-
-	public void setItem(GUIItem item, int start, int end) {
-		IntStream.rangeClosed(start, end).forEach(i -> setItem(i, item));
+		for (int i : index) {
+			setItem(i, item);
+		}
 	}
 
 	public GUIItem getItem(int index) {
@@ -95,18 +89,14 @@ public class GUI {
 	public void updateView() {
 		if (this.inv != null) {
 			List<HumanEntity> viewers = this.inv.getViewers();
-			IntStream.range(0, this.items.length).forEach(index -> {
-				GUIItem item = items[index];
-				if (item == null) {
+			for (int index = 0; index < this.items.length; index++) {
+				if (items[index] == null) {
 					inv.setItem(index, new ItemStack(Material.AIR));
 				} else {
 					inv.setItem(index, items[index].display);
 				}
-			});
-
-			for (HumanEntity p : viewers) {
-				((Player) p).updateInventory();
 			}
+			viewers.forEach(p -> ((Player) p).updateInventory());
 		}
 	}
 
@@ -117,7 +107,7 @@ public class GUI {
 	 * @param b 是否取消
 	 */
 	public void setCancelledIfClickOnTarget(boolean b) {
-		this.cancelOnTarget = b;
+		this.setCancelledIfClickOnTarget = b;
 	}
 
 	/**
@@ -127,7 +117,7 @@ public class GUI {
 	 * @param b 是否取消
 	 */
 	public void setCancelledIfClickOnSelf(boolean b) {
-		this.cancelOnSelf = b;
+		this.setCancelledIfClickOnSelf = b;
 	}
 
 	/**
@@ -137,7 +127,7 @@ public class GUI {
 	 * @param b 是否取消
 	 */
 	public void setCancelledIfClickOnOuter(boolean b) {
-		this.cancelOnOuter = b;
+		this.setCancelledIfClickOnOuter = b;
 	}
 
 	public void addFlag(String flag, Object obj) {
@@ -182,14 +172,78 @@ public class GUI {
 		this.inv = inv;
 		player.openInventory(inv);
 
-		if (listener == null) {
-			Main.regListener(listener = new GUIListener(this, player));
-		}
+		if (listener == null)
+			Bukkit.getPluginManager().registerEvents(listener = new Listener() {
+				@EventHandler
+				public void onInventoryClickEvent(InventoryClickEvent event) {
+					if (!(event.getWhoClicked() instanceof Player)) return;
+					Player player = (Player) event.getWhoClicked();
+					if (!hasOpenedGUI(player)) return;
+
+					rawClickListener(event);
+					if (event.getSlot() != -999) {
+						try {
+							if (getOpenedGUI(player) == GUI.this
+									&& event.getClickedInventory() != null
+									&& event.getClickedInventory().equals(GUI.this.inv)
+									&& GUI.this.items[event.getSlot()] != null) {
+								GUI.this.items[event.getSlot()].realRawClickAction(event);
+							}
+						} catch (ArrayIndexOutOfBoundsException e) {
+							System.err.print("err cause by GUI(" + GUI.this + "), name=" + name);
+							e.printStackTrace();
+							return;
+						}
+					} else if (setCancelledIfClickOnOuter) {
+						event.setCancelled(true);
+					}
+
+					if (getOpenedGUI(player) == GUI.this
+							&& event.getClickedInventory() != null) {
+						if (event.getClickedInventory().equals(GUI.this.inv)) {
+							if (setCancelledIfClickOnTarget) event.setCancelled(true);
+
+							if (event.getSlot() != -999 && GUI.this.items[event.getSlot()] != null) {
+								GUIItem clickedItem = GUI.this.items[event.getSlot()];
+								if (clickedItem.isActionActive()) {
+									clickedItem.onClick(event.getClick());
+									clickedItem.rawClickAction(event);
+									clickedItem.actions.forEach(action -> action.run(event.getClick(), player));
+								}
+								clickedItem.actionsIgnoreActive.forEach(action -> action.run(event.getClick(), player));
+							}
+						} else if (event.getClickedInventory().equals(player.getInventory()) && setCancelledIfClickOnSelf) {
+							event.setCancelled(true);
+						}
+					}
+				}
+
+				@EventHandler
+				public void onDrag(InventoryDragEvent e) {
+					if (!(e.getWhoClicked() instanceof Player)) return;
+					if (e.getInventory().equals(inv)
+							|| e.getInventory().equals(e.getWhoClicked().getInventory())) {
+						GUI.this.onDrag(e);
+					}
+				}
+
+				@EventHandler
+				public void onInventoryCloseEvent(InventoryCloseEvent event) {
+					if (!(event.getPlayer() instanceof Player)) return;
+					if (!event.getInventory().equals(inv)) return;
+
+					HandlerList.unregisterAll(this);
+					listener = null;
+					removeOpenedGUI((Player) event.getPlayer());
+					onClose();
+
+				}
+			}, Main.getInstance());
 
 	}
 
 	/**
-	 * 拖动GUI内物品时执行的代码
+	 * 拖动GUI内物品是执行的代码
 	 *
 	 * @param event InventoryDragEvent
 	 */

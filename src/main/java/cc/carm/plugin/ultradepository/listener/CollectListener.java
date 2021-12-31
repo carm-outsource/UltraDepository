@@ -2,8 +2,6 @@ package cc.carm.plugin.ultradepository.listener;
 
 import cc.carm.plugin.ultradepository.Main;
 import cc.carm.plugin.ultradepository.configuration.PluginConfig;
-import org.bukkit.Material;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,9 +24,7 @@ public class CollectListener implements Listener {
 
 		Player player = event.getPlayer();
 		if (!Main.getUserManager().isCollectEnabled(player)) return;
-		if (event.getBlock().getType() == Material.CHEST || event.getBlock().getType() == Material.TRAPPED_CHEST) {
-			return;
-		}
+		if (event.getBlock().getType().isOccluding()) return;
 
 		List<Item> droppedItems = event.getItems();
 		if (droppedItems.isEmpty()) return;

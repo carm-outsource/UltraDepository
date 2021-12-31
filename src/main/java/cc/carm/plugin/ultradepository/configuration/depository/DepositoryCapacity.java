@@ -3,7 +3,6 @@ package cc.carm.plugin.ultradepository.configuration.depository;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,9 +44,8 @@ public class DepositoryCapacity {
 	public int getPlayerCapacity(Player player) {
 		return getPermissions().entrySet().stream()
 				.filter(entry -> player.hasPermission(entry.getKey()))
-				.map(Map.Entry::getValue)
-				.min(Comparator.comparingInt(Integer::intValue))
-				.orElse(defaultCapacity);
+				.mapToInt(Map.Entry::getValue)
+				.max().orElse(defaultCapacity);
 	}
 
 }

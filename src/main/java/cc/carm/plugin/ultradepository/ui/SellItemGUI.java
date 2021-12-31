@@ -2,6 +2,7 @@ package cc.carm.plugin.ultradepository.ui;
 
 import cc.carm.plugin.ultradepository.Main;
 import cc.carm.plugin.ultradepository.configuration.PluginConfig;
+import cc.carm.plugin.ultradepository.configuration.PluginMessages;
 import cc.carm.plugin.ultradepository.configuration.depository.Depository;
 import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
 import cc.carm.plugin.ultradepository.data.DepositoryItemData;
@@ -177,7 +178,12 @@ public class SellItemGUI extends GUI {
 
 	public static void open(Player player, UserData userData, DepositoryItemData itemData,
 							Depository configuration, DepositoryItem item) {
-		if (!Main.getEconomyManager().isInitialized()) return;
+		player.closeInventory();
+		if (!Main.getEconomyManager().isInitialized()) {
+			PluginMessages.NO_ECONOMY.send(player);
+			return;
+		}
+
 		SellItemGUI gui = new SellItemGUI(player, userData, itemData, configuration, item);
 		gui.openGUI(player);
 	}
