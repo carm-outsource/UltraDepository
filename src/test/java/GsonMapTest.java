@@ -9,6 +9,7 @@ public class GsonMapTest {
 
 	@Test
 	public void test() {
+		System.out.println(this.getClass().getSimpleName());
 
 		Map<String, Map<String, Map<String, Integer>>> values = new LinkedHashMap<>();
 

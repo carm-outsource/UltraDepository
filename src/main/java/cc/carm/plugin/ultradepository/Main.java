@@ -16,12 +16,14 @@ import cc.carm.plugin.ultradepository.util.ColorParser;
 import cc.carm.plugin.ultradepository.util.MessageUtil;
 import cc.carm.plugin.ultradepository.util.SchedulerUtils;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 import org.bstats.charts.SingleLineChart;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -104,6 +106,13 @@ public class Main extends JavaPlugin {
 					"active_depositories",
 					() -> getDepositoryManager().getDepositories().size())
 			);
+			metrics.addCustomChart(new SimplePie("storage_method", () -> getStorage().getClass().getSimpleName()));
+			metrics.addCustomChart(new SimplePie("economy_enabled", () -> economyManager.isInitialized() ? "YES" : "NO"));
+			metrics.addCustomChart(new SimplePie("papi_version", () -> {
+				Plugin plugin = Bukkit.getPluginManager().getPlugin("PlaceholderAPI");
+				if (plugin == null) return "Not installed";
+				else return plugin.getDescription().getVersion();
+			}));
 		}
 
 		initialized = true;
