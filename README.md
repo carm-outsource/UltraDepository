@@ -217,7 +217,7 @@
 
 ## 使用统计
 
-![bStats](https://bstats.org/signatures/bukkit/UltraDepository.svg)
+[![bStats](https://bstats.org/signatures/bukkit/UltraDepository.svg)](https://bstats.org/plugin/bukkit/UltraDepository/13777)
 
 ## 支持与捐赠
 
