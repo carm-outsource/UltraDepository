@@ -131,12 +131,9 @@ public class UserData {
 
 
 	public void checkoutDate() {
-		if (isCurrentDay()) {
-			Main.debug("Date is not change, skip clear sold amount.");
-			return;
-		}
+		if (isCurrentDay()) return;
+
 		this.date = DateIntUtil.getCurrentDate(); //更新日期
-		Main.debug("Date changed, clear sold.");
 		getDepositories().values().stream()
 				.flatMap(value -> value.getContents().values().stream())
 				.forEach(DepositoryItemData::clearSold);
