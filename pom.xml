@@ -28,6 +28,16 @@
             <url>https://www.carm.cc</url>
             <roles>
                 <role>Main Developer</role>
+                <role>Designer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>zimrs</id>
+            <name>Zimrs</name>
+            <email>zimrs@kar.red</email>
+            <url>https://www.zimrs.cn</url>
+            <roles>
+                <role>Product Manager</role>
             </roles>
         </developer>
     </developers>

@@ -5,7 +5,9 @@ version: ${project.version}
 description: ${project.description}
 website: ${project.url}
 
-author: CarmJos
+authors:
+  - CarmJos
+  - Zimrs
 
 api-version: 1.13
 
