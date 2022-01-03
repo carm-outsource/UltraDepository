@@ -7,15 +7,12 @@ import cc.carm.lib.easysql.api.action.query.SQLQuery;
 import cc.carm.plugin.ultradepository.Main;
 import cc.carm.plugin.ultradepository.configuration.PluginConfig;
 import cc.carm.plugin.ultradepository.configuration.depository.Depository;
-import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
 import cc.carm.plugin.ultradepository.configuration.values.ConfigValue;
 import cc.carm.plugin.ultradepository.data.DepositoryData;
-import cc.carm.plugin.ultradepository.data.DepositoryItemData;
 import cc.carm.plugin.ultradepository.data.UserData;
 import cc.carm.plugin.ultradepository.util.DateIntUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class MySQLStorage implements DataStorage {
+public class MySQLStorage extends JSONStorage {
 
 	private static final ConfigValue<String> DRIVER_NAME = new ConfigValue<>(
 			"storage.mysql.driver", String.class, "com.mysql.jdbc.Driver"
@@ -163,36 +160,6 @@ public class MySQLStorage implements DataStorage {
 				.inTable(SQLTables.USER_DATA.getName())
 				.addCondition("uuid", uuid.toString())
 				.setLimit(1).build();
-	}
-
-	private DepositoryData parseContentsData(Depository source, UserData owner, JsonElement contentsElement) {
-		return contentsElement.isJsonObject() ? parseContentsData(source, owner, contentsElement.getAsJsonObject()) : null;
-	}
-
-	private DepositoryData parseContentsData(Depository source, UserData owner, JsonObject contentsObject) {
-		DepositoryData data = DepositoryData.emptyContents(source, owner);
-		for (Map.Entry<String, JsonElement> entry : contentsObject.entrySet()) {
-
-			DepositoryItem item = source.getItems().get(entry.getKey());
-			if (item == null) continue;
-
-			DepositoryItemData itemData = parseItemData(item, data, entry.getValue());
-			if (itemData != null) data.getContents().put(item.getTypeID(), itemData);
-
-		}
-		return data;
-	}
-
-	private DepositoryItemData parseItemData(DepositoryItem source, DepositoryData owner, JsonElement itemElement) {
-		return itemElement.isJsonObject() ? parseItemData(source, owner, itemElement.getAsJsonObject()) : null;
-	}
-
-	private DepositoryItemData parseItemData(DepositoryItem source, DepositoryData owner, JsonObject itemObject) {
-		int amount = itemObject.has("amount") ? itemObject.get("amount").getAsInt() : 0;
-		int sold = itemObject.has("sold") ? itemObject.get("sold").getAsInt() : 0;
-		if (amount == 0 && sold == 0) return null;
-
-		return new DepositoryItemData(source, owner, amount, sold);
 	}
 
 }

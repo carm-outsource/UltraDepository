@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class FileStorage implements DataStorage {
+public class YAMLStorage implements DataStorage {
 
 	private static final ConfigValue<String> FILE_PATH = new ConfigValue<>(
 			"storage.file-path", String.class, "data"

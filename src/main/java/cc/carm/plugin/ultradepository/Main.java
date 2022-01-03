@@ -10,7 +10,8 @@ import cc.carm.plugin.ultradepository.manager.DepositoryManager;
 import cc.carm.plugin.ultradepository.manager.EconomyManager;
 import cc.carm.plugin.ultradepository.manager.UserManager;
 import cc.carm.plugin.ultradepository.storage.DataStorage;
-import cc.carm.plugin.ultradepository.storage.FileStorage;
+import cc.carm.plugin.ultradepository.storage.YAMLStorage;
+import cc.carm.plugin.ultradepository.storage.JSONStorage;
 import cc.carm.plugin.ultradepository.storage.MySQLStorage;
 import cc.carm.plugin.ultradepository.util.ColorParser;
 import cc.carm.plugin.ultradepository.util.MessageUtil;
@@ -57,9 +58,12 @@ public class Main extends JavaPlugin {
 		if (PluginConfig.STORAGE_METHOD.get().equalsIgnoreCase("mysql")) {
 			log("	正在使用 MySQL 进行数据存储");
 			storage = new MySQLStorage();
+		} else if (PluginConfig.STORAGE_METHOD.get().equalsIgnoreCase("json")) {
+			log("	正在使用 JSON 进行数据存储");
+			storage = new JSONStorage();
 		} else {
-			log("	正在使用 文件 进行数据存储");
-			storage = new FileStorage();
+			log("	正在使用 YAML 进行数据存储");
+			storage = new YAMLStorage();
 		}
 
 		if (!storage.initialize()) {

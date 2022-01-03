@@ -1,4 +1,5 @@
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.util.*;
 
@@ -16,7 +17,7 @@ public class GsonMapTest {
 		tests.add(new Test2());
 
 		tests.stream().map(test -> test.getClass().getSimpleName()).forEach(System.out::println);
-		
+
 		Map<String, Map<String, Map<String, Integer>>> values = new LinkedHashMap<>();
 
 
@@ -39,9 +40,14 @@ public class GsonMapTest {
 
 		System.out.println(values.size());
 
-
 		String jsonValues = GSON.toJson(values);
 		System.out.println(jsonValues);
+
+		JsonObject dataObject = new JsonObject();
+		dataObject.addProperty("date", 20201011);
+		dataObject.add("depositories", GSON.toJsonTree(values));
+
+		System.out.println(GSON.toJson(dataObject));
 	}
 
 	public interface Test {

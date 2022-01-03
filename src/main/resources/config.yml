@@ -15,10 +15,10 @@ metrics: true
 # 注意：存储配置不会通过重载指令生效，如有修改请重新启动服务器。
 storage:
 
-  # 存储方式，可选 [ file | mysql ]
-  method: file
+  # 存储方式，可选 [ yaml | json | mysql(推荐) ]
+  method: yaml
 
-  # 选择 file 存储方式时的存储路径
+  # 选择 yaml/json 存储方式时的存储路径
   # 默认为相对路径，相对于插件生成的配置文件夹下的路径
   # 支持绝对路径，如 “/var/data/ub/"(linux) 或 "D:\data\ub\"(windows)
   # 使用绝对路径时请注意权限问题
