@@ -3,7 +3,6 @@ package cc.carm.plugin.ultradepository.data;
 import cc.carm.plugin.ultradepository.Main;
 import cc.carm.plugin.ultradepository.configuration.depository.Depository;
 import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
-import cc.carm.plugin.ultradepository.storage.DataStorage;
 import cc.carm.plugin.ultradepository.util.DateIntUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,15 +17,13 @@ public class UserData {
 
 	public final UUID userUUID;
 
-	DataStorage storage;
 	Map<String, DepositoryData> depositories;
 
 	int date;
 
-	public UserData(UUID userUUID, DataStorage storage,
+	public UserData(UUID userUUID,
 					Map<String, DepositoryData> depositories, int date) {
 		this.userUUID = userUUID;
-		this.storage = storage;
 		this.depositories = depositories;
 		this.date = date;
 	}
@@ -143,11 +140,6 @@ public class UserData {
 		getDepositories().values().stream()
 				.flatMap(value -> value.getContents().values().stream())
 				.forEach(DepositoryItemData::clearSold);
-	}
-
-
-	public void save() throws Exception {
-		this.storage.saveUserData(this);
 	}
 
 	public Map<String, Map<String, Map<String, Integer>>> serializeToMap() {

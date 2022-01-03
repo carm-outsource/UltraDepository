@@ -18,6 +18,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -117,35 +118,29 @@ public class MySQLStorage implements DataStorage {
 	}
 
 	@Override
-	public @NotNull UserData loadData(@NotNull UUID uuid) throws Exception {
-		long start = System.currentTimeMillis();
-		Main.debug("正通过 MySQLStorage 加载 " + uuid + " 的用户数据...");
+	public @Nullable UserData loadData(@NotNull UUID uuid) throws Exception {
 		try (SQLQuery query = createAction(uuid).execute()) {
 			ResultSet resultSet = query.getResultSet();
-			if (resultSet != null && resultSet.next()) {
-				String dataJSON = resultSet.getString("data");
-				Date date = resultSet.getDate("day");
-				UserData data = new UserData(uuid, this, new HashMap<>(), DateIntUtil.getDateInt(date));
 
-				JsonElement dataElement = PARSER.parse(dataJSON);
-				if (dataElement.isJsonObject()) {
-					for (Map.Entry<String, JsonElement> entry : dataElement.getAsJsonObject().entrySet()) {
-						Depository depository = Main.getDepositoryManager().getDepository(entry.getKey());
-						if (depository == null) continue;
+			if (resultSet == null || !resultSet.next()) return null;
 
-						DepositoryData contentsData = parseContentsData(depository, data, entry.getValue());
-						if (contentsData != null) data.setDepository(contentsData);
+			String dataJSON = resultSet.getString("data");
+			Date date = resultSet.getDate("day");
+			UserData data = new UserData(uuid, new HashMap<>(), DateIntUtil.getDateInt(date));
 
-					}
+			JsonElement dataElement = PARSER.parse(dataJSON);
+			if (dataElement.isJsonObject()) {
+				for (Map.Entry<String, JsonElement> entry : dataElement.getAsJsonObject().entrySet()) {
+					Depository depository = Main.getDepositoryManager().getDepository(entry.getKey());
+					if (depository == null) continue;
+
+					DepositoryData contentsData = parseContentsData(depository, data, entry.getValue());
+					if (contentsData != null) data.setDepository(contentsData);
+
 				}
-
-				Main.debug("通过 MySQLStorage 加载 " + uuid + " 的用户数据完成，"
-						+ "耗时 " + (System.currentTimeMillis() - start) + "ms。");
-
-				return data;
 			}
-			Main.debug("当前库内不存在玩家 " + uuid + " 的数据，视作新档。");
-			return new UserData(uuid, this, new HashMap<>(), DateIntUtil.getCurrentDate());
+			return data;
+
 		} catch (Exception exception) {
 			throw new Exception(exception);
 		}
@@ -153,25 +148,10 @@ public class MySQLStorage implements DataStorage {
 
 	@Override
 	public void saveUserData(@NotNull UserData data) throws Exception {
-		long start = System.currentTimeMillis();
-		Main.debug("正通过 MySQLStorage 保存 " + data.getUserUUID() + " 的用户数据...");
-
-		try {
-
-			getSQLManager().createReplace(SQLTables.USER_DATA.getName())
-					.setColumnNames("uuid", "data", "day")
-					.setParams(data.getUserUUID(), GSON.toJson(data.serializeToMap()), data.getDate())
-					.execute();
-
-		} catch (SQLException exception) {
-			Main.error("在保存玩家 #" + data.getUserUUID() + " 的数据时出现异常。");
-			Main.error("Error occurred when saving #" + data.getUserUUID() + " data.");
-			throw new Exception(exception);
-		}
-
-		Main.debug("通过 MySQLStorage 保存 " + data.getUserUUID() + " 的用户数据完成，" +
-				"耗时 " + (System.currentTimeMillis() - start) + "ms。");
-
+		getSQLManager().createReplace(SQLTables.USER_DATA.getName())
+				.setColumnNames("uuid", "data", "day")
+				.setParams(data.getUserUUID(), GSON.toJson(data.serializeToMap()), data.getDate())
+				.execute();
 	}
 
 	private SQLManager getSQLManager() {

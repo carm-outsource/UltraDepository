@@ -11,6 +11,7 @@ import cc.carm.plugin.ultradepository.util.DateIntUtil;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,18 +46,16 @@ public class FileStorage implements DataStorage {
 	}
 
 	@Override
-	public @NotNull UserData loadData(@NotNull UUID uuid) {
-		long start = System.currentTimeMillis();
-		Main.debug("正通过 FileStorage 加载 " + uuid + " 的用户数据...");
+	public @Nullable UserData loadData(@NotNull UUID uuid) {
 		File userDataFile = new File(getDataContainer(), uuid + ".yml");
 		if (!userDataFile.exists()) {
 			Main.debug("当前文件夾内不存在玩家 " + uuid + " 的数据，视作新档。");
-			return new UserData(uuid, this, new HashMap<>(), DateIntUtil.getCurrentDate());
+			return null;
 		}
 
 		YamlConfiguration userDataConfig = YamlConfiguration.loadConfiguration(userDataFile);
 		int dateInt = userDataConfig.getInt("date", DateIntUtil.getCurrentDate());
-		UserData userData = new UserData(uuid, this, new HashMap<>(), dateInt);
+		UserData userData = new UserData(uuid, new HashMap<>(), dateInt);
 
 		ConfigurationSection depositoriesSection = userDataConfig.getConfigurationSection("depositories");
 		if (depositoriesSection != null) {
@@ -88,33 +87,15 @@ public class FileStorage implements DataStorage {
 				if (!depositoryData.getContents().isEmpty()) userData.setDepository(depositoryData);
 			}
 		}
-		Main.debug("通过 FileStorage 加载 " + uuid + " 的用户数据完成，"
-				+ "耗时 " + (System.currentTimeMillis() - start) + "ms。");
-
 		return userData;
 	}
 
 	@Override
 	public void saveUserData(@NotNull UserData data) throws IOException {
-		long start = System.currentTimeMillis();
-		Main.debug("正通过 FileStorage 保存 " + data.getUserUUID() + " 的用户数据...");
-
 		YamlConfiguration userDataConfig = new YamlConfiguration();
 		userDataConfig.set("date", data.getDateInt());
-
-		try {
-			userDataConfig.createSection("depositories", data.serializeToMap());
-			userDataConfig.save(new File(getDataContainer(), data.getUserUUID() + ".yml"));
-		} catch (IOException ioException) {
-			Main.error("在保存玩家 #" + data.getUserUUID() + " 的数据时出现异常。");
-			Main.error("Error occurred when saving #" + data.getUserUUID() + " data.");
-			throw ioException;
-		}
-
-		Main.debug(
-				"通过 FileStorage 保存 " + data.getUserUUID() + " 的用户数据完成，" +
-						"耗时 " + (System.currentTimeMillis() - start) + "ms。"
-		);
+		userDataConfig.createSection("depositories", data.serializeToMap());
+		userDataConfig.save(new File(getDataContainer(), data.getUserUUID() + ".yml"));
 	}
 
 }

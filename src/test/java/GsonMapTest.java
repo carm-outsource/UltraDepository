@@ -1,5 +1,4 @@
 import com.google.gson.Gson;
-import org.junit.Test;
 
 import java.util.*;
 
@@ -7,10 +6,17 @@ public class GsonMapTest {
 
 	private static final Gson GSON = new Gson();
 
-	@Test
+	@org.junit.Test
 	public void test() {
 		System.out.println(this.getClass().getSimpleName());
 
+
+		List<Test> tests = new ArrayList<>();
+		tests.add(new Test1());
+		tests.add(new Test2());
+
+		tests.stream().map(test -> test.getClass().getSimpleName()).forEach(System.out::println);
+		
 		Map<String, Map<String, Map<String, Integer>>> values = new LinkedHashMap<>();
 
 
@@ -36,6 +42,30 @@ public class GsonMapTest {
 
 		String jsonValues = GSON.toJson(values);
 		System.out.println(jsonValues);
+	}
+
+	public interface Test {
+
+		void load();
+
+	}
+
+	public static class Test1 implements Test {
+
+
+		@Override
+		public void load() {
+			System.out.println("test1");
+		}
+	}
+
+	public static class Test2 implements Test {
+
+
+		@Override
+		public void load() {
+			System.out.println("test2");
+		}
 	}
 
 
