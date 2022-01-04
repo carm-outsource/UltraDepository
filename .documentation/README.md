@@ -17,6 +17,11 @@
 
 ## 插件介绍目录
 
-- [使用]()
+- 使用示例
+    - [仓库配置文件预设示例](../.examples/depositories)
+    - [用户数据示例](../.examples/userdata)
+        - [YAML格式](../.examples/userdata/uuid.yml)
+        - [JSON格式](../.examples/userdata/uuid.json)
+        - [MySQL格式](../.examples/userdata/database.sql)
 - [开发](develop)
-  - [自定义存储源](develop/use-custome-storage.md)
+    - [自定义存储源](develop/use-custome-storage.md)
