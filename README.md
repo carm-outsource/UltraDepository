@@ -61,6 +61,7 @@
 ## 插件依赖
 
 - **[必须]** 插件本体基于 [Spigot-API](https://hub.spigotmc.org/stash/projects/SPIGOT)、[BukkitAPI](http://bukkit.org/) 实现。
+- **[自带]** 插件功能基于 [EasyPlugin](https://github.com/CarmJos/EasyPlugin) 实现。
 - **[自带]** 数据部分基于 [EasySQL](https://github.com/CarmJos/EasySQL) 实现。
     - 本插件连接池使用 [BeeCP](https://github.com/Chris2018998/BeeCP) ，更轻量、快速。
 - **[推荐]** 变量部分基于 [PlaceholderAPI](https://www.spigotmc.org/resources/6245/) 实现。
