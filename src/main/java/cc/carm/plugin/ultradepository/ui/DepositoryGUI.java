@@ -1,15 +1,15 @@
 package cc.carm.plugin.ultradepository.ui;
 
-import cc.carm.plugin.ultradepository.Main;
+import cc.carm.lib.easyplugin.gui.GUI;
+import cc.carm.lib.easyplugin.gui.GUIItem;
+import cc.carm.lib.easyplugin.utils.ItemStackFactory;
+import cc.carm.plugin.ultradepository.UltraDepository;
 import cc.carm.plugin.ultradepository.configuration.PluginConfig;
 import cc.carm.plugin.ultradepository.configuration.PluginMessages;
 import cc.carm.plugin.ultradepository.configuration.depository.Depository;
 import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
 import cc.carm.plugin.ultradepository.data.DepositoryItemData;
 import cc.carm.plugin.ultradepository.data.UserData;
-import cc.carm.plugin.ultradepository.util.ItemStackFactory;
-import cc.carm.plugin.ultradepository.util.gui.GUI;
-import cc.carm.plugin.ultradepository.util.gui.GUIItem;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -28,7 +28,7 @@ public class DepositoryGUI extends GUI {
 		super(depository.getGUIConfiguration().getGUIType(), depository.getGUIConfiguration().getTitle());
 
 		this.player = player;
-		this.userData = Main.getUserManager().getData(player);
+		this.userData = UltraDepository.getUserManager().getData(player);
 		this.depository = depository;
 
 		setupItems();

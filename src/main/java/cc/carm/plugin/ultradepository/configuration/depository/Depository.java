@@ -1,6 +1,6 @@
 package cc.carm.plugin.ultradepository.configuration.depository;
 
-import cc.carm.plugin.ultradepository.configuration.gui.GUIConfiguration;
+import cc.carm.lib.easyplugin.gui.configuration.GUIConfiguration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;

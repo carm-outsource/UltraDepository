@@ -1,12 +1,13 @@
 package cc.carm.plugin.ultradepository.hooker;
 
-import cc.carm.plugin.ultradepository.Main;
+import cc.carm.plugin.ultradepository.UltraDepository;
 import cc.carm.plugin.ultradepository.configuration.depository.Depository;
 import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
 import cc.carm.plugin.ultradepository.data.DepositoryItemData;
 import cc.carm.plugin.ultradepository.data.UserData;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -18,16 +19,16 @@ public class PAPIExpansion extends PlaceholderExpansion {
 			"%UltraDepository_amount_<BackpackID>_<ItemTypeID>%",
 			"%UltraDepository_sold_<BackpackID>_<ItemTypeID>%",
 			"%UltraDepository_price_<BackpackID>_<ItemTypeID>%",
-			"%UltraDepository_remain_<BackpackID>_<ItemTypeID>%",
+			"%UltraDepository_reUltraDepository_<BackpackID>_<ItemTypeID>%",
 			"%UltraDepository_capacity_<BackpackID>%",
 			"%UltraDepository_used_<BackpackID>%",
 			"%UltraDepository_usable_<BackpackID>%"
 	);
 
-	Main main;
+	private final JavaPlugin plugin;
 
-	public PAPIExpansion(Main main) {
-		this.main = main;
+	public PAPIExpansion(JavaPlugin plugin) {
+		this.plugin = plugin;
 	}
 
 	@Override
@@ -42,17 +43,17 @@ public class PAPIExpansion extends PlaceholderExpansion {
 
 	@Override
 	public @NotNull String getAuthor() {
-		return main.getDescription().getAuthors().toString();
+		return plugin.getDescription().getAuthors().toString();
 	}
 
 	@Override
 	public @NotNull String getIdentifier() {
-		return main.getDescription().getName();
+		return plugin.getDescription().getName();
 	}
 
 	@Override
 	public @NotNull String getVersion() {
-		return main.getDescription().getVersion();
+		return plugin.getDescription().getVersion();
 	}
 
 	@Override
@@ -64,7 +65,7 @@ public class PAPIExpansion extends PlaceholderExpansion {
 			return "Error Params";
 		}
 
-		UserData data = Main.getUserManager().getData(player);
+		UserData data = UltraDepository.getUserManager().getData(player);
 
 		switch (args[0].toLowerCase()) {
 			case "amount": {
@@ -79,9 +80,9 @@ public class PAPIExpansion extends PlaceholderExpansion {
 				if (sold == null) return "Depository or Item not exists";
 				else return sold.toString();
 			}
-			case "remain": {
+			case "reUltraDepository": {
 				if (args.length < 2) return "Error Params";
-				Depository depository = Main.getDepositoryManager().getDepository(args[1]);
+				Depository depository = UltraDepository.getDepositoryManager().getDepository(args[1]);
 				if (depository == null) return "Depository not exists";
 				DepositoryItem item = depository.getItems().get(args[2]);
 				if (item == null) return "Depository Item not exists";
@@ -91,31 +92,31 @@ public class PAPIExpansion extends PlaceholderExpansion {
 			}
 			case "limit": {
 				if (args.length < 3) return "Error Params";
-				Integer limit = Main.getDepositoryManager().getItemSellLimit(args[1], args[2]);
+				Integer limit = UltraDepository.getDepositoryManager().getItemSellLimit(args[1], args[2]);
 				if (limit == null) return "Depository or Item not exists";
 				else return limit.toString();
 			}
 			case "price": {
 				if (args.length < 3) return "Error Params";
-				Double price = Main.getDepositoryManager().getItemPrice(args[1], args[2]);
+				Double price = UltraDepository.getDepositoryManager().getItemPrice(args[1], args[2]);
 				if (price == null) return "Depository or Item not exists";
 				else return price.toString();
 			}
 			case "capacity": {
 				if (args.length < 2) return "Error Params";
-				Depository depository = Main.getDepositoryManager().getDepository(args[1]);
+				Depository depository = UltraDepository.getDepositoryManager().getDepository(args[1]);
 				if (depository == null) return "Depository not exists";
 				return Integer.toString(depository.getCapacity().getPlayerCapacity(player));
 			}
 			case "used": {
 				if (args.length < 2) return "Error Params";
-				Depository depository = Main.getDepositoryManager().getDepository(args[1]);
+				Depository depository = UltraDepository.getDepositoryManager().getDepository(args[1]);
 				if (depository == null) return "Depository not exists";
 				return Integer.toString(data.getDepositoryData(depository).getUsedCapacity());
 			}
 			case "usable": {
 				if (args.length < 2) return "Error Params";
-				Depository depository = Main.getDepositoryManager().getDepository(args[1]);
+				Depository depository = UltraDepository.getDepositoryManager().getDepository(args[1]);
 				if (depository == null) return "Depository not exists";
 				int used = data.getDepositoryData(depository).getUsedCapacity();
 				return Integer.toString(depository.getCapacity().getPlayerCapacity(player) - used);

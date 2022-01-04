@@ -1,6 +1,8 @@
 package cc.carm.plugin.ultradepository.command;
 
-import cc.carm.plugin.ultradepository.Main;
+import cc.carm.lib.easyplugin.utils.ColorParser;
+import cc.carm.lib.easyplugin.utils.MessageUtils;
+import cc.carm.plugin.ultradepository.UltraDepository;
 import cc.carm.plugin.ultradepository.configuration.PluginConfig;
 import cc.carm.plugin.ultradepository.configuration.PluginMessages;
 import cc.carm.plugin.ultradepository.configuration.depository.Depository;
@@ -9,8 +11,6 @@ import cc.carm.plugin.ultradepository.data.DepositoryData;
 import cc.carm.plugin.ultradepository.data.DepositoryItemData;
 import cc.carm.plugin.ultradepository.data.UserData;
 import cc.carm.plugin.ultradepository.ui.DepositoryGUI;
-import cc.carm.plugin.ultradepository.util.ColorParser;
-import cc.carm.plugin.ultradepository.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -52,7 +52,7 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 						return false;
 					}
 					if (args.length < 2) return helpPlayer(player);
-					Depository depository = Main.getDepositoryManager().getDepository(args[1]);
+					Depository depository = UltraDepository.getDepositoryManager().getDepository(args[1]);
 					if (depository == null) {
 						PluginMessages.NO_DEPOSITORY.send(player);
 						return true;
@@ -64,13 +64,13 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 					if (!player.hasPermission("UltraDepository.Command.Sell")) {
 						return false;
 					}
-					if (!Main.getEconomyManager().isInitialized()) {
+					if (!UltraDepository.getEconomyManager().isInitialized()) {
 						PluginConfig.Sounds.SELL_FAIL.play(player);
 						PluginMessages.NO_ECONOMY.send(player);
 						return true;
 					}
 					if (args.length < 4) return helpPlayer(player);
-					Depository depository = Main.getDepositoryManager().getDepository(args[1]);
+					Depository depository = UltraDepository.getDepositoryManager().getDepository(args[1]);
 					if (depository == null) {
 						PluginConfig.Sounds.SELL_FAIL.play(player);
 						PluginMessages.NO_DEPOSITORY.send(player);
@@ -95,7 +95,7 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 						return true;
 					}
 
-					UserData userData = Main.getUserManager().getData(player);
+					UserData userData = UltraDepository.getUserManager().getData(player);
 					DepositoryItemData itemData = userData.getItemData(item);
 					int limit = item.getLimit();
 					int sold = itemData.getSold();
@@ -113,26 +113,26 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 						return true;
 					}
 
-					Main.getEconomyManager().sellItem(player, userData, itemData, amount);
+					UltraDepository.getEconomyManager().sellItem(player, userData, item, amount);
 					return true;
 				}
 				case "sellall": {
 					if (!player.hasPermission("UltraDepository.Command.SellAll")) {
 						return false;
 					}
-					if (!Main.getEconomyManager().isInitialized()) {
+					if (!UltraDepository.getEconomyManager().isInitialized()) {
 						PluginConfig.Sounds.SELL_FAIL.play(player);
 						PluginMessages.NO_ECONOMY.send(player);
 						return true;
 					}
-					UserData userData = Main.getUserManager().getData(player);
+					UserData userData = UltraDepository.getUserManager().getData(player);
 
 					String depositoryID = args.length >= 2 ? args[1] : null;
 					String itemID = args.length >= 3 ? args[2] : null;
 
 					Depository depository = null;
 					if (depositoryID != null) {
-						depository = Main.getDepositoryManager().getDepository(depositoryID);
+						depository = UltraDepository.getDepositoryManager().getDepository(depositoryID);
 						if (depository == null) {
 							PluginConfig.Sounds.SELL_FAIL.play(player);
 							PluginMessages.NO_DEPOSITORY.send(player);
@@ -141,7 +141,7 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 					}
 
 					if (depository == null) {
-						Main.getEconomyManager().sellAllItem(player, userData);
+						UltraDepository.getEconomyManager().sellAllItem(player, userData);
 						sender.sendMessage("Success! " + player.getName() + "'s items had been sold.");
 						return true;
 					}
@@ -157,11 +157,11 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 					}
 
 					if (item == null) {
-						Main.getEconomyManager().sellAllItem(player, userData, userData.getDepositoryData(depositoryID));
+						UltraDepository.getEconomyManager().sellAllItem(player, userData, depository);
 						return true;
 					}
 
-					Main.getEconomyManager().sellAllItem(player, userData, userData.getItemData(item));
+					UltraDepository.getEconomyManager().sellAllItem(player, userData, item);
 					return true;
 				}
 				default:
@@ -177,14 +177,14 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 						sender.sendMessage("Player does not exist.");
 						return false;
 					}
-					UserData userData = Main.getUserManager().getData(player);
+					UserData userData = UltraDepository.getUserManager().getData(player);
 
 					String depositoryID = args.length >= 3 ? args[2] : null;
 					String itemID = args.length >= 4 ? args[3] : null;
 
 					Depository depository = null;
 					if (depositoryID != null) {
-						depository = Main.getDepositoryManager().getDepository(depositoryID);
+						depository = UltraDepository.getDepositoryManager().getDepository(depositoryID);
 						if (depository == null) {
 							PluginMessages.NO_DEPOSITORY.send(player);
 							return true;
@@ -193,12 +193,12 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 					sender.sendMessage(ColorParser.parse("&fInfo &6" + player.getName() + " &f:"));
 					if (depository == null) {
 						userData.getDepositories().values().forEach(depositoryData -> {
-							MessageUtil.send(sender, "&8# &e" + depositoryData.getIdentifier());
+							MessageUtils.send(sender, "&8# &e" + depositoryData.getIdentifier());
 							depositoryData.getContents().values().forEach(itemData -> {
 								String typeID = itemData.getSource().getTypeID();
 								int amount = itemData.getAmount();
 								int sold = itemData.getSold();
-								MessageUtil.send(sender, "&8- &f" + typeID + " &7[&f " + amount + "&8|&f " + sold + "&7]");
+								MessageUtils.send(sender, "&8- &f" + typeID + " &7[&f " + amount + "&8|&f " + sold + "&7]");
 							});
 						});
 						return true;
@@ -215,12 +215,12 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 
 					if (item == null) {
 						DepositoryData depositoryData = userData.getDepositoryData(depository);
-						MessageUtil.send(sender, "&8# &e" + depositoryData.getIdentifier());
+						MessageUtils.send(sender, "&8# &e" + depositoryData.getIdentifier());
 						depositoryData.getContents().values().forEach(itemData -> {
 							String typeID = itemData.getSource().getTypeID();
 							int amount = itemData.getAmount();
 							int sold = itemData.getSold();
-							MessageUtil.send(sender, "&8- &f" + typeID + " &7[&f " + amount + "&8|&f " + sold + "&7]");
+							MessageUtils.send(sender, "&8- &f" + typeID + " &7[&f " + amount + "&8|&f " + sold + "&7]");
 						});
 						return true;
 					}
@@ -230,8 +230,8 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 					int amount = itemData.getAmount();
 					int sold = itemData.getSold();
 
-					MessageUtil.send(sender, "&8# &e" + depository.getIdentifier());
-					MessageUtil.send(sender, "&8- &f" + typeID + " &7[&f " + amount + "&8|&f " + sold + "&7]");
+					MessageUtils.send(sender, "&8# &e" + depository.getIdentifier());
+					MessageUtils.send(sender, "&8- &f" + typeID + " &7[&f " + amount + "&8|&f " + sold + "&7]");
 					return true;
 				}
 				case "add": {
@@ -242,7 +242,7 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 						return false;
 					}
 
-					Depository depository = Main.getDepositoryManager().getDepository(args[2]);
+					Depository depository = UltraDepository.getDepositoryManager().getDepository(args[2]);
 					if (depository == null) {
 						PluginMessages.NO_DEPOSITORY.send(sender);
 						return true;
@@ -264,7 +264,7 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 						return true;
 					}
 
-					Integer after = Main.getUserManager().getData(player)
+					Integer after = UltraDepository.getUserManager().getData(player)
 							.addItemAmount(depository.getIdentifier(), item.getTypeID(), amount);
 
 					if (after != null) {
@@ -283,7 +283,7 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 						return false;
 					}
 
-					Depository depository = Main.getDepositoryManager().getDepository(args[2]);
+					Depository depository = UltraDepository.getDepositoryManager().getDepository(args[2]);
 					if (depository == null) {
 						PluginMessages.NO_DEPOSITORY.send(sender);
 						return true;
@@ -305,7 +305,7 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 						return true;
 					}
 
-					UserData userData = Main.getUserManager().getData(player);
+					UserData userData = UltraDepository.getUserManager().getData(player);
 					if (amount != null) {
 						Integer after = userData.removeItemAmount(depository.getIdentifier(), item.getTypeID(), amount);
 						if (after != null) {
@@ -331,17 +331,17 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 
 					Depository depository = null;
 					if (depositoryID != null) {
-						depository = Main.getDepositoryManager().getDepository(depositoryID);
+						depository = UltraDepository.getDepositoryManager().getDepository(depositoryID);
 						if (depository == null) {
 							PluginMessages.NO_DEPOSITORY.send(sender);
 							return true;
 						}
 					}
 
-					UserData userData = Main.getUserManager().getData(player);
+					UserData userData = UltraDepository.getUserManager().getData(player);
 
 					if (depository == null) {
-						Main.getEconomyManager().sellAllItem(player, userData);
+						UltraDepository.getEconomyManager().sellAllItem(player, userData);
 						sender.sendMessage("Success! " + player.getName() + "'s items had been sold.");
 						return true;
 					}
@@ -355,7 +355,7 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 						}
 					}
 					if (item == null) {
-						Main.getEconomyManager().sellAllItem(player, userData, userData.getDepositoryData(depository));
+						UltraDepository.getEconomyManager().sellAllItem(player, userData, depository);
 						sender.sendMessage("Success! " + player.getName() + "'s " + depository.getIdentifier() + " had been sold.");
 						return true;
 					}
@@ -374,7 +374,7 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 					}
 
 					if (amount == null) {
-						Main.getEconomyManager().sellAllItem(player, userData, userData.getItemData(item));
+						UltraDepository.getEconomyManager().sellAllItem(player, userData, item);
 						sender.sendMessage("Success! " + player.getName() + "'s " + item.getTypeID() + " had been sold.");
 						return true;
 					}
@@ -395,7 +395,7 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 						return true;
 					}
 
-					Main.getEconomyManager().sellItem(player, userData, userData.getItemData(item), amount);
+					UltraDepository.getEconomyManager().sellItem(player, userData, item, amount);
 					sender.sendMessage("Success! " + player.getName() + "'s " + amount + " " + item.getTypeID() + " had been sold.");
 					return true;
 				}
@@ -430,7 +430,7 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 								&& player.hasPermission("UltraDepository.Command.Sell"))
 								|| (aim.equalsIgnoreCase("sellAll")
 								&& player.hasPermission("UltraDepository.Command.SellAll"))) {
-							allCompletes.addAll(Main.getDepositoryManager().getDepositories().keySet());
+							allCompletes.addAll(UltraDepository.getDepositoryManager().getDepositories().keySet());
 						}
 						break;
 					}
@@ -441,7 +441,7 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 								&& player.hasPermission("UltraDepository.Command.Sell"))
 								|| (aim.equalsIgnoreCase("sellAll")
 								&& player.hasPermission("UltraDepository.Command.SellAll"))) {
-							Depository depository = Main.getDepositoryManager().getDepository(depositoryID);
+							Depository depository = UltraDepository.getDepositoryManager().getDepository(depositoryID);
 							if (depository != null) {
 								allCompletes.addAll(depository.getItems().keySet());
 							}
@@ -465,11 +465,11 @@ public class DepositoryCommand implements CommandExecutor, TabCompleter {
 					break;
 				}
 				case 3: {
-					allCompletes.addAll(Main.getDepositoryManager().getDepositories().keySet());
+					allCompletes.addAll(UltraDepository.getDepositoryManager().getDepositories().keySet());
 					break;
 				}
 				case 4: {
-					Depository depository = Main.getDepositoryManager().getDepository(args[2]);
+					Depository depository = UltraDepository.getDepositoryManager().getDepository(args[2]);
 					if (depository != null) {
 						allCompletes.addAll(depository.getItems().keySet());
 					}

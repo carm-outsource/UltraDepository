@@ -1,6 +1,7 @@
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import java.lang.reflect.Method;
 import java.util.*;
 
 public class GsonMapTest {
@@ -15,8 +16,8 @@ public class GsonMapTest {
 		List<Test> tests = new ArrayList<>();
 		tests.add(new Test1());
 		tests.add(new Test2());
-
-		tests.stream().map(test -> test.getClass().getSimpleName()).forEach(System.out::println);
+		tests.add(new Test3());
+		tests.stream().map(test -> test.getClass().getSimpleName() + " : " + test.isOverride("load")).forEach(System.out::println);
 
 		Map<String, Map<String, Map<String, Integer>>> values = new LinkedHashMap<>();
 
@@ -54,6 +55,19 @@ public class GsonMapTest {
 
 		void load();
 
+		default boolean isOverride(String methodName) {
+			Map<Method, Method> methodMap = new HashMap<>();
+			Arrays.stream(Test.class.getDeclaredMethods())
+					.filter(method -> method.getName().equals(methodName))
+					.forEach(method -> Arrays.stream(getClass().getDeclaredMethods())
+							.filter(extend -> extend.getName().equals(methodName))
+							.filter(extend -> extend.getReturnType().equals(method.getReturnType()))
+							.filter(extend -> extend.getParameterTypes().length == method.getParameterTypes().length)
+							.findFirst().ifPresent(extendMethod -> methodMap.put(method, extendMethod))
+					);
+			return !methodMap.isEmpty();
+		}
+
 	}
 
 	public static class Test1 implements Test {
@@ -65,12 +79,14 @@ public class GsonMapTest {
 		}
 	}
 
-	public static class Test2 implements Test {
+	public static class Test2 extends Test1 {
 
+	}
+
+	public static class Test3 extends Test2 {
 
 		@Override
 		public void load() {
-			System.out.println("test2");
 		}
 	}
 

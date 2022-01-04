@@ -1,12 +1,13 @@
-package cc.carm.plugin.ultradepository.storage;
+package cc.carm.plugin.ultradepository.storage.impl;
 
-import cc.carm.plugin.ultradepository.Main;
+import cc.carm.lib.easyplugin.configuration.values.ConfigValue;
+import cc.carm.plugin.ultradepository.UltraDepository;
 import cc.carm.plugin.ultradepository.configuration.depository.Depository;
 import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
-import cc.carm.plugin.ultradepository.configuration.values.ConfigValue;
 import cc.carm.plugin.ultradepository.data.DepositoryData;
 import cc.carm.plugin.ultradepository.data.DepositoryItemData;
 import cc.carm.plugin.ultradepository.data.UserData;
+import cc.carm.plugin.ultradepository.storage.DataStorage;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -34,7 +35,7 @@ public class JSONStorage implements DataStorage {
 
 	@Override
 	public boolean initialize() {
-		dataContainer = new File(Main.getInstance().getDataFolder(), FILE_PATH.get());
+		dataContainer = new File(UltraDepository.getInstance().getDataFolder(), FILE_PATH.get());
 		if (!dataContainer.exists()) {
 			return dataContainer.mkdir();
 		} else {
@@ -45,6 +46,7 @@ public class JSONStorage implements DataStorage {
 	@Override
 	public void shutdown() {
 		// 似乎没什么需要做的？
+		dataContainer = null;
 	}
 
 	public File getDataContainer() {
@@ -55,7 +57,7 @@ public class JSONStorage implements DataStorage {
 	public @Nullable UserData loadData(@NotNull UUID uuid) throws Exception {
 		File userDataFile = new File(getDataContainer(), uuid + ".json");
 		if (!userDataFile.exists()) {
-			Main.debug("当前文件夾内不存在玩家 " + uuid + " 的数据，视作新档。");
+			UltraDepository.getInstance().debug("当前文件夾内不存在玩家 " + uuid + " 的数据，视作新档。");
 			return null;
 		}
 
@@ -69,7 +71,7 @@ public class JSONStorage implements DataStorage {
 		UserData userData = new UserData(uuid, new HashMap<>(), dateInt);
 
 		for (Map.Entry<String, JsonElement> entry : repositoriesObject.entrySet()) {
-			Depository depository = Main.getDepositoryManager().getDepository(entry.getKey());
+			Depository depository = UltraDepository.getDepositoryManager().getDepository(entry.getKey());
 			if (depository == null) continue;
 
 			DepositoryData contentsData = parseContentsData(depository, userData, entry.getValue());
@@ -103,8 +105,7 @@ public class JSONStorage implements DataStorage {
 											   @NotNull JsonObject contentsObject) {
 		DepositoryData data = DepositoryData.emptyContents(source, owner);
 		for (Map.Entry<String, JsonElement> entry : contentsObject.entrySet()) {
-
-			DepositoryItem item = source.getItems().get(entry.getKey());
+			DepositoryItem item = source.getItems().get(getFixedTypeID(entry.getKey()));
 			if (item == null) continue;
 
 			DepositoryItemData itemData = parseItemData(item, data, entry.getValue());

@@ -1,7 +1,7 @@
 package cc.carm.plugin.ultradepository.configuration;
 
 
-import cc.carm.plugin.ultradepository.configuration.message.ConfigMessageList;
+import cc.carm.lib.easyplugin.configuration.message.ConfigMessageList;
 
 public class PluginMessages {
 

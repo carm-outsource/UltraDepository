@@ -1,6 +1,6 @@
 package cc.carm.plugin.ultradepository.listener;
 
-import cc.carm.plugin.ultradepository.Main;
+import cc.carm.plugin.ultradepository.UltraDepository;
 import cc.carm.plugin.ultradepository.data.UserData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,23 +20,23 @@ public class UserListener implements Listener {
 			return;
 		}
 		UUID uuid = event.getUniqueId();
-		Main.debug("尝试加载玩家 " + event.getName() + " 的数据...");
-		Main.getUserManager().getDataCache().put(uuid, Main.getUserManager().loadData(uuid));
+		UltraDepository.getInstance().debug("尝试加载玩家 " + event.getName() + " 的数据...");
+		UltraDepository.getUserManager().getDataCache().put(uuid, UltraDepository.getUserManager().loadData(uuid));
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPreLoginMonitor(AsyncPlayerPreLoginEvent event) {
 		if (event.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED) {
-			Main.getUserManager().getDataCache().remove(event.getUniqueId());
+			UltraDepository.getUserManager().getDataCache().remove(event.getUniqueId());
 		}
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerLogin(PlayerLoginEvent e) {
-		UserData data = Main.getUserManager().getData(e.getPlayer().getUniqueId());
+		UserData data = UltraDepository.getUserManager().getData(e.getPlayer().getUniqueId());
 		if (data == null) {
 			e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
-			e.setKickMessage(Main.getInstance().getName() + " 数据未被正确加载，请重新进入。");
+			e.setKickMessage(UltraDepository.getInstance().getName() + " 数据未被正确加载，请重新进入。");
 		}
 	}
 
@@ -44,7 +44,7 @@ public class UserListener implements Listener {
 	public void onQuit(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		UUID playerUUID = player.getUniqueId();
-		Main.getScheduler().runAsync(() -> Main.getUserManager().unloadData(playerUUID, true));
+		UltraDepository.getInstance().getScheduler().runAsync(() -> UltraDepository.getUserManager().unloadData(playerUUID, true));
 	}
 
 }

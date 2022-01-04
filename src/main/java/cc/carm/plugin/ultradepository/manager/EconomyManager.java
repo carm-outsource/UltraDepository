@@ -2,10 +2,14 @@ package cc.carm.plugin.ultradepository.manager;
 
 import cc.carm.plugin.ultradepository.configuration.PluginConfig;
 import cc.carm.plugin.ultradepository.configuration.PluginMessages;
+import cc.carm.plugin.ultradepository.configuration.depository.Depository;
+import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
 import cc.carm.plugin.ultradepository.data.DepositoryData;
 import cc.carm.plugin.ultradepository.data.DepositoryItemData;
 import cc.carm.plugin.ultradepository.data.UserData;
+import cc.carm.plugin.ultradepository.event.DepositorySellItemEvent;
 import cc.carm.plugin.ultradepository.hooker.VaultHooker;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class EconomyManager {
@@ -41,43 +45,48 @@ public class EconomyManager {
 	}
 
 	public void sellAllItem(Player player, UserData userData, boolean playSound) {
-		userData.getDepositories().values().forEach(depositoryData -> sellAllItem(player, userData, depositoryData, false));
+		userData.getDepositories().values().stream().map(DepositoryData::getSource)
+				.forEach(depositoryData -> sellAllItem(player, userData, depositoryData, false));
 		if (playSound) PluginConfig.Sounds.SELL_SUCCESS.play(player);
 	}
 
 
-	public void sellAllItem(Player player, UserData userData, DepositoryData depositoryData) {
-		sellAllItem(player, userData, depositoryData, true);
+	public void sellAllItem(Player player, UserData userData, Depository depository) {
+		sellAllItem(player, userData, depository, true);
 	}
 
-	public void sellAllItem(Player player, UserData userData, DepositoryData depositoryData, boolean playSound) {
-		depositoryData.getContents().values().forEach(value -> sellAllItem(player, userData, value, false));
+	public void sellAllItem(Player player, UserData userData, Depository depository, boolean playSound) {
+		depository.getItems().values().forEach(value -> sellAllItem(player, userData, value, false));
 		if (playSound) PluginConfig.Sounds.SELL_SUCCESS.play(player);
 	}
 
 
-	public void sellAllItem(Player player, UserData userData, DepositoryItemData itemData) {
-		sellAllItem(player, userData, itemData, true);
+	public void sellAllItem(Player player, UserData userData, DepositoryItem depositoryItem) {
+		sellAllItem(player, userData, depositoryItem, true);
 	}
 
-	public void sellAllItem(Player player, UserData userData, DepositoryItemData itemData, boolean playSound) {
+	public void sellAllItem(Player player, UserData userData, DepositoryItem depositoryItem, boolean playSound) {
+		DepositoryItemData itemData = userData.getItemData(depositoryItem);
 		int amount = itemData.getAmount();
 		int sold = itemData.getSold();
-		int limit = itemData.getSource().getLimit();
+		int limit = depositoryItem.getLimit();
 		int finalAmount = Math.min(amount, (limit - sold));
-		if (finalAmount > 0) sellItem(player, userData, itemData, finalAmount, false);
+		if (finalAmount > 0) sellItem(player, userData, depositoryItem, finalAmount, false);
 		if (playSound) PluginConfig.Sounds.SELL_SUCCESS.play(player);
 	}
 
-	public void sellItem(Player player, UserData userData, DepositoryItemData itemData, int amount) {
-		sellItem(player, userData, itemData, amount, true);
+	public void sellItem(Player player, UserData userData, DepositoryItem depositoryItem, int amount) {
+		sellItem(player, userData, depositoryItem, amount, true);
 	}
 
-	public void sellItem(Player player, UserData userData, DepositoryItemData itemData, int amount, boolean playSound) {
-		userData.addItemSold(itemData.getOwner().getSource().getIdentifier(), itemData.getSource().getTypeID(), amount);
-		userData.removeItemAmount(itemData.getOwner().getSource().getIdentifier(), itemData.getSource().getTypeID(), amount);
-		double money = sell(player, itemData.getSource().getPrice(), amount);
-		PluginMessages.SOLD.send(player, new Object[]{itemData.getSource().getName(), amount, money});
+	public void sellItem(Player player, UserData userData, DepositoryItem depositoryItem, int amount, boolean playSound) {
+		int[] changes = userData.getItemData(depositoryItem).applyChanges(-amount, amount);
+		double money = sell(player, depositoryItem.getPrice(), amount);
+		Bukkit.getPluginManager().callEvent(new DepositorySellItemEvent(
+				player, depositoryItem, changes[0] + amount, changes[0], money
+		));
+
+		PluginMessages.SOLD.send(player, new Object[]{depositoryItem.getName(), amount, money});
 		if (playSound) PluginConfig.Sounds.SELL_SUCCESS.play(player);
 	}
 

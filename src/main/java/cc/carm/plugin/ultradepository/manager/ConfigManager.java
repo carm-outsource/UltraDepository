@@ -1,38 +1,28 @@
 package cc.carm.plugin.ultradepository.manager;
 
 
-import cc.carm.plugin.ultradepository.Main;
-import cc.carm.plugin.ultradepository.configuration.file.FileConfig;
-import cc.carm.plugin.ultradepository.configuration.gui.GUIActionConfiguration;
-import cc.carm.plugin.ultradepository.configuration.gui.GUIActionType;
-import cc.carm.plugin.ultradepository.configuration.gui.GUIConfiguration;
-import cc.carm.plugin.ultradepository.util.gui.GUIItem;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
-import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
+import cc.carm.lib.easyplugin.configuration.file.FileConfig;
+import cc.carm.plugin.ultradepository.UltraDepository;
 
 public class ConfigManager {
 
-	private static FileConfig config;
-	private static FileConfig messageConfig;
+	private static FileConfig pluginConfiguration;
+	private static FileConfig messageConfiguration;
 
 	public static void initConfig() {
-		ConfigManager.config = new FileConfig(Main.getInstance(), "config.yml");
-		ConfigManager.messageConfig = new FileConfig(Main.getInstance(), "messages.yml");
+		pluginConfiguration = new FileConfig(UltraDepository.getInstance(), "config.yml");
+		messageConfiguration = new FileConfig(UltraDepository.getInstance(), "messages.yml");
+
+		FileConfig.pluginConfiguration = () -> pluginConfiguration;
+		FileConfig.messageConfiguration = () -> messageConfiguration;
 	}
 
 	public static FileConfig getPluginConfig() {
-		return config;
+		return pluginConfiguration;
 	}
 
 	public static FileConfig getMessageConfig() {
-		return messageConfig;
+		return messageConfiguration;
 	}
 
 	public static void reload() {

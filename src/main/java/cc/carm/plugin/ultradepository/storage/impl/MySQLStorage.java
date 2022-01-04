@@ -1,13 +1,14 @@
-package cc.carm.plugin.ultradepository.storage;
+package cc.carm.plugin.ultradepository.storage.impl;
 
-import cc.carm.lib.easysql.EasySQL;
-import cc.carm.lib.easysql.api.SQLManager;
-import cc.carm.lib.easysql.api.action.query.PreparedQueryAction;
-import cc.carm.lib.easysql.api.action.query.SQLQuery;
-import cc.carm.plugin.ultradepository.Main;
+import cc.carm.lib.easyplugin.configuration.values.ConfigValue;
+import cc.carm.lib.easyplugin.database.DatabaseTable;
+import cc.carm.lib.easyplugin.database.EasySQL;
+import cc.carm.lib.easyplugin.database.api.SQLManager;
+import cc.carm.lib.easyplugin.database.api.action.query.PreparedQueryAction;
+import cc.carm.lib.easyplugin.database.api.action.query.SQLQuery;
+import cc.carm.plugin.ultradepository.UltraDepository;
 import cc.carm.plugin.ultradepository.configuration.PluginConfig;
 import cc.carm.plugin.ultradepository.configuration.depository.Depository;
-import cc.carm.plugin.ultradepository.configuration.values.ConfigValue;
 import cc.carm.plugin.ultradepository.data.DepositoryData;
 import cc.carm.plugin.ultradepository.data.UserData;
 import cc.carm.plugin.ultradepository.util.DateIntUtil;
@@ -41,40 +42,14 @@ public class MySQLStorage extends JSONStorage {
 			"storage.mysql.password", String.class, "password"
 	);
 
-	public enum SQLTables {
+	private static final DatabaseTable USER_TABLE = new DatabaseTable(
+			"ub_data",
+			new String[]{
+					"`uuid` VARCHAR(36) NOT NULL PRIMARY KEY", // 用户的UUID
+					"`data` MEDIUMTEXT NOT NULL",// 背包内具体物品
+					"`day` DATE NOT NULL", // 记录卖出数量的所在天
+			});
 
-		USER_DATA("ub_data", new String[]{
-				"`uuid` VARCHAR(36) NOT NULL PRIMARY KEY", // 用户的UUID
-				"`data` MEDIUMTEXT NOT NULL",// 背包内具体物品
-				"`day` DATE NOT NULL", // 记录卖出数量的所在天
-		});
-
-		String name;
-		String[] columns;
-
-		SQLTables(String name, String[] columns) {
-			this.name = name;
-			this.columns = columns;
-		}
-
-
-		public static void createTables(SQLManager sqlManager) throws SQLException {
-			for (SQLTables value : values()) {
-				sqlManager.createTable(value.getName())
-						.setColumns(value.getColumns())
-						.build().execute();
-			}
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public String[] getColumns() {
-			return columns;
-		}
-
-	}
 
 	public static final Gson GSON = new Gson();
 	public static final JsonParser PARSER = new JsonParser();
@@ -85,22 +60,22 @@ public class MySQLStorage extends JSONStorage {
 	public boolean initialize() {
 
 		try {
-			Main.log("	尝试连接到数据库...");
+			UltraDepository.getInstance().log("	尝试连接到数据库...");
 			this.sqlManager = EasySQL.createManager(DRIVER_NAME.get(), URL.get(), USERNAME.get(), PASSWORD.get());
 			this.sqlManager.setDebugMode(PluginConfig.DEBUG.get());
 		} catch (Exception exception) {
-			Main.error("无法连接到数据库，请检查配置文件。");
-			Main.error("Could not connect to the database, please check the configuration.");
+			UltraDepository.getInstance().error("无法连接到数据库，请检查配置文件。");
+			UltraDepository.getInstance().error("Could not connect to the database, please check the configuration.");
 			exception.printStackTrace();
 			return false;
 		}
 
 		try {
-			Main.log("	创建插件所需表...");
-			SQLTables.createTables(sqlManager);
+			UltraDepository.getInstance().log("	创建插件所需表...");
+			USER_TABLE.createTable(sqlManager);
 		} catch (SQLException exception) {
-			Main.error("无法创建插件所需的表，请检查数据库权限。");
-			Main.error("Could not create necessary tables, please check the database privileges.");
+			UltraDepository.getInstance().error("无法创建插件所需的表，请检查数据库权限。");
+			UltraDepository.getInstance().error("Could not create necessary tables, please check the database privileges.");
 			exception.printStackTrace();
 			return false;
 		}
@@ -110,7 +85,7 @@ public class MySQLStorage extends JSONStorage {
 
 	@Override
 	public void shutdown() {
-		Main.log("	关闭数据库连接...");
+		UltraDepository.getInstance().log("	关闭数据库连接...");
 		EasySQL.shutdownManager(getSQLManager());
 	}
 
@@ -128,7 +103,7 @@ public class MySQLStorage extends JSONStorage {
 			JsonElement dataElement = PARSER.parse(dataJSON);
 			if (dataElement.isJsonObject()) {
 				for (Map.Entry<String, JsonElement> entry : dataElement.getAsJsonObject().entrySet()) {
-					Depository depository = Main.getDepositoryManager().getDepository(entry.getKey());
+					Depository depository = UltraDepository.getDepositoryManager().getDepository(entry.getKey());
 					if (depository == null) continue;
 
 					DepositoryData contentsData = parseContentsData(depository, data, entry.getValue());
@@ -145,7 +120,7 @@ public class MySQLStorage extends JSONStorage {
 
 	@Override
 	public void saveUserData(@NotNull UserData data) throws Exception {
-		getSQLManager().createReplace(SQLTables.USER_DATA.getName())
+		getSQLManager().createReplace(USER_TABLE.getTableName())
 				.setColumnNames("uuid", "data", "day")
 				.setParams(data.getUserUUID(), GSON.toJson(data.serializeToMap()), data.getDate())
 				.execute();
@@ -156,8 +131,7 @@ public class MySQLStorage extends JSONStorage {
 	}
 
 	private PreparedQueryAction createAction(UUID uuid) {
-		return getSQLManager().createQuery()
-				.inTable(SQLTables.USER_DATA.getName())
+		return USER_TABLE.createQuery(sqlManager)
 				.addCondition("uuid", uuid.toString())
 				.setLimit(1).build();
 	}

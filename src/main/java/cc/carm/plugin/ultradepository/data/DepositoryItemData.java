@@ -42,6 +42,12 @@ public class DepositoryItemData {
 		this.sold = Math.max(0, sold);
 	}
 
+	public int[] applyChanges(int amountChanges, int soldChanges) {
+		setAmount(getAmount() + amountChanges);
+		setSold(getSold() + soldChanges);
+		return new int[]{getAmount(), getSold()};
+	}
+
 	public void clearSold() {
 		this.sold = 0;
 	}

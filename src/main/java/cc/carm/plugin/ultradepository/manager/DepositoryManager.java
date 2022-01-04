@@ -1,12 +1,13 @@
 package cc.carm.plugin.ultradepository.manager;
 
-import cc.carm.plugin.ultradepository.Main;
+import cc.carm.plugin.ultradepository.UltraDepository;
 import cc.carm.plugin.ultradepository.configuration.PluginConfig;
 import cc.carm.plugin.ultradepository.configuration.PluginMessages;
 import cc.carm.plugin.ultradepository.configuration.depository.Depository;
 import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
-import cc.carm.plugin.ultradepository.data.UserData;
+import cc.carm.plugin.ultradepository.event.DepositoryCollectItemEvent;
 import com.google.common.collect.HashMultimap;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -40,8 +41,8 @@ public class DepositoryManager {
 
 	public void loadDepositories() {
 		long start = System.currentTimeMillis();
-		Main.log("	开始加载仓库配置...");
-		File folder = new File(Main.getInstance().getDataFolder(), "depositories");
+		UltraDepository.getInstance().log("	开始加载仓库配置...");
+		File folder = new File(UltraDepository.getInstance().getDataFolder(), "depositories");
 		if (!folder.exists()) {
 			folder.mkdir();
 		} else if (folder.isDirectory()) {
@@ -63,19 +64,19 @@ public class DepositoryManager {
 				depository.getItems().values().forEach(value -> items.put(value.getTypeID(), depository.getIdentifier()));
 				data.put(identifier, depository);
 			} else {
-				Main.error("	仓库 " + depository.getName() + " 未配置任何物品，请检查相关配置！");
+				UltraDepository.getInstance().error("	仓库 " + depository.getName() + " 未配置任何物品，请检查相关配置！");
 			}
 		}
 		for (Map.Entry<String, Collection<String>> entry : items.asMap().entrySet()) {
-			Main.debug("# " + entry.getKey());
+			UltraDepository.getInstance().debug("# " + entry.getKey());
 			for (String depositoryID : entry.getValue()) {
-				Main.debug("- " + depositoryID);
+				UltraDepository.getInstance().debug("- " + depositoryID);
 			}
 		}
 
 		this.depositories = data;
 		this.itemMap = items;
-		Main.log("	仓库配置加载完成，共加载 " + data.size() + " 个仓库，耗时 " + (System.currentTimeMillis() - start) + "ms 。");
+		UltraDepository.getInstance().log("	仓库配置加载完成，共加载 " + data.size() + " 个仓库，耗时 " + (System.currentTimeMillis() - start) + "ms 。");
 	}
 
 	public @NotNull HashMap<@NotNull String, @NotNull Depository> getDepositories() {
@@ -112,14 +113,15 @@ public class DepositoryManager {
 
 	public Set<Depository> getPlayerUsableDepository(Player player, ItemStack itemStack) {
 		return getItemDepositories(itemStack).stream().filter(configuration -> {
-			int used = Main.getUserManager().getData(player).getDepositoryData(configuration).getUsedCapacity();
+			int used = UltraDepository.getUserManager().getData(player).getDepositoryData(configuration).getUsedCapacity();
 			int max = configuration.getCapacity().getPlayerCapacity(player);
 			return used + itemStack.getAmount() <= max;
 		}).collect(Collectors.toSet());
 	}
 
 	public @NotNull String getItemTypeID(Material material, int data) {
-		return material.name() + ":" + data;
+		if (data == 0) return material.name();
+		else return material.name() + ":" + data;
 	}
 
 	public @NotNull String getItemTypeID(ItemStack itemStack) {
@@ -127,38 +129,48 @@ public class DepositoryManager {
 	}
 
 	public Collection<ItemStack> collectItem(Player player, Collection<ItemStack> items) {
-		if (!Main.getUserManager().isCollectEnabled(player)) {
-			Main.debug("player " + player.getName() + " disabled collect, skipped.");
+		if (!UltraDepository.getUserManager().isCollectEnabled(player)) {
+			UltraDepository.getInstance().debug("player " + player.getName() + " disabled collect, skipped.");
 			return items;
 		} else return items.stream().filter(item -> !collectItem(player, item)).collect(Collectors.toList());
 	}
 
 	public boolean collectItem(Player player, ItemStack item) {
 		String typeID = getItemTypeID(item);
-		Main.debug("Checking item " + typeID + " ...");
-		if (!Main.getUserManager().isCollectEnabled(player)) {
-			Main.debug("Player " + player.getName() + " disabled collect, skipped.");
+		UltraDepository.getInstance().debug("Checking item " + typeID + " ...");
+		if (!UltraDepository.getUserManager().isCollectEnabled(player)) {
+			UltraDepository.getInstance().debug("Player " + player.getName() + " disabled collect, skipped.");
 			return false;
 		}
 		ItemMeta meta = item.getItemMeta();
 		if (meta != null && (meta.hasLore() || meta.hasDisplayName() || meta.hasEnchants())) {
 			// 不收集有特殊属性的物品
-			Main.debug("Item has special meta, skipped.");
+			UltraDepository.getInstance().debug("Item has special meta, skipped.");
 			return false;
 		}
 		Set<Depository> usableDepositories = getPlayerUsableDepository(player, item);
 		if (usableDepositories.size() < 1) {
-			Main.debug("Item doesn't has any depository, skipped.");
+			UltraDepository.getInstance().debug("Item doesn't has any depository, skipped.");
 			return false;
 		}
+
 		Depository depository = usableDepositories.stream().findFirst().orElse(null);
-		String itemName = depository.getItems().get(typeID).getName();
-		UserData data = Main.getUserManager().getData(player);
+		DepositoryItem depositoryItem = depository.getItems().get(typeID);
 		int itemAmount = item.getAmount();
-		data.addItemAmount(depository.getIdentifier(), typeID, itemAmount);
-		PluginMessages.COLLECTED.send(player, new Object[]{itemName, itemAmount, depository.getName()});
+
+		DepositoryCollectItemEvent collectItemEvent = new DepositoryCollectItemEvent(player, depository, depositoryItem, itemAmount);
+		Bukkit.getPluginManager().callEvent(collectItemEvent);
+
+		if (collectItemEvent.isCancelled()) return false;
+		int finalAmount = collectItemEvent.getItemAmount();
+
+		collectItemEvent.getUserData().addItemAmount(depository.getIdentifier(), typeID, finalAmount);
+		PluginMessages.COLLECTED.send(player, new Object[]{
+				depository.getItems().get(typeID).getName(),
+				finalAmount, depository.getName()
+		});
 		PluginConfig.Sounds.COLLECT.play(player);
-		Main.debug("Item collected successfully.");
+		UltraDepository.getInstance().debug("Item collected successfully.");
 		return true;
 	}
 

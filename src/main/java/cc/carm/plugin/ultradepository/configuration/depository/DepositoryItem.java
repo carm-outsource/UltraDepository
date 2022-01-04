@@ -1,7 +1,7 @@
 package cc.carm.plugin.ultradepository.configuration.depository;
 
-import cc.carm.plugin.ultradepository.Main;
-import cc.carm.plugin.ultradepository.util.ItemStackFactory;
+import cc.carm.lib.easyplugin.utils.ItemStackFactory;
+import cc.carm.plugin.ultradepository.UltraDepository;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
@@ -45,7 +45,7 @@ public class DepositoryItem {
 	}
 
 	public @NotNull String getTypeID() {
-		return getMaterial().name() + ":" + getData();
+		return UltraDepository.getDepositoryManager().getItemTypeID(getMaterial(), getData());
 	}
 
 	public @NotNull Material getMaterial() {
@@ -123,8 +123,8 @@ public class DepositoryItem {
 			);
 
 		} catch (Exception ex) {
-			Main.error("没有与 " + typeID + " 匹配的物品！");
-			Main.error("No match material of " + typeID + " !");
+			UltraDepository.getInstance().error("没有与 " + typeID + " 匹配的物品！");
+			UltraDepository.getInstance().error("No match material of " + typeID + " !");
 			return null;
 		}
 	}

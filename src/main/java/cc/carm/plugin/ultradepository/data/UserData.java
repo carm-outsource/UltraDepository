@@ -1,6 +1,6 @@
 package cc.carm.plugin.ultradepository.data;
 
-import cc.carm.plugin.ultradepository.Main;
+import cc.carm.plugin.ultradepository.UltraDepository;
 import cc.carm.plugin.ultradepository.configuration.depository.Depository;
 import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
 import cc.carm.plugin.ultradepository.util.DateIntUtil;
@@ -42,7 +42,7 @@ public class UserData {
 	}
 
 	public @Nullable DepositoryData getDepositoryData(String depositoryID) {
-		Depository depository = Main.getDepositoryManager().getDepository(depositoryID);
+		Depository depository = UltraDepository.getDepositoryManager().getDepository(depositoryID);
 		if (depository == null) return null;
 		return getDepositoryData(depository);
 	}

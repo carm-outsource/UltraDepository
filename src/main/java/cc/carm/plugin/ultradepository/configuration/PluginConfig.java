@@ -1,11 +1,12 @@
 package cc.carm.plugin.ultradepository.configuration;
 
-import cc.carm.plugin.ultradepository.configuration.message.ConfigMessage;
-import cc.carm.plugin.ultradepository.configuration.message.ConfigMessageList;
-import cc.carm.plugin.ultradepository.configuration.values.ConfigSound;
-import cc.carm.plugin.ultradepository.configuration.values.ConfigStringCast;
-import cc.carm.plugin.ultradepository.configuration.values.ConfigValue;
+import cc.carm.lib.easyplugin.configuration.impl.ConfigSound;
+import cc.carm.lib.easyplugin.configuration.impl.ConfigStringCast;
+import cc.carm.lib.easyplugin.configuration.message.ConfigMessage;
+import cc.carm.lib.easyplugin.configuration.message.ConfigMessageList;
+import cc.carm.lib.easyplugin.configuration.values.ConfigValue;
 import cc.carm.plugin.ultradepository.manager.ConfigManager;
+import cc.carm.plugin.ultradepository.storage.StorageMethod;
 import org.bukkit.Material;
 
 public class PluginConfig {
@@ -18,9 +19,8 @@ public class PluginConfig {
 			"metrics", Boolean.class, true
 	);
 
-
-	public static final ConfigValue<String> STORAGE_METHOD = new ConfigValue<>(
-			"storage.method", String.class
+	public static final ConfigStringCast<StorageMethod> STORAGE_METHOD = new ConfigStringCast<>(
+			"storage.method", StorageMethod::read, StorageMethod.YAML
 	);
 
 	/**

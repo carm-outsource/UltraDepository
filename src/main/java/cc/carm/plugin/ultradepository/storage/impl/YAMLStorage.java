@@ -1,12 +1,13 @@
-package cc.carm.plugin.ultradepository.storage;
+package cc.carm.plugin.ultradepository.storage.impl;
 
-import cc.carm.plugin.ultradepository.Main;
+import cc.carm.lib.easyplugin.configuration.values.ConfigValue;
+import cc.carm.plugin.ultradepository.UltraDepository;
 import cc.carm.plugin.ultradepository.configuration.depository.Depository;
 import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
-import cc.carm.plugin.ultradepository.configuration.values.ConfigValue;
 import cc.carm.plugin.ultradepository.data.DepositoryData;
 import cc.carm.plugin.ultradepository.data.DepositoryItemData;
 import cc.carm.plugin.ultradepository.data.UserData;
+import cc.carm.plugin.ultradepository.storage.DataStorage;
 import cc.carm.plugin.ultradepository.util.DateIntUtil;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -28,7 +29,7 @@ public class YAMLStorage implements DataStorage {
 
 	@Override
 	public boolean initialize() {
-		dataContainer = new File(Main.getInstance().getDataFolder(), FILE_PATH.get());
+		dataContainer = new File(UltraDepository.getInstance().getDataFolder(), FILE_PATH.get());
 		if (!dataContainer.exists()) {
 			return dataContainer.mkdir();
 		} else {
@@ -39,6 +40,7 @@ public class YAMLStorage implements DataStorage {
 	@Override
 	public void shutdown() {
 		// 似乎没什么需要做的？
+		dataContainer = null;
 	}
 
 	public File getDataContainer() {
@@ -49,7 +51,7 @@ public class YAMLStorage implements DataStorage {
 	public @Nullable UserData loadData(@NotNull UUID uuid) {
 		File userDataFile = new File(getDataContainer(), uuid + ".yml");
 		if (!userDataFile.exists()) {
-			Main.debug("当前文件夾内不存在玩家 " + uuid + " 的数据，视作新档。");
+			UltraDepository.getInstance().debug("当前文件夾内不存在玩家 " + uuid + " 的数据，视作新档。");
 			return null;
 		}
 
@@ -61,7 +63,7 @@ public class YAMLStorage implements DataStorage {
 		if (depositoriesSection != null) {
 			for (String depositoryID : depositoriesSection.getKeys(false)) {
 
-				Depository depository = Main.getDepositoryManager().getDepository(depositoryID);
+				Depository depository = UltraDepository.getDepositoryManager().getDepository(depositoryID);
 				if (depository == null) continue;
 
 				ConfigurationSection depositorySection = depositoriesSection.getConfigurationSection(depositoryID);
@@ -70,7 +72,8 @@ public class YAMLStorage implements DataStorage {
 				DepositoryData depositoryData = DepositoryData.emptyContents(depository, userData);
 
 				for (String itemTypeID : depositorySection.getKeys(false)) {
-					DepositoryItem item = depository.getItems().get(itemTypeID);
+
+					DepositoryItem item = depository.getItems().get(getFixedTypeID(itemTypeID));
 					if (item == null) continue;
 
 					ConfigurationSection itemSection = depositorySection.getConfigurationSection(itemTypeID);

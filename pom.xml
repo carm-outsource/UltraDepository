@@ -9,6 +9,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <easyplugin.version>1.1.0</easyplugin.version>
     </properties>
 
     <groupId>cc.carm.plugin</groupId>
@@ -71,17 +72,6 @@
     <repositories>
 
         <repository>
-            <id>EasySQL</id>
-            <url>https://maven.pkg.github.com/CarmJos/EasySQL</url>
-        </repository>
-
-        <repository>
-            <id>github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/CarmJos/UltraDepository</url>
-        </repository>
-
-        <repository>
             <id>central</id>
             <url>https://repo1.maven.org/maven2/</url>
         </repository>
@@ -93,8 +83,9 @@
         </repository>
 
         <repository>
-            <id>nexus</id>
-            <url>https://mvn.lumine.io/repository/maven-public/</url>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/CarmJos/UltraDepository</url>
         </repository>
 
     </repositories>
@@ -110,8 +101,29 @@
 
         <dependency>
             <groupId>cc.carm.lib</groupId>
-            <artifactId>easysql-beecp</artifactId>
-            <version>0.2.3</version>
+            <artifactId>easyplugin-main</artifactId>
+            <version>${easyplugin.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.carm.lib</groupId>
+            <artifactId>easyplugin-configuration</artifactId>
+            <version>${easyplugin.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.carm.lib</groupId>
+            <artifactId>easyplugin-gui</artifactId>
+            <version>${easyplugin.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>cc.carm.lib</groupId>
+            <artifactId>easyplugin-database</artifactId>
+            <version>${easyplugin.version}</version>
             <scope>compile</scope>
         </dependency>
 
@@ -218,24 +230,19 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
-                        <configuration>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
-                        </configuration>
                     </execution>
                 </executions>
+
                 <configuration>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
                     <relocations>
                         <relocation>
                             <pattern>org.bstats</pattern>
                             <shadedPattern>cc.carm.plugin.ultradepository.lib.bstats</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>cc.carm.lib.easysql</pattern>
-                            <shadedPattern>cc.carm.plugin.ultradepository.lib.easysql</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>cn.beecp</pattern>
-                            <shadedPattern>cc.carm.plugin.ultradepository.lib.beecp</shadedPattern>
+                            <pattern>cc.carm.lib.easyplugin</pattern>
+                            <shadedPattern>cc.carm.plugin.ultradepository.lib.easyplugin</shadedPattern>
                         </relocation>
                     </relocations>
                     <filters>

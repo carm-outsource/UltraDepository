@@ -1,16 +1,16 @@
 package cc.carm.plugin.ultradepository.ui;
 
-import cc.carm.plugin.ultradepository.Main;
+import cc.carm.lib.easyplugin.gui.GUI;
+import cc.carm.lib.easyplugin.gui.GUIItem;
+import cc.carm.lib.easyplugin.gui.GUIType;
+import cc.carm.lib.easyplugin.utils.ItemStackFactory;
+import cc.carm.plugin.ultradepository.UltraDepository;
 import cc.carm.plugin.ultradepository.configuration.PluginConfig;
 import cc.carm.plugin.ultradepository.configuration.PluginMessages;
 import cc.carm.plugin.ultradepository.configuration.depository.Depository;
 import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
 import cc.carm.plugin.ultradepository.data.DepositoryItemData;
 import cc.carm.plugin.ultradepository.data.UserData;
-import cc.carm.plugin.ultradepository.util.ItemStackFactory;
-import cc.carm.plugin.ultradepository.util.gui.GUI;
-import cc.carm.plugin.ultradepository.util.gui.GUIItem;
-import cc.carm.plugin.ultradepository.util.gui.GUIType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -52,7 +52,7 @@ public class SellItemGUI extends GUI {
 		this.currentAmount = Math.max(1, amount); // 不可小于1
 		ItemStackFactory factory = new ItemStackFactory(this.itemDisplay);
 		List<String> additionalLore = PluginConfig.General.ADDITIONAL_LORE.get(player, new Object[]{
-				getItemName(), getRemainAmount(), getItemPrice(),
+				getItemName(), getReUltraDepositoryAmount(), getItemPrice(),
 				getSoldAmount(), (getSellLimit() - getSoldAmount()), getSellLimit()
 		});
 		additionalLore.forEach(factory::addLore);
@@ -123,8 +123,8 @@ public class SellItemGUI extends GUI {
 		return new GUIItem(factory.toItemStack()) {
 			@Override
 			public void onClick(ClickType type) {
-				int amount = Math.min(getCurrentAmount(), Math.min(getRemainAmount(), getSellLimit() - getSoldAmount()));
-				if (amount > 0) Main.getEconomyManager().sellItem(player, userData, itemData, amount);
+				int amount = Math.min(getCurrentAmount(), Math.min(getReUltraDepositoryAmount(), getSellLimit() - getSoldAmount()));
+				if (amount > 0) UltraDepository.getEconomyManager().sellItem(player, userData, item, amount);
 				player.closeInventory();
 			}
 		};
@@ -164,7 +164,7 @@ public class SellItemGUI extends GUI {
 		return getCurrentAmount() * getItemPrice();
 	}
 
-	private int getRemainAmount() {
+	private int getReUltraDepositoryAmount() {
 		return userData.getItemData(this.item).getAmount();
 	}
 
@@ -173,13 +173,13 @@ public class SellItemGUI extends GUI {
 	}
 
 	private int getAddableAmount() {
-		return Math.min(getRemainAmount(), getSellLimit() - getSoldAmount()) - getCurrentAmount();
+		return Math.min(getReUltraDepositoryAmount(), getSellLimit() - getSoldAmount()) - getCurrentAmount();
 	}
 
 	public static void open(Player player, UserData userData, DepositoryItemData itemData,
 							Depository configuration, DepositoryItem item) {
 		player.closeInventory();
-		if (!Main.getEconomyManager().isInitialized()) {
+		if (!UltraDepository.getEconomyManager().isInitialized()) {
 			PluginMessages.NO_ECONOMY.send(player);
 			return;
 		}
