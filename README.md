@@ -217,6 +217,10 @@
 
 您也可以 [点击这里](.examples/depositories/full-example.yml) 查看一份*详细的仓库配置示例*，以制作您自己的仓库。
 
+## 开发
+
+详细开发介绍请 [点击这里](.documentation/README.md) , JavaDoc(最新Release) 请 [点击这里](https://carmjos.github.io/UltraDepository) 。
+
 ## 使用统计
 
 [![bStats](https://bstats.org/signatures/bukkit/UltraDepository.svg)](https://bstats.org/plugin/bukkit/UltraDepository/13777)
