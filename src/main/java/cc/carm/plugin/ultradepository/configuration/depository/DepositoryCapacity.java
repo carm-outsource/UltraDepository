@@ -42,10 +42,21 @@ public class DepositoryCapacity {
 	}
 
 	public int getPlayerCapacity(Player player) {
-		return getPermissions().entrySet().stream()
-				.filter(entry -> player.hasPermission(entry.getKey()))
-				.mapToInt(Map.Entry::getValue)
-				.max().orElse(defaultCapacity);
+		if (defaultCapacity == -1) return -1;
+
+		int capacity = defaultCapacity;
+		for (Map.Entry<String, Integer> entry : getPermissions().entrySet()) {
+			if (player.hasPermission(entry.getKey())) {
+				int value = entry.getValue();
+				if (value == -1) {
+					return -1;
+				} else if (value > capacity) {
+					capacity = value;
+				}
+			}
+		}
+		
+		return capacity;
 	}
 
 }

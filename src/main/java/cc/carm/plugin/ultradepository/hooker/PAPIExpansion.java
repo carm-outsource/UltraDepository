@@ -19,7 +19,7 @@ public class PAPIExpansion extends PlaceholderExpansion {
 			"%UltraDepository_amount_<BackpackID>_<ItemTypeID>%",
 			"%UltraDepository_sold_<BackpackID>_<ItemTypeID>%",
 			"%UltraDepository_price_<BackpackID>_<ItemTypeID>%",
-			"%UltraDepository_reUltraDepository_<BackpackID>_<ItemTypeID>%",
+			"%UltraDepository_remain_<BackpackID>_<ItemTypeID>%",
 			"%UltraDepository_capacity_<BackpackID>%",
 			"%UltraDepository_used_<BackpackID>%",
 			"%UltraDepository_usable_<BackpackID>%"
@@ -80,7 +80,7 @@ public class PAPIExpansion extends PlaceholderExpansion {
 				if (sold == null) return "Depository or Item not exists";
 				else return sold.toString();
 			}
-			case "reUltraDepository": {
+			case "remain": {
 				if (args.length < 2) return "Error Params";
 				Depository depository = UltraDepository.getDepositoryManager().getDepository(args[1]);
 				if (depository == null) return "Depository not exists";
@@ -106,7 +106,8 @@ public class PAPIExpansion extends PlaceholderExpansion {
 				if (args.length < 2) return "Error Params";
 				Depository depository = UltraDepository.getDepositoryManager().getDepository(args[1]);
 				if (depository == null) return "Depository not exists";
-				return Integer.toString(depository.getCapacity().getPlayerCapacity(player));
+				int capacity = depository.getCapacity().getPlayerCapacity(player);
+				return capacity < 0 ? "∞" : Integer.toString(capacity);
 			}
 			case "used": {
 				if (args.length < 2) return "Error Params";
@@ -118,8 +119,9 @@ public class PAPIExpansion extends PlaceholderExpansion {
 				if (args.length < 2) return "Error Params";
 				Depository depository = UltraDepository.getDepositoryManager().getDepository(args[1]);
 				if (depository == null) return "Depository not exists";
+				int max = depository.getCapacity().getPlayerCapacity(player);
 				int used = data.getDepositoryData(depository).getUsedCapacity();
-				return Integer.toString(depository.getCapacity().getPlayerCapacity(player) - used);
+				return max < 0 ? "∞" : Integer.toString(max - used);
 			}
 			case "version": {
 				return getVersion();

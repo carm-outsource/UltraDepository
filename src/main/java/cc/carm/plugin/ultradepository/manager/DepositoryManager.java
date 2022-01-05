@@ -115,7 +115,7 @@ public class DepositoryManager {
 		return getItemDepositories(itemStack).stream().filter(configuration -> {
 			int used = UltraDepository.getUserManager().getData(player).getDepositoryData(configuration).getUsedCapacity();
 			int max = configuration.getCapacity().getPlayerCapacity(player);
-			return used + itemStack.getAmount() <= max;
+			return max < 0 || used + itemStack.getAmount() <= max;
 		}).collect(Collectors.toSet());
 	}
 
