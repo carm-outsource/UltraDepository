@@ -2,6 +2,7 @@ package cc.carm.plugin.ultradepository;
 
 import cc.carm.lib.easyplugin.EasyPlugin;
 import cc.carm.lib.easyplugin.gui.GUI;
+import cc.carm.lib.easyplugin.i18n.EasyPluginMessageProvider;
 import cc.carm.lib.easyplugin.utils.MessageUtils;
 import cc.carm.plugin.ultradepository.command.DepositoryCommand;
 import cc.carm.plugin.ultradepository.configuration.PluginConfig;
@@ -30,6 +31,9 @@ public class UltraDepository extends EasyPlugin {
 	private static EconomyManager economyManager;
 	private static DepositoryManager depositoryManager;
 
+	public UltraDepository() {
+		super(new EasyPluginMessageProvider.zh_CN());
+	}
 
 	@Override
 	public void load() {
@@ -153,6 +157,7 @@ public class UltraDepository extends EasyPlugin {
 		log("&6 \\____/|_|\\__|_|  \\__,_|&e|_____/ \\___| .__/ \\___/|___/_|\\__\\___/|_|   \\__, |");
 		log("&6                                    &e| |                               __/ |");
 		log("&6                                    &e|_|                              |___/ ");
-		log(" &fView more information at&6 https://github.com/CarmJos/UltraDepository");
+		log("&f访问项目主页查看详细插件介绍 &8| &F View GitHub to get more information");
+		log("&6https://github.com/CarmJos/UltraDepository");
 	}
 }
