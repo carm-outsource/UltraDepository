@@ -12,6 +12,9 @@ import cc.carm.plugin.ultradepository.hooker.VaultHooker;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class EconomyManager {
 
 	VaultHooker hooker;
@@ -35,9 +38,9 @@ public class EconomyManager {
 
 	public double sell(Player player, double price, int amount) {
 		if (!isInitialized()) return 0D;
-		double money = price * amount;
-		getHooker().addMoney(player, money);
-		return money;
+		BigDecimal money = BigDecimal.valueOf(price * amount).setScale(2, RoundingMode.DOWN);
+		getHooker().addMoney(player, money.doubleValue());
+		return money.doubleValue();
 	}
 
 	public void sellAllItem(Player player, UserData userData) {
