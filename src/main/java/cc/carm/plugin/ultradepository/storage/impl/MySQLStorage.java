@@ -7,7 +7,6 @@ import cc.carm.lib.easyplugin.database.api.SQLManager;
 import cc.carm.lib.easyplugin.database.api.action.query.PreparedQueryAction;
 import cc.carm.lib.easyplugin.database.api.action.query.SQLQuery;
 import cc.carm.plugin.ultradepository.UltraDepository;
-import cc.carm.plugin.ultradepository.configuration.PluginConfig;
 import cc.carm.plugin.ultradepository.configuration.depository.Depository;
 import cc.carm.plugin.ultradepository.data.DepositoryData;
 import cc.carm.plugin.ultradepository.data.UserData;
@@ -62,7 +61,7 @@ public class MySQLStorage extends JSONStorage {
 		try {
 			UltraDepository.getInstance().log("	尝试连接到数据库...");
 			this.sqlManager = EasySQL.createManager(DRIVER_NAME.get(), URL.get(), USERNAME.get(), PASSWORD.get());
-			this.sqlManager.setDebugMode(PluginConfig.DEBUG.get());
+			this.sqlManager.setDebugMode(UltraDepository.getInstance().isDebugging());
 		} catch (Exception exception) {
 			UltraDepository.getInstance().error("无法连接到数据库，请检查配置文件。");
 			UltraDepository.getInstance().error("Could not connect to the database, please check the configuration.");

@@ -148,6 +148,11 @@ public class UltraDepository extends EasyPlugin {
 	}
 
 	@Override
+	public boolean isDebugging() {
+		return PluginConfig.DEBUG.get();
+	}
+
+	@Override
 	public void outputInfo() {
 		log(" ",
 				"&6 _    _ _ _            &e  _____                       _ _                   ",
