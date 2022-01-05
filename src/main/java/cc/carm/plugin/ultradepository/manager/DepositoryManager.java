@@ -165,11 +165,13 @@ public class DepositoryManager {
 		int finalAmount = collectItemEvent.getItemAmount();
 
 		collectItemEvent.getUserData().addItemAmount(depository.getIdentifier(), typeID, finalAmount);
-		PluginMessages.COLLECTED.send(player, new Object[]{
-				depository.getItems().get(typeID).getName(),
-				finalAmount, depository.getName()
-		});
-		PluginConfig.Sounds.COLLECT.play(player);
+		if (!player.hasPermission("UltraDepository.silent")) {
+			PluginMessages.COLLECTED.send(player, new Object[]{
+					depository.getItems().get(typeID).getName(),
+					finalAmount, depository.getName()
+			});
+			PluginConfig.Sounds.COLLECT.play(player);
+		}
 		UltraDepository.getInstance().debug("Item collected successfully.");
 		return true;
 	}

@@ -176,6 +176,9 @@
 # UltraDepository.use
 - 超级仓库的基本使用权限 (默认所有人都有)
 
+# UltraDepository.silent
+- 拥有该权限将不再接收到放入背包的提示。
+
 # UltraDepository.Command.Sell
 - 玩家使用Sell指令的权限
 
