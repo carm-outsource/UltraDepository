@@ -101,7 +101,7 @@ public class UltraDepository extends EasyPlugin {
 					"active_depositories",
 					() -> getDepositoryManager().getDepositories().size())
 			);
-			metrics.addCustomChart(new SimplePie("storage_method", () -> getStorage().getClass().getSimpleName()));
+			metrics.addCustomChart(new SimplePie("storage_method", storageMethod::name));
 			metrics.addCustomChart(new SimplePie("economy_enabled", () -> economyManager.isInitialized() ? "YES" : "NO"));
 			metrics.addCustomChart(new SimplePie("papi_version", () -> {
 				Plugin plugin = Bukkit.getPluginManager().getPlugin("PlaceholderAPI");
