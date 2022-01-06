@@ -42,12 +42,12 @@ public class DepositoryGUI extends GUI {
 
 	private GUIItem createGUIItem(DepositoryItem item) {
 		DepositoryItemData itemData = userData.getItemData(item);
-		int remain = item.getLimit() - itemData.getSold();
+		int canSell = item.getLimit() - itemData.getSold();
 
 		ItemStackFactory factory = new ItemStackFactory(item.getDisplayItem());
 		List<String> additionalLore = PluginConfig.General.ADDITIONAL_LORE.get(player, new Object[]{
 				item.getName(), itemData.getAmount(), item.getPrice(),
-				itemData.getSold(), remain, item.getLimit()
+				itemData.getSold(), canSell, item.getLimit()
 		});
 
 		additionalLore.forEach(factory::addLore);
@@ -65,10 +65,12 @@ public class DepositoryGUI extends GUI {
 				}
 
 				if (type == ClickType.LEFT) {
-					if (remain >= 1) {
+					if (canSell >= 1) {
 						SellItemGUI.open(player, userData, itemData, depository, item);
 					} else {
-						PluginMessages.ITEM_SOLD_LIMIT.send(player, new Object[]{remain, item.getLimit()});
+						PluginConfig.Sounds.SELL_FAIL.play(player);
+						PluginMessages.ITEM_SOLD_LIMIT.send(player, new Object[]{canSell, item.getLimit()});
+						player.closeInventory();
 					}
 				} else if (type == ClickType.RIGHT) {
 

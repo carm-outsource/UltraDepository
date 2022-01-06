@@ -9,13 +9,13 @@
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
-        <easyplugin.version>1.1.0</easyplugin.version>
+        <easyplugin.version>1.1.2</easyplugin.version>
     </properties>
 
     <groupId>cc.carm.plugin</groupId>
     <artifactId>ultradepository</artifactId>
     <packaging>jar</packaging>
-    <version>1.1.8</version>
+    <version>1.2.0</version>
 
     <name>UltraDepository</name>
     <description>超级仓库插件，支持设定不同物品的存储仓库。</description>
@@ -261,9 +261,6 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
-                <includes>
-                    <include>LICENSE</include>
-                </includes>
             </resource>
         </resources>
     </build>

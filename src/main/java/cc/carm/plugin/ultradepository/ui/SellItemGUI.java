@@ -11,6 +11,7 @@ import cc.carm.plugin.ultradepository.configuration.depository.Depository;
 import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
 import cc.carm.plugin.ultradepository.data.DepositoryItemData;
 import cc.carm.plugin.ultradepository.data.UserData;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -73,7 +74,7 @@ public class SellItemGUI extends GUI {
 	}
 
 	private GUIItem getAddItem(int amount) {
-		ItemStackFactory factory = new ItemStackFactory(Add.TYPE.get());
+		ItemStackFactory factory = new ItemStackFactory(Add.TYPE.getOptional().orElse(Material.STONE));
 		factory.setDurability(Add.DATA.get());
 		factory.setDisplayName(Add.NAME.get(player, new Object[]{
 				getItemName(), amount
@@ -93,7 +94,7 @@ public class SellItemGUI extends GUI {
 	}
 
 	private GUIItem getRemoveItem(int amount) {
-		ItemStackFactory factory = new ItemStackFactory(Remove.TYPE.get());
+		ItemStackFactory factory = new ItemStackFactory(Remove.TYPE.getOptional().orElse(Material.STONE));
 		factory.setDurability(Remove.DATA.get());
 		factory.setDisplayName(Remove.NAME.get(player, new Object[]{
 				getItemName(), amount
@@ -112,7 +113,7 @@ public class SellItemGUI extends GUI {
 	}
 
 	private GUIItem getConfirmItem() {
-		ItemStackFactory factory = new ItemStackFactory(Confirm.TYPE.get());
+		ItemStackFactory factory = new ItemStackFactory(Confirm.TYPE.getOptional().orElse(Material.STONE));
 		factory.setDurability(Confirm.DATA.get());
 		factory.setDisplayName(Confirm.NAME.get(player, new Object[]{
 				getItemName(), getCurrentAmount(), getTotalMoney()
@@ -131,7 +132,7 @@ public class SellItemGUI extends GUI {
 	}
 
 	private GUIItem getCancelItem() {
-		ItemStackFactory factory = new ItemStackFactory(Cancel.TYPE.get());
+		ItemStackFactory factory = new ItemStackFactory(Cancel.TYPE.getOptional().orElse(Material.STONE));
 		factory.setDurability(Cancel.DATA.get());
 		factory.setDisplayName(Cancel.NAME.get());
 		factory.setLore(Cancel.LORE.get());

@@ -32,6 +32,7 @@ permissions:
 
   "UltraDepository.silent":
     description: "超级仓库的安静模式权限，拥有该权限将不再接收到放入背包的提示。"
+    default: false
 
   "UltraDepository.auto":
     description: "超级仓库的自动收集权限"

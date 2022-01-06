@@ -36,7 +36,7 @@ public class UltraDepository extends EasyPlugin {
 	}
 
 	@Override
-	public void load() {
+	protected void load() {
 		instance = this;
 
 		log("加载配置文件...");
@@ -46,7 +46,7 @@ public class UltraDepository extends EasyPlugin {
 	}
 
 	@Override
-	public boolean initialize() {
+	protected boolean initialize() {
 
 		log("初始化存储方式...");
 		StorageMethod storageMethod = PluginConfig.STORAGE_METHOD.get();
@@ -113,7 +113,7 @@ public class UltraDepository extends EasyPlugin {
 	}
 
 	@Override
-	public void shutdown() {
+	protected void shutdown() {
 		if (!isInitialized()) return;
 
 		log("保存现有用户数据...");

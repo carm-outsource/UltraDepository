@@ -1,13 +1,14 @@
 package cc.carm.plugin.ultradepository.configuration;
 
+import cc.carm.lib.easyplugin.configuration.cast.ConfigStringCast;
 import cc.carm.lib.easyplugin.configuration.impl.ConfigSound;
-import cc.carm.lib.easyplugin.configuration.impl.ConfigStringCast;
 import cc.carm.lib.easyplugin.configuration.message.ConfigMessage;
 import cc.carm.lib.easyplugin.configuration.message.ConfigMessageList;
 import cc.carm.lib.easyplugin.configuration.values.ConfigValue;
 import cc.carm.plugin.ultradepository.manager.ConfigManager;
 import cc.carm.plugin.ultradepository.storage.StorageMethod;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 
 public class PluginConfig {
 
@@ -44,7 +45,7 @@ public class PluginConfig {
 
 	public static class Sounds {
 
-		public static final ConfigSound COLLECT = new ConfigSound("sounds.collect");
+		public static final ConfigSound COLLECT = new ConfigSound("sounds.collect", Sound.ENTITY_VILLAGER_CELEBRATE);
 		public static final ConfigSound SELL_SUCCESS = new ConfigSound("sounds.sell-success");
 		public static final ConfigSound SELL_FAIL = new ConfigSound("sounds.sell-fail");
 		public static final ConfigSound GUI_CLICK = new ConfigSound("sounds.gui-click");
