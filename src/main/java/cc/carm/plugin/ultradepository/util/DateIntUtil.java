@@ -22,10 +22,14 @@ public class DateIntUtil {
 	}
 
 	public static long getDateMillis(int dateInt) {
+		return getDate(dateInt).getTime();
+	}
+
+	public static Date getDate(int dateInt) {
 		try {
-			return getFormat().parse(Integer.toString(dateInt)).getTime();
-		} catch (ParseException e) {
-			return System.currentTimeMillis();
+			return (Date) getFormat().parse(Integer.toString(dateInt));
+		} catch (ParseException | NumberFormatException e) {
+			return new Date(System.currentTimeMillis());
 		}
 	}
 

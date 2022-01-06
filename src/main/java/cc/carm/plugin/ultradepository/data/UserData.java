@@ -117,7 +117,7 @@ public class UserData {
 
 
 	public Date getDate() {
-		return new Date(DateIntUtil.getDateMillis(getDateInt()));
+		return DateIntUtil.getDate(getDateInt());
 	}
 
 	public int getDateInt() {
