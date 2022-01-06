@@ -9,12 +9,17 @@ public class ConfigManager {
 	private static FileConfig pluginConfiguration;
 	private static FileConfig messageConfiguration;
 
-	public static void initConfig() {
-		pluginConfiguration = new FileConfig(UltraDepository.getInstance(), "config.yml");
-		messageConfiguration = new FileConfig(UltraDepository.getInstance(), "messages.yml");
+	public static boolean initialize() {
+		try {
+			pluginConfiguration = new FileConfig(UltraDepository.getInstance(), "config.yml");
+			messageConfiguration = new FileConfig(UltraDepository.getInstance(), "messages.yml");
 
-		FileConfig.pluginConfiguration = () -> pluginConfiguration;
-		FileConfig.messageConfiguration = () -> messageConfiguration;
+			FileConfig.pluginConfiguration = () -> pluginConfiguration;
+			FileConfig.messageConfiguration = () -> messageConfiguration;
+			return true;
+		} catch (Exception ex) {
+			return false;
+		}
 	}
 
 	public static FileConfig getPluginConfig() {
@@ -26,13 +31,21 @@ public class ConfigManager {
 	}
 
 	public static void reload() {
-		getPluginConfig().reload();
-		getMessageConfig().reload();
+		try {
+			getPluginConfig().reload();
+			getMessageConfig().reload();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	public static void saveConfig() {
-		getPluginConfig().save();
-		getMessageConfig().save();
+		try {
+			getPluginConfig().save();
+			getMessageConfig().save();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 }

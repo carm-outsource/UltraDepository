@@ -38,28 +38,25 @@ public class UltraDepository extends EasyPlugin {
 	@Override
 	protected void load() {
 		instance = this;
-
-		log("加载配置文件...");
-		ConfigManager.initConfig();
-
-		GUI.initialize(this);
 	}
 
 	@Override
 	protected boolean initialize() {
 
-		log("初始化存储方式...");
-		StorageMethod storageMethod = PluginConfig.STORAGE_METHOD.get();
-		if (storageMethod == null) {
-			log("初始化存储方式失败，放弃加载");
+		log("加载配置文件...");
+		if (!ConfigManager.initialize()) {
+			log("初始化配置文件失败，放弃加载。");
 			return false;
 		}
 
-		storage = storageMethod.createStorage();
+		log("初始化存储方式...");
+		StorageMethod storageMethod = PluginConfig.STORAGE_METHOD.getOptional().orElse(StorageMethod.YAML);
 		log("	正在使用 " + storageMethod.name() + " 进行数据存储");
 
+		storage = storageMethod.createStorage();
 		if (!storage.initialize()) {
-			error("存储初始化失败，请检查配置文件。");
+			error("初始化存储失败，请检查配置文件。");
+			storage.shutdown();
 			return false;
 		}
 
@@ -79,6 +76,7 @@ public class UltraDepository extends EasyPlugin {
 		log("加载仓库管理器...");
 		depositoryManager = new DepositoryManager();
 		getDepositoryManager().loadDepositories();
+		GUI.initialize(this);
 
 		log("注册监听器...");
 		regListener(new UserListener());
