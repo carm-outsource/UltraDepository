@@ -27,7 +27,8 @@ public class DateIntUtil {
 
 	public static Date getDate(int dateInt) {
 		try {
-			return (Date) getFormat().parse(Integer.toString(dateInt));
+			long millis = getFormat().parse(Integer.toString(dateInt)).getTime();
+			return new java.sql.Date(millis);
 		} catch (ParseException | NumberFormatException e) {
 			return new Date(System.currentTimeMillis());
 		}

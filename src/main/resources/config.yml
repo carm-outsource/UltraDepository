@@ -29,6 +29,7 @@ storage:
     # 数据库驱动路径
     driver: "com.mysql.jdbc.Driver"
     url: "jdbc:mysql://127.0.0.1:3306/<db-name>"
+    table: "ud_data" # 插件表名，允许自定义
     username: "username"
     password: "password"
 

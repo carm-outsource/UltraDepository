@@ -73,7 +73,7 @@ public class YAMLStorage implements DataStorage {
 
 				for (String itemTypeID : depositorySection.getKeys(false)) {
 
-					DepositoryItem item = depository.getItems().get(getFixedTypeID(itemTypeID));
+					DepositoryItem item = depository.getItems().get(DataStorage.getFixedTypeID(itemTypeID));
 					if (item == null) continue;
 
 					ConfigurationSection itemSection = depositorySection.getConfigurationSection(itemTypeID);

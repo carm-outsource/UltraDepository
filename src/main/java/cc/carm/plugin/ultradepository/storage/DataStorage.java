@@ -27,7 +27,7 @@ public interface DataStorage {
 	 * @return 正确ID数据
 	 * @since v1.1.6
 	 */
-	default String getFixedTypeID(String typeID) {
+	static String getFixedTypeID(String typeID) {
 		String trueID = typeID;
 		if (typeID.contains(":")) {
 			try {

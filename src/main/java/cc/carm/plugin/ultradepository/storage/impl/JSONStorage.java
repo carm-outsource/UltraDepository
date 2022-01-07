@@ -30,8 +30,8 @@ public class JSONStorage implements DataStorage {
 
 	private File dataContainer;
 
-	public static final Gson GSON = new Gson();
-	public static final JsonParser PARSER = new JsonParser();
+	protected static final Gson GSON = new Gson();
+	protected static final JsonParser PARSER = new JsonParser();
 
 	@Override
 	public boolean initialize() {
@@ -66,18 +66,9 @@ public class JSONStorage implements DataStorage {
 		JsonObject dataObject = dataElement.getAsJsonObject();
 
 		int dateInt = dataObject.get("date").getAsInt();
-		JsonObject repositoriesObject = dataObject.getAsJsonObject("depositories");
-
 		UserData userData = new UserData(uuid, new HashMap<>(), dateInt);
 
-		for (Map.Entry<String, JsonElement> entry : repositoriesObject.entrySet()) {
-			Depository depository = UltraDepository.getDepositoryManager().getDepository(entry.getKey());
-			if (depository == null) continue;
-
-			DepositoryData contentsData = parseContentsData(depository, userData, entry.getValue());
-			if (contentsData != null) userData.setDepository(contentsData);
-
-		}
+		loadDepositoriesInto(userData, dataObject.getAsJsonObject("depositories"));
 
 		return userData;
 	}
@@ -86,7 +77,7 @@ public class JSONStorage implements DataStorage {
 	public void saveUserData(@NotNull UserData data) throws Exception {
 		JsonObject dataObject = new JsonObject();
 		dataObject.addProperty("date", data.getDateInt());
-		dataObject.add("depositories", GSON.toJsonTree(data.serializeToMap()));
+		dataObject.add("depositories", saveDepositoriesToJson(data));
 
 		FileWriter writer = new FileWriter(new File(getDataContainer(), data.getUserUUID() + ".json"));
 		writer.write(GSON.toJson(dataObject));
@@ -94,18 +85,36 @@ public class JSONStorage implements DataStorage {
 		writer.close();
 	}
 
-	protected DepositoryData parseContentsData(@NotNull Depository source,
-											   @NotNull UserData owner,
-											   @NotNull JsonElement contentsElement) {
-		return contentsElement.isJsonObject() ? parseContentsData(source, owner, contentsElement.getAsJsonObject()) : null;
+	public static JsonElement saveDepositoriesToJson(UserData data) {
+		return GSON.toJsonTree(data.serializeToMap());
 	}
 
-	protected DepositoryData parseContentsData(@NotNull Depository source,
-											   @NotNull UserData owner,
-											   @NotNull JsonObject contentsObject) {
+	public static String serializeDepositories(UserData data) {
+		return GSON.toJson(saveDepositoriesToJson(data));
+	}
+
+	public static void loadDepositoriesInto(UserData data, JsonElement depositoriesElement) {
+		if (depositoriesElement == null || !depositoriesElement.isJsonObject()) return;
+
+		for (Map.Entry<String, JsonElement> entry : depositoriesElement.getAsJsonObject().entrySet()) {
+			Depository depository = UltraDepository.getDepositoryManager().getDepository(entry.getKey());
+			if (depository == null) continue;
+
+			DepositoryData contentsData = parseContentsData(depository, data, entry.getValue());
+			if (contentsData != null) data.setDepository(contentsData);
+
+		}
+	}
+
+	public static DepositoryData parseContentsData(@NotNull Depository source,
+												   @NotNull UserData owner,
+												   @NotNull JsonElement contentsElement) {
+		if (!contentsElement.isJsonObject()) return null;
+		JsonObject contentsObject = contentsElement.getAsJsonObject();
+
 		DepositoryData data = DepositoryData.emptyContents(source, owner);
 		for (Map.Entry<String, JsonElement> entry : contentsObject.entrySet()) {
-			DepositoryItem item = source.getItems().get(getFixedTypeID(entry.getKey()));
+			DepositoryItem item = source.getItems().get(DataStorage.getFixedTypeID(entry.getKey()));
 			if (item == null) continue;
 
 			DepositoryItemData itemData = parseItemData(item, data, entry.getValue());
@@ -115,15 +124,13 @@ public class JSONStorage implements DataStorage {
 		return data;
 	}
 
-	protected DepositoryItemData parseItemData(@NotNull DepositoryItem source,
-											   @NotNull DepositoryData owner,
-											   @NotNull JsonElement itemElement) {
-		return itemElement.isJsonObject() ? parseItemData(source, owner, itemElement.getAsJsonObject()) : null;
-	}
 
-	protected DepositoryItemData parseItemData(@NotNull DepositoryItem source,
-											   @NotNull DepositoryData owner,
-											   @NotNull JsonObject itemObject) {
+	public static DepositoryItemData parseItemData(@NotNull DepositoryItem source,
+												   @NotNull DepositoryData owner,
+												   @NotNull JsonElement itemElement) {
+		if (!itemElement.isJsonObject()) return null;
+		JsonObject itemObject = itemElement.getAsJsonObject();
+
 		int amount = itemObject.has("amount") ? itemObject.get("amount").getAsInt() : 0;
 		int sold = itemObject.has("sold") ? itemObject.get("sold").getAsInt() : 0;
 		if (amount == 0 && sold == 0) return null;
