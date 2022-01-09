@@ -207,9 +207,9 @@
 
 详见源文件。
 
-### 消息配置文件 ([messages.yml](src/main/resources/messages.yml))
+### 消息配置文件 ([messages.yml](src/main/java/cc/carm/plugin/ultradepository/configuration/PluginMessages.java))
 
-详见源文件。
+详见代码文件中默认值，相关文件将在首次运行时创建。
 
 ### 仓库配置文件 ([depositories/<仓库ID>.yml](.examples/depositories/full-example.yml))
 

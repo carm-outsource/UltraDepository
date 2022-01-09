@@ -89,7 +89,7 @@ public class EconomyManager {
 				player, depositoryItem, changes[0] + amount, changes[0], money
 		));
 
-		PluginMessages.SOLD.send(player, new Object[]{depositoryItem.getName(), amount, money});
+		PluginMessages.ITEM_SOLD.send(player, new Object[]{depositoryItem.getName(), amount, money});
 		if (playSound) PluginConfig.Sounds.SELL_SUCCESS.play(player);
 	}
 

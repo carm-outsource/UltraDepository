@@ -78,7 +78,7 @@ public class DepositoryGUI extends GUI {
 						int pickupAmount = Math.min(itemData.getAmount(), item.getMaterial().getMaxStackSize());
 						userData.removeItemAmount(item.getDepository().getIdentifier(), item.getTypeID(), pickupAmount);
 						player.getInventory().addItem(item.getRawItem(pickupAmount));
-						PluginMessages.PICKUP.send(player, new Object[]{
+						PluginMessages.ITEM_PICKUP.send(player, new Object[]{
 								item.getName(), pickupAmount
 						});
 						setupItems(); //刷新GUI

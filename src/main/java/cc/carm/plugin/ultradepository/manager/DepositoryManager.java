@@ -166,7 +166,7 @@ public class DepositoryManager {
 
 		collectItemEvent.getUserData().addItemAmount(depository.getIdentifier(), typeID, finalAmount);
 		if (!player.hasPermission("UltraDepository.silent")) {
-			PluginMessages.COLLECTED.send(player, new Object[]{
+			PluginMessages.ITEM_COLLECT.send(player, new Object[]{
 					depository.getItems().get(typeID).getName(),
 					finalAmount, depository.getName()
 			});
