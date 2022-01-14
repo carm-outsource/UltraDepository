@@ -47,6 +47,7 @@ public class PluginConfig {
 	public static class Sounds {
 
 		public static final ConfigSound COLLECT = new ConfigSound("sounds.collect", Sound.ENTITY_VILLAGER_CELEBRATE);
+		public static final ConfigSound TAKEOUT = new ConfigSound("sounds.collect");
 		public static final ConfigSound SELL_SUCCESS = new ConfigSound("sounds.sell-success");
 		public static final ConfigSound SELL_FAIL = new ConfigSound("sounds.sell-fail");
 		public static final ConfigSound GUI_CLICK = new ConfigSound("sounds.gui-click");
@@ -56,20 +57,49 @@ public class PluginConfig {
 	 * 通用配置
 	 */
 	public static class General {
+
 		/**
 		 * 针对每一件物品的额外介绍
 		 * 将添加到背包界面内的物品上，避免重复配置
 		 */
-		public static final ConfigMessageList ADDITIONAL_LORE = new ConfigMessageList(
-				ConfigManager::getPluginConfig, "general.additional-lore", new String[]{},
-				new String[]{
-						"%(item_name)", "%(amount)", "%(price)", "%(sold)", "%(remain)", "%(limit)"
-				});
+		public static class AdditionalLore {
+
+			public static final ConfigMessageList AVAILABLE_FOR_SALE = new ConfigMessageList(
+					ConfigManager::getPluginConfig, "general.additional-lore.available-for-sale",
+					new String[]{},
+					new String[]{
+							"%(item_name)", "%(amount)", "%(price)", "%(sold)", "%(remain)", "%(limit)"
+					});
+
+			public static final ConfigMessageList NOT_FOR_SALE = new ConfigMessageList(
+					ConfigManager::getPluginConfig, "general.additional-lore.not-for-sale",
+					new String[]{}, new String[]{
+					"%(item_name)", "%(amount)"
+			});
+
+		}
 
 		/**
 		 * 提示玩家点击行为的介绍
 		 * 将添加到背包界面内的物品上，避免重复配置
 		 */
+		public static class ClickLore {
+			public static final ConfigMessageList AVAILABLE_FOR_SALE = new ConfigMessageList(
+					ConfigManager::getPluginConfig,
+					"general.click-lore.available-for-sale",
+					new String[]{}, new String[]{
+					"%(item_name)", "%(amount)", "%(price)"
+			});
+
+			public static final ConfigMessageList NOT_FOR_SALE = new ConfigMessageList(
+					ConfigManager::getPluginConfig, "general.click-lore.not-for-sale",
+					new String[]{},
+					new String[]{
+							"%(item_name)", "%(amount)"
+					});
+		}
+
+
 		public static final ConfigMessageList CLICK_LORE = new ConfigMessageList(
 				ConfigManager::getPluginConfig,
 				"general.click-lore",

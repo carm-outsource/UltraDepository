@@ -20,7 +20,7 @@ storage:
 
   # 选择 yaml/json 存储方式时的存储路径
   # 默认为相对路径，相对于插件生成的配置文件夹下的路径
-  # 支持绝对路径，如 “/var/data/ub/"(linux) 或 "D:\data\ub\"(windows)
+  # 支持绝对路径，如 “/var/data/ud/"(linux) 或 "D:\data\ud\"(windows)
   # 使用绝对路径时请注意权限问题
   file-path: data
 
@@ -44,6 +44,7 @@ collect:
 
 sounds:
   collect: "ENTITY_EXPERIENCE_ORB_PICKUP:0.5"
+  takeout: "ENTITY_HORSE_ARMOR:0.5"
   sell-success: "ENTITY_VILLAGER_CELEBRATE"
   sell-fail: "ENTITY_VILLAGER_NO"
   gui-click: "UI_BUTTON_CLICK"
@@ -51,20 +52,34 @@ sounds:
 # 通用配置
 general:
 
-  # 针对每一件物品的额外介绍
+  # 针对可出售物品的额外介绍
   # 将添加到背包界面内的物品上，避免重复配置
   additional-lore:
-    - " "
-    - "&f仓库内数量 &a%(amount)"
-    - "&f该物品单价 &a%(price)"
-    - "&f今日可出售 &a%(remain)&8/%(limit)"
+    available-for-sale:
+      # 可出售物品的介绍
+      - " "
+      - "&f仓库内数量 &a%(amount)"
+      - "&f该物品单价 &a%(price)"
+      - "&f今日可出售 &a%(remain)&8/%(limit)"
+    not-for-sale:
+      # 针对不可出售的物品的额外介绍
+      # (当 未安装经济插件 或 每日可售出数量<=0 或 单价<=0 时判断为不可出售)
+      - " "
+      - "&f仓库内数量 &a%(amount)"
+
 
   # 提示玩家点击行为的介绍
   # 将添加到背包界面内的物品上，避免重复配置
   click-lore:
-    - " "
-    - "&a&l左键点击 &8| &f按量售出该物品"
-    - "&a&l右键点击 &8| &f取出一组该物品"
+    available-for-sale:
+      - " "
+      - "&a&l左键点击 &8| &f按量售出该物品"
+      - "&a&l右键点击 &8| &f取出一组该物品"
+    not-for-sale:
+      # 针对不可出售的物品的额外介绍
+      # (当 未安装经济插件 或 每日可售出数量<=0 或 单价<=0 时判断为不可出售)
+      - " "
+      - "&a&l右键点击 &8| &f取出一组该物品"
 
   # 售出界面的配置
   sell-gui:

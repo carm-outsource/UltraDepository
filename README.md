@@ -25,6 +25,7 @@
 本插件由 [墨豆Mordo](https://www.mordo.cn)、[子墨Zimrs](https://www.zimrs.cn) 资助本人开发，经过授权后开源。
 
 > 本插件已发布于 [MCBBS](https://www.mcbbs.net/forum.php?mod=viewthread&tid=1292631) 和 [SpigotMC]() 。
+
 ## 功能介绍
 
 本插件允许配置多个不同功能的仓库，玩家通过 击杀生物/挖掘方块/捡起收集 获得的原版物品可以自动被放入仓库中。
@@ -173,12 +174,8 @@
 <summary>展开查看所有权限</summary>
 
 ```text
-
 # UltraDepository.use
 - 超级仓库的基本使用权限 (默认所有人都有)
-
-# UltraDepository.silent
-- 拥有该权限将不再接收到放入背包的提示。
 
 # UltraDepository.Command.Sell
 - 玩家使用Sell指令的权限
@@ -195,9 +192,12 @@
 - 若玩家缺失该权限或“UltraDepository.auto”权限，则自动收集物品功能不会启用。
 - 您可以自己使用GUI创建一个按钮，后通过给玩家添加/删除该权限决定玩家是否开启自动收集。
 
+# UltraDepository.silent
+- 拥有该权限将不再接收到放入背包的提示。
+- 您可以自己使用GUI创建一个按钮，后通过给玩家添加/删除该权限决定玩家是否开启收集提示。
+
 # UltraDepository.admin
 - "超级仓库的管理权限"
-
 ```
 
 </details>

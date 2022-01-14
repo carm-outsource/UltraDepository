@@ -13,8 +13,10 @@ import cc.carm.plugin.ultradepository.data.UserData;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -24,7 +26,7 @@ public class DepositoryGUI extends GUI {
 	UserData userData;
 	Depository depository;
 
-	public DepositoryGUI(Player player, Depository depository) {
+	private DepositoryGUI(Player player, Depository depository) {
 		super(depository.getGUIConfiguration().getGUIType(), depository.getGUIConfiguration().getTitle());
 
 		this.player = player;
@@ -35,53 +37,53 @@ public class DepositoryGUI extends GUI {
 	}
 
 	public void setupItems() {
+		loadConfigItems();
+		loadDepositoryItems();
+	}
+
+	public void loadConfigItems() {
 		depository.getGUIConfiguration().setupItems(player, this);
+	}
+
+	public void loadDepositoryItems() {
 		depository.getItems().values().forEach(depositoryItem -> setItem(depositoryItem.getSlot(), createGUIItem(depositoryItem)));
 	}
 
-
 	private GUIItem createGUIItem(DepositoryItem item) {
-		DepositoryItemData itemData = userData.getItemData(item);
-		int canSell = item.getLimit() - itemData.getSold();
-
-		ItemStackFactory factory = new ItemStackFactory(item.getDisplayItem());
-		List<String> additionalLore = PluginConfig.General.ADDITIONAL_LORE.get(player, new Object[]{
-				item.getName(), itemData.getAmount(), item.getPrice(),
-				itemData.getSold(), canSell, item.getLimit()
-		});
-
-		additionalLore.forEach(factory::addLore);
-		List<String> clickLore = PluginConfig.General.CLICK_LORE.get(player, new Object[]{
-				item.getName(), itemData.getAmount(), item.getPrice()
-		});
-		clickLore.forEach(factory::addLore);
-
-		return new GUIItem(factory.toItemStack()) {
+		return new GUIItem(getItemIcon(player, userData, item)) {
 			@Override
 			public void onClick(ClickType type) {
+				DepositoryItemData itemData = userData.getItemData(item);
 				if (itemData.getAmount() < 1) {
+					PluginConfig.Sounds.SELL_FAIL.play(player);
 					PluginMessages.NO_ENOUGH_ITEM.send(player);
 					return;
 				}
 
-				if (type == ClickType.LEFT) {
-					if (canSell >= 1) {
+				if (canSell(item) && type == ClickType.LEFT) {
+					int sellableAmount = item.getLimit() - itemData.getSold();
+					if (sellableAmount >= 1) {
 						SellItemGUI.open(player, userData, itemData, depository, item);
 					} else {
 						PluginConfig.Sounds.SELL_FAIL.play(player);
-						PluginMessages.ITEM_SOLD_LIMIT.send(player, new Object[]{canSell, item.getLimit()});
+						PluginMessages.ITEM_SOLD_LIMIT.send(player, new Object[]{sellableAmount, item.getLimit()});
 						player.closeInventory();
 					}
 				} else if (type == ClickType.RIGHT) {
 
 					if (hasEmptySlot(player)) {
-						int pickupAmount = Math.min(itemData.getAmount(), item.getMaterial().getMaxStackSize());
-						userData.removeItemAmount(item.getDepository().getIdentifier(), item.getTypeID(), pickupAmount);
-						player.getInventory().addItem(item.getRawItem(pickupAmount));
-						PluginMessages.ITEM_PICKUP.send(player, new Object[]{
-								item.getName(), pickupAmount
+						int takeoutAmount = Math.min(itemData.getAmount(), item.getMaterial().getMaxStackSize());
+						userData.removeItemAmount(
+								item.getDepository().getIdentifier(), item.getTypeID(), takeoutAmount
+						);
+						player.getInventory().addItem(item.getRawItem(takeoutAmount));
+						PluginMessages.ITEM_TAKEOUT.send(player, new Object[]{
+								item.getName(), takeoutAmount
 						});
-						setupItems(); //刷新GUI
+						PluginConfig.Sounds.TAKEOUT.play(player);
+
+						setDisplay(getItemIcon(player, userData, item)); // 刷新物品显示
+						loadConfigItems(); // 更新配置中的其他物品
 						updateView();
 					} else {
 						PluginMessages.NO_SPACE.send(player);
@@ -92,10 +94,49 @@ public class DepositoryGUI extends GUI {
 		};
 	}
 
-	private boolean hasEmptySlot(Player player) {
+	public static boolean hasEmptySlot(Player player) {
 		return IntStream.range(0, 36)
 				.mapToObj(i -> player.getInventory().getItem(i))
 				.anyMatch(i -> i == null || i.getType() == Material.AIR);
+	}
+
+	public static ItemStack getItemIcon(@NotNull Player player,
+										@NotNull UserData userData,
+										@NotNull DepositoryItem item) {
+		DepositoryItemData itemData = userData.getItemData(item);
+		ItemStackFactory factory = new ItemStackFactory(item.getDisplayItem());
+		getExtraLore(player, itemData).forEach(factory::addLore);
+		return factory.toItemStack();
+	}
+
+	public static List<String> getExtraLore(@NotNull Player player,
+											@NotNull DepositoryItemData itemData) {
+		DepositoryItem item = itemData.getSource();
+		int canSell = item.getLimit() - itemData.getSold();
+
+		List<String> lore = new ArrayList<>();
+		if (canSell(item)) {
+			lore.addAll(PluginConfig.General.AdditionalLore.AVAILABLE_FOR_SALE.get(player, new Object[]{
+					item.getName(), itemData.getAmount(), item.getPrice(),
+					itemData.getSold(), canSell, item.getLimit()
+			}));
+			lore.addAll(PluginConfig.General.ClickLore.AVAILABLE_FOR_SALE.get(player, new Object[]{
+					item.getName(), itemData.getAmount(), item.getPrice()
+			}));
+		} else {
+			lore.addAll(PluginConfig.General.AdditionalLore.NOT_FOR_SALE.get(player, new Object[]{
+					item.getName(), itemData.getAmount()
+			}));
+			lore.addAll(PluginConfig.General.ClickLore.NOT_FOR_SALE.get(player, new Object[]{
+					item.getName(), itemData.getAmount()
+			}));
+		}
+		return lore;
+	}
+
+	public static boolean canSell(DepositoryItem item) {
+		return UltraDepository.getEconomyManager().isInitialized()
+				&& item.getLimit() > 0 && item.getPrice() > 0;
 	}
 
 	public static void open(@NotNull Player player, @NotNull Depository depository) {

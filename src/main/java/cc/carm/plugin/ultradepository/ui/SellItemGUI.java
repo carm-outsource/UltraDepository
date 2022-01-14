@@ -15,6 +15,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import static cc.carm.plugin.ultradepository.configuration.PluginConfig.General.SellGUI.Items.*;
@@ -51,10 +53,11 @@ public class SellItemGUI extends GUI {
 	private void load(int amount) {
 		this.currentAmount = Math.max(1, amount); // 不可小于1
 		ItemStackFactory factory = new ItemStackFactory(this.itemDisplay);
-		List<String> additionalLore = PluginConfig.General.ADDITIONAL_LORE.get(player, new Object[]{
-				getItemName(), getReUltraDepositoryAmount(), getItemPrice(),
-				getSoldAmount(), (getSellLimit() - getSoldAmount()), getSellLimit()
-		});
+		List<String> additionalLore = PluginConfig.General.AdditionalLore.AVAILABLE_FOR_SALE
+				.get(player, new Object[]{
+						getItemName(), getDepositoryAmount(), getItemPrice(),
+						getSoldAmount(), (getSellLimit() - getSoldAmount()), getSellLimit()
+				});
 		additionalLore.forEach(factory::addLore);
 
 		setItem(9, getCurrentAmount() > 1000 ? getRemoveItem(1000) : null);
@@ -67,7 +70,7 @@ public class SellItemGUI extends GUI {
 		setItem(16, getAddableAmount() >= 100 ? getAddItem(100) : null);
 		setItem(17, getAddableAmount() >= 1000 ? getAddItem(1000) : null);
 
-		if (getCurrentAmount() >= 1) setItem(getConfirmItem(), 27, 28, 29, 30);
+		setItem(getCurrentAmount() >= 1 ? getConfirmItem() : null, 27, 28, 29, 30);
 		setItem(getCancelItem(), 32, 33, 34, 35);
 
 	}
@@ -104,7 +107,7 @@ public class SellItemGUI extends GUI {
 		})) {
 			@Override
 			public void onClick(ClickType type) {
-				int amount = Math.min(getCurrentAmount(), Math.min(getReUltraDepositoryAmount(), getSellLimit() - getSoldAmount()));
+				int amount = Math.min(getCurrentAmount(), Math.min(getDepositoryAmount(), getSellLimit() - getSoldAmount()));
 				if (amount > 0) UltraDepository.getEconomyManager().sellItem(player, userData, item, amount);
 				player.closeInventory();
 			}
@@ -138,10 +141,11 @@ public class SellItemGUI extends GUI {
 	}
 
 	private double getTotalMoney() {
-		return getCurrentAmount() * getItemPrice();
+		BigDecimal money = BigDecimal.valueOf(getCurrentAmount() * getItemPrice()).setScale(2, RoundingMode.DOWN);
+		return money.doubleValue();
 	}
 
-	private int getReUltraDepositoryAmount() {
+	private int getDepositoryAmount() {
 		return userData.getItemData(this.item).getAmount();
 	}
 
@@ -150,7 +154,7 @@ public class SellItemGUI extends GUI {
 	}
 
 	private int getAddableAmount() {
-		return Math.min(getReUltraDepositoryAmount(), getSellLimit() - getSoldAmount()) - getCurrentAmount();
+		return Math.min(getDepositoryAmount(), getSellLimit() - getSoldAmount()) - getCurrentAmount();
 	}
 
 	public static void open(Player player, UserData userData, DepositoryItemData itemData,

@@ -20,7 +20,7 @@ storage:
   method: yaml
 
   # The storage file path when choosing "yaml"/"json" method.
-  # Support absolute paths, e.g. “/var/data/ub/"(linux) or "D:\data\ub\"(windows)
+  # Support absolute paths, e.g. “/var/data/ud/"(linux) or "D:\data\ud\"(windows)
   # **Be aware of permission issues when using absolute paths!**
   file-path: data
 
@@ -52,17 +52,35 @@ general:
   # Hints lore for the item's information
   # Will add to items in BackpackGUI and SellGUI.
   additional-lore:
-    - " "
-    - "&fAmount &a%(amount)"
-    - "&fPrice &a%(price)"
-    - "&fSold &a%(remain)&8/%(limit)"
+    available-for-sale:
+      - " "
+      - "&fAmount &a%(amount)"
+      - "&fPrice &a%(price)"
+      - "&fSold &a%(remain)&8/%(limit)"
+      not-for-sale:
+        # Display when :
+        # 1. Vault not installed
+        # 2. No economy plugins
+        # 3. daily sell limit <= 0
+        # 4. item price <=0
+        - " "
+        - "&fAmount &a%(amount)"
 
   # Hints lore for the player's click
   # Will add to items in BackpackGUI.
   click-lore:
-    - " "
-    - "&a&lLEFT-CLICK  &8| &fSell items"
-    - "&a&lRIGHT-CLICK &8| &fTake one Stack"
+    available-for-sale:
+      - " "
+      - "&a&lLEFT-CLICK  &8| &fSell items"
+      - "&a&lRIGHT-CLICK &8| &fTake one Stack"
+    not-for-sale:
+      # Display when :
+      # 1. Vault not installed
+      # 2. No economy plugins
+      # 3. daily sell limit <= 0
+      # 4. item price <=0
+      - " "
+      - "&a&lRIGHT-CLICK &8| &fTake one Stack"
 
   # Configuration of the SellGUI
   sell-gui:

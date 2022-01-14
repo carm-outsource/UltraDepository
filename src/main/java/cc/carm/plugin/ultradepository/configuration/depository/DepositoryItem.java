@@ -116,8 +116,8 @@ public class DepositoryItem {
 			return new DepositoryItem(
 					depository, material, data,
 					section.getInt("slot", 0),
-					section.getDouble("price", 0),
-					section.getInt("limit", 0),
+					section.getDouble("price", -1),
+					section.getInt("limit", -1),
 					section.getString("name", material.name()),
 					section.getStringList("lore")
 			);

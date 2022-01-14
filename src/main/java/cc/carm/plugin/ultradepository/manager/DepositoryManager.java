@@ -179,6 +179,12 @@ public class DepositoryManager {
 					finalAmount, depository.getName()
 			});
 			PluginConfig.Sounds.COLLECT.play(player);
+
+			PluginMessages.ITEM_COLLECT_ACTIONBAR.sendBar(player, new Object[]{
+					depository.getItems().get(typeID).getName(),
+					finalAmount, depository.getName()
+			}); // Support action bar
+
 		}
 		UltraDepository.getInstance().debug("Item collected successfully.");
 		return true;
