@@ -1,0 +1,91 @@
+# ${project.name} - ${project.description}
+# Source url: ${project.url}
+# Download URL: ${project.distributionManagement.downloadUrl}
+
+version: ${project.version}
+
+debug: false
+
+# bStats Metrics
+# This option is used to help developers analysis plugin stats,
+# and will never affect performance and user experience.
+# You can choose to turn it off here.
+metrics: true
+
+# Storage Configuration
+storage:
+
+  # Storage method
+  # You can choose [ yaml | json | mysql ]
+  method: yaml
+
+  # The storage file path when choosing "yaml"/"json" method.
+  # Support absolute paths, e.g. “/var/data/ub/"(linux) or "D:\data\ub\"(windows)
+  # **Be aware of permission issues when using absolute paths!**
+  file-path: data
+
+  # The Database configuration when choosing "mysql" method.
+  mysql:
+    driver: "com.mysql.jdbc.Driver"
+    url: "jdbc:mysql://127.0.0.1:3306/<db-name>"
+    table: "ud_data" # Plugin data table name, allowing customization
+    username: "username"
+    password: "password"
+
+
+# Player Collect Configuration
+# Used to determine when put the player's item into the backpack automatically
+collect:
+  pickup: true # Pickup Items
+  kill: true # Kill Entities (Animals/Monsters)
+  break: true # Break Blocks
+
+sounds:
+  collect: "ENTITY_EXPERIENCE_ORB_PICKUP:0.5"
+  sell-success: "ENTITY_VILLAGER_CELEBRATE"
+  sell-fail: "ENTITY_VILLAGER_NO"
+  gui-click: "UI_BUTTON_CLICK"
+
+# General Configuration
+general:
+
+  # Hints lore for the item's information
+  # Will add to items in BackpackGUI and SellGUI.
+  additional-lore:
+    - " "
+    - "&fAmount &a%(amount)"
+    - "&fPrice &a%(price)"
+    - "&fSold &a%(remain)&8/%(limit)"
+
+  # Hints lore for the player's click
+  # Will add to items in BackpackGUI.
+  click-lore:
+    - " "
+    - "&a&lLEFT-CLICK  &8| &fSell items"
+    - "&a&lRIGHT-CLICK &8| &fTake one Stack"
+
+  # Configuration of the SellGUI
+  sell-gui:
+    title: "&8Selling %(item_name)"
+    items:
+      add:
+        type: GREEN_STAINED_GLASS_PANE
+        name: "&aAdd %(amount)"
+      remove:
+        type: RED_STAINED_GLASS_PANE
+        name: "&cReduce %(amount)"
+      confirm:
+        type: EMERALD
+        name: "&a&lConfirm"
+        lore:
+          - " "
+          - "&7You will sell &r%(item_name) &8x &f%(amount)"
+          - "&7and will get $&e%(money) &7."
+          - " "
+          - "&a&lClick to confirm"
+      cancel:
+        type: REDSTONE
+        name: "&c&lCancel"
+        lore:
+          - " "
+          - "&cClick to cancel"

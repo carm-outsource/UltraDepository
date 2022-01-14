@@ -15,12 +15,12 @@
 [![License](https://img.shields.io/github/license/CarmJos/UltraDepository)](https://opensource.org/licenses/GPL-3.0)
 [![workflow](https://github.com/CarmJos/UltraDepository/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/CarmJos/UltraDepository/actions/workflows/maven.yml)
 ![CodeSize](https://img.shields.io/github/languages/code-size/CarmJos/UltraDepository)
-![Support](https://img.shields.io/badge/Minecraft-Java%201.13--Latest-green)
+![Support](https://img.shields.io/badge/Minecraft-Java%201.16--Latest-green)
 ![](https://visitor-badge.glitch.me/badge?page_id=UltraDepository.readme)
 
 超级仓库插件，支持设定不同物品的存储仓库。
 
-本插件基于Spigot实现，**理论上支持全版本**。
+本插件基于 Spigot(1.16.3) 实现，**理论上支持1.16后的全部版本**。
 
 本插件由 [墨豆Mordo](https://www.mordo.cn)、[子墨Zimrs](https://www.zimrs.cn) 资助本人开发，经过授权后开源。
 

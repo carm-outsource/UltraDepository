@@ -9,7 +9,7 @@ authors:
   - CarmJos
   - Zimrs
 
-api-version: 1.13
+api-version: 1.16
 
 softdepend:
   - PlaceholderAPI
