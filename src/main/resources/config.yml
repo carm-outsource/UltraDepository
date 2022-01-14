@@ -78,7 +78,6 @@ general:
         name: "&c减少 %(amount) 个"
       confirm:
         type: EMERALD
-        data: 0
         name: "&a确认售出"
         lore:
           - " "
@@ -88,7 +87,6 @@ general:
           - "&a&l点击确认售出"
       cancel:
         type: REDSTONE
-        data: 0
         name: "&c取消售出"
         lore:
           - " "

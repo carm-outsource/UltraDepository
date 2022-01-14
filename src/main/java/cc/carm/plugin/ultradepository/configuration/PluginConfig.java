@@ -1,6 +1,7 @@
 package cc.carm.plugin.ultradepository.configuration;
 
 import cc.carm.lib.easyplugin.configuration.cast.ConfigStringCast;
+import cc.carm.lib.easyplugin.configuration.impl.ConfigItem;
 import cc.carm.lib.easyplugin.configuration.impl.ConfigSound;
 import cc.carm.lib.easyplugin.configuration.message.ConfigMessage;
 import cc.carm.lib.easyplugin.configuration.message.ConfigMessageList;
@@ -60,7 +61,7 @@ public class PluginConfig {
 		 * 将添加到背包界面内的物品上，避免重复配置
 		 */
 		public static final ConfigMessageList ADDITIONAL_LORE = new ConfigMessageList(
-				ConfigManager.getPluginConfig(), "general.additional-lore", new String[]{},
+				ConfigManager::getPluginConfig, "general.additional-lore", new String[]{},
 				new String[]{
 						"%(item_name)", "%(amount)", "%(price)", "%(sold)", "%(remain)", "%(limit)"
 				});
@@ -70,7 +71,9 @@ public class PluginConfig {
 		 * 将添加到背包界面内的物品上，避免重复配置
 		 */
 		public static final ConfigMessageList CLICK_LORE = new ConfigMessageList(
-				ConfigManager.getPluginConfig(), "general.click-lore", new String[]{}, new String[]{
+				ConfigManager::getPluginConfig,
+				"general.click-lore",
+				new String[]{}, new String[]{
 				"%(item_name)", "%(amount)", "%(price)"
 		});
 
@@ -81,7 +84,8 @@ public class PluginConfig {
 
 
 			public static final ConfigMessage TITLE = new ConfigMessage(
-					ConfigManager.getPluginConfig(), "general.sell-gui.title",
+					ConfigManager::getPluginConfig,
+					"general.sell-gui.title",
 					"&a&l出售", new String[]{
 					"%(item_name)", "%(backpack_name)"
 			}
@@ -89,124 +93,32 @@ public class PluginConfig {
 
 			public static class Items {
 
-				public static class Add {
+				public static final ConfigItem ADD = new ConfigItem(
+						"general.sell-gui.items.add",
+						new String[]{"%(item_name)", "%(amount)"},
+						ConfigItem.create(Material.GREEN_STAINED_GLASS_PANE, "&a添加物品 %(amount) 个")
+				);
 
-					public static final ConfigStringCast<Material> TYPE = new ConfigStringCast<>(
-							"general.sell-gui.items.add.type",
-							Material::matchMaterial, Material.STONE
-					);
+				public static final ConfigItem REMOVE = new ConfigItem(
+						"general.sell-gui.items.remove",
+						new String[]{"%(item_name)", "%(amount)"},
+						ConfigItem.create(Material.RED_STAINED_GLASS_PANE, "&c減少物品 %(amount) 个")
+				);
 
+				public static final ConfigItem CONFIRM = new ConfigItem(
+						"general.sell-gui.items.confirm",
+						new String[]{"%(item_name)", "%(amount)", "%(money)"},
+						ConfigItem.create(Material.EMERALD, "&2确认售出")
+				);
 
-					public static final ConfigValue<Integer> DATA = new ConfigValue<>(
-							"general.sell-gui.items.add.data", Integer.class, 0
-					);
-
-
-					public static final ConfigMessage NAME = new ConfigMessage(
-							ConfigManager.getPluginConfig(), "general.sell-gui.items.add.name",
-							"&a添加物品 %(amount) 个", new String[]{
-							"%(item_name)", "%(amount)"
-					}
-					);
-
-
-					public static final ConfigMessageList LORE = new ConfigMessageList(
-							ConfigManager.getPluginConfig(), "general.sell-gui.items.add.lore",
-							new String[]{}, new String[]{
-							"%(item_name)", "%(amount)"
-					}
-					);
-
-				}
-
-				public static class Remove {
-
-					public static final ConfigStringCast<Material> TYPE = new ConfigStringCast<>(
-							"general.sell-gui.items.remove.type",
-							Material::matchMaterial, Material.STONE
-					);
-
-
-					public static final ConfigValue<Integer> DATA = new ConfigValue<>(
-							"general.sell-gui.items.remove.data", Integer.class, 0
-					);
-
-
-					public static final ConfigMessage NAME = new ConfigMessage(
-							ConfigManager.getPluginConfig(), "general.sell-gui.items.remove.name",
-							"&c減少物品 %(amount) 个", new String[]{
-							"%(item_name)", "%(amount)"
-					}
-					);
-
-
-					public static final ConfigMessageList LORE = new ConfigMessageList(
-							ConfigManager.getPluginConfig(), "general.sell-gui.items.remove.lore",
-							new String[]{}, new String[]{
-							"%(item_name)", "%(amount)"
-					}
-					);
-
-				}
-
-				public static class Confirm {
-
-					public static final ConfigStringCast<Material> TYPE = new ConfigStringCast<>(
-							"general.sell-gui.items.confirm.type",
-							Material::matchMaterial, Material.EMERALD
-					);
-
-
-					public static final ConfigValue<Integer> DATA = new ConfigValue<>(
-							"general.sell-gui.items.confirm.data", Integer.class, 0
-					);
-
-
-					public static final ConfigMessage NAME = new ConfigMessage(
-							ConfigManager.getPluginConfig(), "general.sell-gui.items.confirm.name",
-							"&2确认售出", new String[]{
-							"%(item_name)", "%(amount)", "%(money)"
-					}
-					);
-
-
-					public static final ConfigMessageList LORE = new ConfigMessageList(
-							ConfigManager.getPluginConfig(), "general.sell-gui.items.confirm.lore",
-							new String[]{}, new String[]{
-							"%(item_name)", "%(amount)", "%(money)"
-					}
-					);
-
-				}
-
-				public static class Cancel {
-
-					public static final ConfigStringCast<Material> TYPE = new ConfigStringCast<>(
-							"general.sell-gui.items.cancel.type",
-							Material::matchMaterial, Material.REDSTONE
-					);
-
-
-					public static final ConfigValue<Integer> DATA = new ConfigValue<>(
-							"general.sell-gui.items.cancel.data", Integer.class, 0
-					);
-
-
-					public static final ConfigMessage NAME = new ConfigMessage(
-							ConfigManager.getPluginConfig(), "general.sell-gui.items.cancel.name",
-							"&4取消售出", null
-					);
-
-					public static final ConfigMessageList LORE = new ConfigMessageList(
-							ConfigManager.getPluginConfig(), "general.sell-gui.items.cancel.lore", new String[0], new String[0]
-					);
-
-				}
+				public static final ConfigItem CANCEL = new ConfigItem(
+						"general.sell-gui.items.cancel",
+						ConfigItem.create(Material.REDSTONE, "&4取消售出")
+				);
 
 			}
 
 		}
 
 	}
-
 }
