@@ -2,7 +2,7 @@
 
 ## 详细示例
 
-您可以 [点击这里](full-example.yml) 查看一份详细的示例。
+您可以 [点击这里](../../src/main/resources/depositories/.example-depository.yml) 查看一份详细的示例。
 
 ## 使用须知
 

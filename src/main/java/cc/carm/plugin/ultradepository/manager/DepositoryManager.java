@@ -45,6 +45,11 @@ public class DepositoryManager {
 		File folder = new File(UltraDepository.getInstance().getDataFolder(), "depositories");
 		if (!folder.exists()) {
 			folder.mkdir();
+
+			UltraDepository.getInstance().saveResource(
+					"depositories/.example-depository.yml", false
+			);
+
 		} else if (folder.isDirectory()) {
 			folder.delete();
 			folder.mkdir();
@@ -56,7 +61,8 @@ public class DepositoryManager {
 		HashMap<@NotNull String, @NotNull Depository> data = new HashMap<>();
 		for (File file : files) {
 			String fileName = file.getName();
-			if (!file.isFile() || !fileName.toLowerCase().endsWith(".yml")) continue;
+			if (!file.isFile() || fileName.startsWith(".")) continue;
+			if (!fileName.toLowerCase().endsWith(".yml")) continue;
 			String identifier = fileName.substring(0, fileName.lastIndexOf("."));
 			FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
 			Depository depository = Depository.loadFrom(identifier, configuration);
@@ -101,6 +107,7 @@ public class DepositoryManager {
 		return getDepositories().get(depositoryID);
 	}
 
+	@SuppressWarnings("deprecation")
 	public Set<Depository> getItemDepositories(ItemStack itemStack) {
 		return getItemDepositories(itemStack.getType(), itemStack.getDurability());
 	}
@@ -124,6 +131,7 @@ public class DepositoryManager {
 		else return material.name() + ":" + data;
 	}
 
+	@SuppressWarnings("deprecation")
 	public @NotNull String getItemTypeID(ItemStack itemStack) {
 		return getItemTypeID(itemStack.getType(), itemStack.getDurability());
 	}

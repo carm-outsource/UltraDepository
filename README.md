@@ -211,15 +211,15 @@
 
 详见代码文件中默认值，相关文件将在首次运行时创建。
 
-### 仓库配置文件 ([depositories/<仓库ID>.yml](.examples/depositories/full-example.yml))
+### 仓库配置文件 ([depositories/<仓库ID>.yml](src/main/resources/depositories/.example-depository.yml))
 
 所有仓库配置均为单独的配置文件，存放于 `插件配置目录/depositories` 下，便于管理。
 
-文件名即仓库的ID，**强烈推荐使用纯英文**，部分符号可能会影响正常读取，请避免使用。
+文件名即仓库的ID，**强烈推荐使用纯英文**。以`.`开头的仓库配置不会被加载。部分符号可能会影响正常读取，请避免使用。
 
 随本项目预设了几个常用的仓库类型，可以 [在这里](.examples/depositories) 找到您需要的仓库配置加以修改后使用。
 
-您也可以 [点击这里](.examples/depositories/full-example.yml) 查看一份*详细的仓库配置示例*，以制作您自己的仓库。
+您也可以 [点击这里](src/main/resources/depositories/.example-depository.yml) 查看一份*详细的仓库配置示例*，以制作您自己的仓库。
 
 ## 开发
 
