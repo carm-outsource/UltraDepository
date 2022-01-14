@@ -24,6 +24,7 @@
 
 本插件由 [墨豆Mordo](https://www.mordo.cn)、[子墨Zimrs](https://www.zimrs.cn) 资助本人开发，经过授权后开源。
 
+> 本插件已发布于 [MCBBS](https://www.mcbbs.net/forum.php?mod=viewthread&tid=1292631) 和 [SpigotMC]() 。
 ## 功能介绍
 
 本插件允许配置多个不同功能的仓库，玩家通过 击杀生物/挖掘方块/捡起收集 获得的原版物品可以自动被放入仓库中。
