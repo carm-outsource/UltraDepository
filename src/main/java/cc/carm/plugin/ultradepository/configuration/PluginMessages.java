@@ -95,4 +95,8 @@ public class PluginMessages extends MessagesRoot {
 			"&f数目输入错误，请输入正确的数字！"
 	);
 
+	public static final EasyMessage LOAD_FAILED = new EasyMessage(
+			"&c您的背包数据未被正确加载，请重新进入！"
+	);
+
 }

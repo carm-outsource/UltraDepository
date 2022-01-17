@@ -32,7 +32,7 @@ public class UserManager {
 		try {
 			long start = System.currentTimeMillis();
 			DataStorage storage = UltraDepository.getStorage();
-			UltraDepository.getInstance().debug("正通过 " + storage.getClass().getSimpleName() + " 加载 " + userUUID + " 的用户数据...");
+			UltraDepository.getInstance().debug("正通过 " + storage.getClass().getSimpleName() + " 加载 " + userUUID + " 的用户数据...(" + System.currentTimeMillis() + ")");
 			UserData data = UltraDepository.getStorage().loadData(userUUID);
 
 			if (data == null) {
@@ -64,7 +64,7 @@ public class UserManager {
 			long start = System.currentTimeMillis();
 			DataStorage storage = UltraDepository.getStorage();
 
-			UltraDepository.getInstance().debug("正通过 " + storage.getClass().getSimpleName() + " 保存 " + data.getUserUUID() + " 的用户数据...");
+			UltraDepository.getInstance().debug("正通过 " + storage.getClass().getSimpleName() + " 保存 " + data.getUserUUID() + " 的用户数据...(" + System.currentTimeMillis() + ")");
 			storage.saveUserData(data);
 
 			UltraDepository.getInstance().debug("通过 " + storage.getClass().getSimpleName() + " 保存 " + data.getUserUUID() + " 的用户数据完成，" +
