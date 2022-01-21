@@ -22,7 +22,7 @@ public interface DataStorage {
 	void shutdown();
 
 	/**
-	 * 用于加载用户数据的方法。<bold>该方法将会被异步运行！</bold>
+	 * 用于加载用户数据的方法。<b>该方法将会被异步运行！</b>
 	 * <br>该方法一般无需自行执行，见 {@link UserManager#loadData(UUID)}
 	 * <br>
 	 * <br>若不存在该用户的数据，请返回 null 。
@@ -35,7 +35,7 @@ public interface DataStorage {
 	UserData loadData(@NotNull UUID uuid) throws Exception;
 
 	/**
-	 * 用于保存用户数据的方法。 <bold>该方法将会被异步运行！</bold>
+	 * 用于保存用户数据的方法。 <b>该方法将会被异步运行！</b>
 	 * <br>该方法一般无需自行执行，见 {@link UserManager#saveData(UserData)}
 	 *
 	 * @param data 用户数据
