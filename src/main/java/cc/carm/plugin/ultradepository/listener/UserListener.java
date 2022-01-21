@@ -20,15 +20,13 @@ public class UserListener implements Listener {
 		if (event.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED) {
 			return;
 		}
-		UUID uuid = event.getUniqueId();
-		UltraDepository.getUserManager().getDataCache()
-				.put(uuid, UltraDepository.getUserManager().loadData(uuid));
+		UltraDepository.getUserManager().loadDataCache(event.getUniqueId());
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPreLoginMonitor(AsyncPlayerPreLoginEvent event) {
 		if (event.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED) {
-			UltraDepository.getUserManager().getDataCache().remove(event.getUniqueId());
+			UltraDepository.getUserManager().removeDataCache(event.getUniqueId());
 		}
 	}
 

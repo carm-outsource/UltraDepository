@@ -4,6 +4,7 @@ import cc.carm.plugin.ultradepository.UltraDepository;
 import cc.carm.plugin.ultradepository.data.UserData;
 import cc.carm.plugin.ultradepository.storage.DataStorage;
 import cc.carm.plugin.ultradepository.util.DateIntUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,6 +19,27 @@ public class UserManager {
 
 	public HashMap<UUID, UserData> getDataCache() {
 		return dataCache;
+	}
+
+	public void loadPlayersData() {
+		if (Bukkit.getOnlinePlayers().size() < 1) return;
+
+		UltraDepository.getInstance().log("加载当前在线玩家数据...");
+		// 用于热加载时重载玩家数据。
+		Bukkit.getOnlinePlayers().forEach(player -> loadDataCache(player.getUniqueId()));
+	}
+
+	public @NotNull UserData loadDataCache(@NotNull UUID userUUID) {
+		UserData data = loadData(userUUID);
+		UltraDepository.getUserManager().getDataCache().put(userUUID, data);
+		return data;
+	}
+
+
+	public boolean removeDataCache(@NotNull UUID userUUID) {
+		boolean contains = getDataCache().containsKey(userUUID);
+		getDataCache().remove(userUUID);
+		return contains;
 	}
 
 	public @Nullable UserData getData(@NotNull UUID userUUID) {
@@ -56,7 +78,7 @@ public class UserManager {
 		UserData data = getData(uuid);
 		if (data == null) return;
 		if (save) saveData(data);
-		dataCache.remove(uuid);
+		removeDataCache(uuid);
 	}
 
 	public void saveData(UserData data) {

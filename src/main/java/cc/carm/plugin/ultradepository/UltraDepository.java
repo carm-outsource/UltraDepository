@@ -60,9 +60,6 @@ public class UltraDepository extends EasyPlugin {
 			return false;
 		}
 
-		log("加载用户系统...");
-		userManager = new UserManager();
-
 		log("加载经济系统...");
 		if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
 			economyManager = new EconomyManager();
@@ -76,11 +73,15 @@ public class UltraDepository extends EasyPlugin {
 		log("加载仓库管理器...");
 		depositoryManager = new DepositoryManager();
 		getDepositoryManager().loadDepositories();
-		GUI.initialize(this);
+
+		log("加载用户系统...");
+		userManager = new UserManager();
+
 
 		log("注册监听器...");
 		regListener(new UserListener());
 		regListener(new CollectListener());
+		GUI.initialize(this);
 
 		log("注册指令...");
 		registerCommand("UltraDepository", new DepositoryCommand());
@@ -107,6 +108,9 @@ public class UltraDepository extends EasyPlugin {
 				else return plugin.getDescription().getVersion();
 			}));
 		}
+
+		getUserManager().loadPlayersData();
+
 		return true;
 	}
 
@@ -123,6 +127,7 @@ public class UltraDepository extends EasyPlugin {
 
 		log("卸载监听器...");
 		Bukkit.getServicesManager().unregisterAll(this);
+
 	}
 
 	public static DataStorage getStorage() {
