@@ -7,6 +7,7 @@ import cc.carm.lib.easyplugin.utils.MessageUtils;
 import cc.carm.plugin.ultradepository.command.DepositoryCommand;
 import cc.carm.plugin.ultradepository.configuration.PluginConfig;
 import cc.carm.plugin.ultradepository.hooker.PAPIExpansion;
+import cc.carm.plugin.ultradepository.hooker.UpdateChecker;
 import cc.carm.plugin.ultradepository.listener.CollectListener;
 import cc.carm.plugin.ultradepository.listener.UserListener;
 import cc.carm.plugin.ultradepository.manager.ConfigManager;
@@ -107,6 +108,13 @@ public class UltraDepository extends EasyPlugin {
 				if (plugin == null) return "Not installed";
 				else return plugin.getDescription().getVersion();
 			}));
+		}
+
+		if (PluginConfig.CHECK_UPDATE.get()) {
+			log("开始检查更新...");
+			UpdateChecker.checkUpdate(this);
+		} else {
+			log("已禁用检查更新，跳过。");
 		}
 
 		getUserManager().loadPlayersData();

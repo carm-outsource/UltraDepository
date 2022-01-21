@@ -21,6 +21,10 @@ public class PluginConfig {
 			"metrics", Boolean.class, true
 	);
 
+	public static final ConfigValue<Boolean> CHECK_UPDATE = new ConfigValue<>(
+			"check-update", Boolean.class, true
+	);
+
 	public static final ConfigStringCast<StorageMethod> STORAGE_METHOD = new ConfigStringCast<>(
 			"storage.method", StorageMethod::read, StorageMethod.YAML
 	);
