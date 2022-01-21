@@ -6,6 +6,7 @@ import cc.carm.plugin.ultradepository.configuration.PluginMessages;
 import cc.carm.plugin.ultradepository.configuration.depository.Depository;
 import cc.carm.plugin.ultradepository.configuration.depository.DepositoryItem;
 import cc.carm.plugin.ultradepository.event.DepositoryCollectItemEvent;
+import cc.carm.plugin.ultradepository.util.JarUtil;
 import com.google.common.collect.HashMultimap;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -18,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -45,10 +47,14 @@ public class DepositoryManager {
 		File folder = new File(UltraDepository.getInstance().getDataFolder(), "depositories");
 		if (!folder.exists()) {
 			folder.mkdir();
-
-			UltraDepository.getInstance().saveResource(
-					"depositories/.example-depository.yml", false
-			);
+			
+			try {
+				JarUtil.copyFolderFromJar(
+						"depositories", UltraDepository.getInstance().getDataFolder(),
+						JarUtil.CopyOption.COPY_IF_NOT_EXIST
+				);
+			} catch (IOException ignore) {
+			}
 
 		} else if (folder.isDirectory()) {
 			folder.delete();

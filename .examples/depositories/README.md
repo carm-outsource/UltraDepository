@@ -17,18 +17,18 @@
 
 ## 预设配置截图
 
-### 渔夫仓库 ([fishman.yml](files/fishman.yml))
+### 渔夫仓库 ([fishman.yml](../../src/main/resources/depositories/fishman.yml))
 
 ![fishman](images/fishman.png)
 
-### 矿工仓库 ([miner.yml](files/miner.yml))
+### 矿工仓库 ([miner.yml](../../src/main/resources/depositories/miner.yml))
 
 ![miner](images/miner.png)
 
-### 农夫仓库 ([farmer.yml](files/farmer.yml))
+### 农夫仓库 ([farmer.yml](../../src/main/resources/depositories/farmer.yml))
 
 ![farmer](images/farmer.png)
 
-### 猎人仓库 ([hunter.yml](files/hunter.yml))
+### 猎人仓库 ([hunter.yml](../../src/main/resources/depositories/hunter.yml))
 
 ![hunter](images/hunter.png)
