@@ -119,7 +119,7 @@
         <dependency>
             <groupId>cc.carm.lib</groupId>
             <artifactId>githubreleases4j</artifactId>
-            <version>1.2.2</version>
+            <version>1.3.0</version>
             <scope>compile</scope>
         </dependency>
 
