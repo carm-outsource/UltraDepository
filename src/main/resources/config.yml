@@ -32,7 +32,7 @@ storage:
   # 选择 database 存储方式时的数据库配置
   mysql:
     # 数据库驱动路径
-    driver: "com.mysql.jdbc.Driver"
+    driver: "com.mysql.cj.jdbc.Driver"
     url: "jdbc:mysql://127.0.0.1:3306/<db-name>"
     table: "ud_data" # 插件表名，允许自定义
     username: "username"
