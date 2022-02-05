@@ -1,12 +1,12 @@
 package cc.carm.plugin.ultradepository.storage.impl;
 
 import cc.carm.lib.easyplugin.configuration.values.ConfigValue;
-import cc.carm.lib.easyplugin.database.DatabaseTable;
-import cc.carm.lib.easyplugin.database.EasySQL;
-import cc.carm.lib.easyplugin.database.api.SQLManager;
-import cc.carm.lib.easyplugin.database.api.action.query.PreparedQueryAction;
+import cc.carm.lib.easysql.EasySQL;
+import cc.carm.lib.easysql.api.SQLManager;
+import cc.carm.lib.easysql.api.action.query.PreparedQueryAction;
 import cc.carm.plugin.ultradepository.UltraDepository;
 import cc.carm.plugin.ultradepository.data.UserData;
+import cc.carm.plugin.ultradepository.util.DatabaseTable;
 import cc.carm.plugin.ultradepository.util.DateIntUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
