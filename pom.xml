@@ -11,6 +11,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
         <easyplugin.version>1.3.5</easyplugin.version>
+        <easysql.version>0.3.8</easysql.version>
+        <ghreleases.version>1.3.1</ghreleases.version>
     </properties>
 
     <groupId>cc.carm.plugin</groupId>
@@ -114,15 +116,22 @@
         <dependency>
             <groupId>cc.carm.lib</groupId>
             <artifactId>easysql-beecp</artifactId>
-            <version>0.3.8</version>
+            <version>${easysql.version}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>cc.carm.lib</groupId>
             <artifactId>githubreleases4j</artifactId>
-            <version>1.3.1</version>
+            <version>${ghreleases.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>3.0.0</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
@@ -137,13 +146,6 @@
             <artifactId>placeholderapi</artifactId>
             <version>2.10.9</version>
             <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.bstats</groupId>
-            <artifactId>bstats-bukkit</artifactId>
-            <version>3.0.0</version>
-            <scope>compile</scope>
         </dependency>
 
         <dependency>
@@ -262,20 +264,8 @@
                             <shadedPattern>cc.carm.plugin.ultradepository.lib.bstats</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>org.json</pattern>
-                            <shadedPattern>cc.carm.plugin.ultradepository.lib.json</shadedPattern>
-                        </relocation>
-                        <relocation>
                             <pattern>cc.carm.lib.easyplugin</pattern>
                             <shadedPattern>cc.carm.plugin.ultradepository.lib.easyplugin</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>cc.carm.lib.easysql</pattern>
-                            <shadedPattern>cc.carm.plugin.ultradepository.lib.easysql</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>cc.carm.lib.githubreleases4j</pattern>
-                            <shadedPattern>cc.carm.plugin.ultradepository.lib.github</shadedPattern>
                         </relocation>
                     </relocations>
                     <filters>
