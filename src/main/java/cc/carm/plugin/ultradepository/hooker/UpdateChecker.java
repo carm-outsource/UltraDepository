@@ -1,11 +1,12 @@
 package cc.carm.plugin.ultradepository.hooker;
 
 import cc.carm.lib.githubreleases4j.GithubReleases4J;
+import cc.carm.plugin.ultradepository.Main;
 import cc.carm.plugin.ultradepository.UltraDepository;
 
 public class UpdateChecker {
 
-	public static void checkUpdate(UltraDepository plugin) {
+	public static void checkUpdate(Main plugin) {
 		plugin.getScheduler().runAsync(() -> {
 
 			Integer behindVersions = GithubReleases4J.getVersionBehind(

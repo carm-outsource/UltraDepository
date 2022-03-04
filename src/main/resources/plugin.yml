@@ -1,4 +1,4 @@
-main: cc.carm.plugin.ultradepository.UltraDepository
+main: cc.carm.plugin.ultradepository.Main
 name: UltraDepository
 
 version: ${project.version}
