@@ -30,6 +30,8 @@ public class Main extends EasyPlugin {
 
     private DataStorage storage;
 
+
+    private ConfigManager configManager;
     private UserManager userManager;
     private EconomyManager economyManager;
     private DepositoryManager depositoryManager;
@@ -47,7 +49,8 @@ public class Main extends EasyPlugin {
     protected boolean initialize() {
 
         log("加载配置文件...");
-        if (!ConfigManager.initialize()) {
+        this.configManager = new ConfigManager(this);
+        if (!configManager.initialize()) {
             log("初始化配置文件失败，放弃加载。");
             return false;
         }
@@ -158,6 +161,10 @@ public class Main extends EasyPlugin {
 
     protected DepositoryManager getDepositoryManager() {
         return depositoryManager;
+    }
+
+    protected ConfigManager getConfigManager() {
+        return configManager;
     }
 
     @Override

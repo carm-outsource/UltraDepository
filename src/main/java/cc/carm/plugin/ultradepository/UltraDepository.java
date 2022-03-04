@@ -1,5 +1,6 @@
 package cc.carm.plugin.ultradepository;
 
+import cc.carm.plugin.ultradepository.manager.ConfigManager;
 import cc.carm.plugin.ultradepository.manager.DepositoryManager;
 import cc.carm.plugin.ultradepository.manager.EconomyManager;
 import cc.carm.plugin.ultradepository.manager.UserManager;
@@ -26,5 +27,9 @@ public class UltraDepository {
     public static DepositoryManager getDepositoryManager() {
         return Main.getInstance().getDepositoryManager();
     }
-    
+
+    public static ConfigManager getConfigManager() {
+        return Main.getInstance().getConfigManager();
+    }
+
 }
