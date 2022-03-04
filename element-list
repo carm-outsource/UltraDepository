@@ -1,0 +1,13 @@
+cc.carm.plugin.ultradepository
+cc.carm.plugin.ultradepository.command
+cc.carm.plugin.ultradepository.configuration
+cc.carm.plugin.ultradepository.configuration.depository
+cc.carm.plugin.ultradepository.data
+cc.carm.plugin.ultradepository.event
+cc.carm.plugin.ultradepository.hooker
+cc.carm.plugin.ultradepository.listener
+cc.carm.plugin.ultradepository.manager
+cc.carm.plugin.ultradepository.storage
+cc.carm.plugin.ultradepository.storage.impl
+cc.carm.plugin.ultradepository.ui
+cc.carm.plugin.ultradepository.util
