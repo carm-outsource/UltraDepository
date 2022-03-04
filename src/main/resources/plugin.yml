@@ -15,6 +15,10 @@ softdepend:
   - PlaceholderAPI
   - Vault
 
+libraries:
+  - cc.carm.lib:easysql-beecp:0.3.8
+  - cc.carm.lib:githubreleases4j:1.3.0
+
 commands:
   "UltraDepository":
     description: "超级仓库的主指令"
